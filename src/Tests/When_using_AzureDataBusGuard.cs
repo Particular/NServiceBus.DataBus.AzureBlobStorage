@@ -1,12 +1,10 @@
 ﻿namespace NServiceBus.Azure.Tests.DataBus
 {
     using System;
-    using Config;
     using NServiceBus.DataBus.AzureBlobStorage;
     using NUnit.Framework;
  
     [TestFixture]
-    [Category("Azure")]
     public class When_using_AzureDataBusGuard
     {
         [Test]
@@ -24,7 +22,7 @@
         }
 
         [TestCase(0)]
-        [TestCase(AzureDataBusDefaults.DefaultBlockSize + 1)]
+        [TestCase(AzureDataBusGuard.MaxBlockSize + 1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Should_not_allow_block_size_more_than_4MB_or_less_than_one_byte(int blockSize)
         {
@@ -83,13 +81,6 @@
         public void Should_not_allow_negative_default_time_to_live()
         {
             AzureDataBusGuard.CheckDefaultTTL(-1L);
-        }
-
-        [Test]
-        public void Should_validate_all_default_settings_for_azure_databus_config()
-        {
-// ReSharper disable once ObjectCreationAsStatement
-            new AzureDataBusConfig();
         }
     }
 }

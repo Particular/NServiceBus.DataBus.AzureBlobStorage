@@ -5,47 +5,52 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class AzureDataBusGuard
     {
-        public static void CheckMaxRetries(object maxRetries)
+        public static void CheckMaxRetries(int maxRetries)
         {
-            if ((int) maxRetries < 0)
+            if (maxRetries < 0)
             {
-                throw new ArgumentOutOfRangeException("maxRetries", maxRetries, "MaxRetries should not be negative.");
+                throw new ArgumentOutOfRangeException(nameof(maxRetries), maxRetries, "Must be non negative.");
             }
         }
 
-        public static void CheckBackOffInterval(object backOffInterval)
+        public static void CheckBackOffInterval(int backOffInterval)
         {
-            if ((int) backOffInterval < 0)
+            if (backOffInterval < 0)
             {
-                throw new ArgumentOutOfRangeException("backOffInterval", backOffInterval, "BackOffInterval should not be negative.");
+                throw new ArgumentOutOfRangeException(nameof(backOffInterval), backOffInterval, "Must not be negative.");
             }
         }
 
-        public static void CheckBlockSize(object blockSize)
+        public static void CheckBlockSize(int blockSize)
         {
-            if ((int) blockSize <= 0 || (int) blockSize > AzureDataBusDefaults.DefaultBlockSize)
+            if (blockSize <= 0)
             {
-                throw new ArgumentOutOfRangeException("blockSize", blockSize, "BlockSize should not be negative.");
+                throw new ArgumentOutOfRangeException(nameof(blockSize), blockSize, "Must not be negative.");
+            }
+         
+            if (blockSize > MaxBlockSize)
+            {
+                throw new ArgumentOutOfRangeException(nameof(blockSize), blockSize, "Must be less than 4mb");
             }
         }
 
-        public static void CheckNumberOfIOThreads(object numberOfIOThreads)
+        public static void CheckNumberOfIOThreads(int numberOfIOThreads)
         {
-            if ((int) numberOfIOThreads <= 0)
+            if (numberOfIOThreads <= 0)
             {
-                throw new ArgumentOutOfRangeException("numberOfIOThreads", numberOfIOThreads, "NumberOfIOThreads should not be less than one.");
+                throw new ArgumentOutOfRangeException(nameof(numberOfIOThreads), numberOfIOThreads, "Should not be less than one.");
             }
         }
 
-        public static void CheckConnectionString(object connectionString)
+        public static void CheckConnectionString(string connectionString)
         {
-            if (string.IsNullOrWhiteSpace((string) connectionString))
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentException("ConnectionString should not be an empty string.", "connectionString");
+                throw new ArgumentException("Should not be an empty string.", nameof(connectionString));
             }
         }
 
-        public static void CheckContainerName(object containerName)
+        public static void CheckContainerName(string containerName)
         {
             const string errorMessage =
                 "Invalid container name. The container name must be confirming to the following naming rules:" +
@@ -59,36 +64,34 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 return;
             }
 
-            throw new ArgumentException(errorMessage, "containerName");
+            throw new ArgumentException(errorMessage, nameof(containerName));
         }
 
         static bool IsValidBlobContainerName(object containerName)
         {
-            return !string.IsNullOrWhiteSpace((string) containerName) &&
-                   Regex.IsMatch((string) containerName, @"^(([a-z\d]((-(?=[a-z\d]))|([a-z\d])){2,62})|(\$root))$");
+            return !string.IsNullOrWhiteSpace((string)containerName) &&
+                   Regex.IsMatch((string)containerName, @"^(([a-z\d]((-(?=[a-z\d]))|([a-z\d])){2,62})|(\$root))$");
         }
 
-        public static void CheckBasePath(object basePath)
+        public static void CheckBasePath(string basePath)
         {
-            var value = basePath != null ? (string) basePath : " ";
+            var value = basePath != null ? basePath : " ";
             var spacesOnly = value.Trim().Length == 0 && value.Length != 0;
 
             if (spacesOnly)
             {
-                throw new ArgumentException("BasePath name should not be null or spaces only.", "basePath");
+                throw new ArgumentException("Should not be null or spaces only.", nameof(basePath));
             }
         }
 
-        public static void CheckDefaultTTL(object defaultTTL)
+        public static void CheckDefaultTTL(long defaultTTL)
         {
-            if (defaultTTL.GetType() != typeof(long))
+            if (defaultTTL < 0)
             {
-                throw new ArgumentException("defaultTTL should be of type long", "defaultTTL");
-            }
-            if ((long) defaultTTL < 0)
-            {
-                throw new ArgumentOutOfRangeException("defaultTTL", defaultTTL, "DefaultTTL should not be negative.");
+                throw new ArgumentOutOfRangeException(nameof(defaultTTL), defaultTTL, "Should not be negative.");
             }
         }
+
+        public const int MaxBlockSize = 4 * 1024 * 1024; //4 mb
     }
 }

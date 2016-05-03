@@ -97,13 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureDataBus.cs" />
-    <Compile Include="AzureDataBusDefaults.cs" />
     <Compile Include="AzureDataBusGuard.cs" />
     <Compile Include="AzureDataBusPersistence.cs" />
     <Compile Include="BlobStorageDataBus.cs" />
     <Compile Include="ConfigureAzureDataBus.cs" />
-    <Compile Include="AzureDataBusConfig.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="DataBusSettings.cs" />
     <Compile Include="obsoletes.cs" />
   </ItemGroup>
   <ItemGroup>

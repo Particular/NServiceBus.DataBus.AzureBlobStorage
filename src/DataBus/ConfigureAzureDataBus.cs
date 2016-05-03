@@ -10,7 +10,7 @@
         {
             AzureDataBusGuard.CheckMaxRetries(maxRetries);
 
-            config.GetSettings().Set("AzureDataBus.MaxRetries", maxRetries);
+            GetSettings(config).MaxRetries = maxRetries;
             return config;
         }
 
@@ -18,7 +18,7 @@
         {
             AzureDataBusGuard.CheckBackOffInterval(backOffInterval);
 
-            config.GetSettings().Set("AzureDataBus.BackOffInterval", backOffInterval);
+            GetSettings(config).BackOffInterval = backOffInterval;
             return config;
         }
 
@@ -26,7 +26,7 @@
         {
             AzureDataBusGuard.CheckBlockSize(blockSize);
 
-            config.GetSettings().Set("AzureDataBus.BlockSize", blockSize);
+            GetSettings(config).BlockSize = blockSize;
             return config;
         }
 
@@ -34,7 +34,7 @@
         {
             AzureDataBusGuard.CheckNumberOfIOThreads(numberOfIOThreads);
 
-            config.GetSettings().Set("AzureDataBus.NumberOfIOThreads", numberOfIOThreads);
+            GetSettings(config).NumberOfIOThreads = numberOfIOThreads;
             return config;
         }
 
@@ -42,7 +42,7 @@
         {
             AzureDataBusGuard.CheckConnectionString(connectionString);
 
-            config.GetSettings().Set("AzureDataBus.ConnectionString", connectionString);
+            GetSettings(config).ConnectionString = connectionString;
             return config;
         }
 
@@ -50,7 +50,7 @@
         {
             AzureDataBusGuard.CheckContainerName(containerName);
 
-            config.GetSettings().Set("AzureDataBus.Container", containerName);
+            GetSettings(config).Container = containerName;
             return config;
         }
 
@@ -58,7 +58,7 @@
         {
             AzureDataBusGuard.CheckBasePath(basePath);
 
-            config.GetSettings().Set("AzureDataBus.BasePath", basePath);
+            GetSettings(config).BasePath = basePath;
             return config;
         }
 
@@ -66,8 +66,20 @@
         {
             AzureDataBusGuard.CheckDefaultTTL(defaultTTLInSeconds);
 
-            config.GetSettings().Set("AzureDataBus.DefaultTTL", defaultTTLInSeconds);
+            GetSettings(config).TTL = defaultTTLInSeconds;
             return config;
+        }
+
+        static DataBusSettings GetSettings(DataBusExtentions<AzureDataBus> config)
+        {
+            DataBusSettings settings;
+            if (!config.GetSettings().TryGet(out settings))
+            {
+                settings = new DataBusSettings();
+                config.GetSettings().Set<DataBusSettings>(settings);
+            }
+
+            return settings;
         }
     }
 }

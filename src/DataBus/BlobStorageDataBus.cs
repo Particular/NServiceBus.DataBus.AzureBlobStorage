@@ -15,27 +15,24 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
-        public BlobStorageDataBus(CloudBlobContainer container)
+        public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings)
         {
             this.container = container;
+            this.settings = settings;
             timer = new Timer(o => DeleteExpiredBlobs());
+            retryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(settings.BackOffInterval), settings.MaxRetries);
         }
-
-        public int MaxRetries { get; set; }
-        public int BackOffInterval { get; set; }
-        public int NumberOfIOThreads { get; set; }
-        public string BasePath { get; set; }
-        public int BlockSize { get; set; }
-        public long DefaultTTL { get; set; }
 
         public async Task<Stream> Get(string key)
         {
             Stream stream = new MemoryStream();
-            var blob = container.GetBlockBlobReference(Path.Combine(BasePath, key));
-            await blob.FetchAttributesAsync();
-            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = NumberOfIOThreads;
-            container.ServiceClient.DefaultRequestOptions.RetryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(BackOffInterval), MaxRetries);
-            await blob.DownloadToStreamAsync(stream);
+            var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
+            await blob.FetchAttributesAsync().ConfigureAwait(false);
+
+            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
+            container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;
+
+            await blob.DownloadToStreamAsync(stream).ConfigureAwait(false);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
@@ -43,21 +40,21 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived)
         {
             var key = Guid.NewGuid().ToString();
-            var blob = container.GetBlockBlobReference(Path.Combine(BasePath, key));
+            var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
             SetValidUntil(blob, timeToBeReceived);
-            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = NumberOfIOThreads;
-            container.ServiceClient.DefaultRequestOptions.RetryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(BackOffInterval), MaxRetries);
-            blob.StreamWriteSizeInBytes = BlockSize;
-            await blob.UploadFromStreamAsync(stream);
+            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
+            container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;
+            blob.StreamWriteSizeInBytes = settings.BlockSize;
+            await blob.UploadFromStreamAsync(stream).ConfigureAwait(false);
             return key;
         }
 
         public async Task Start()
         {
-            ServicePointManager.DefaultConnectionLimit = NumberOfIOThreads;
-            await container.CreateIfNotExistsAsync();
+            ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
+            await container.CreateIfNotExistsAsync().ConfigureAwait(false);
             timer.Change(0, 300000);
-            logger.Info("Blob storage data bus started. Location: " + Path.Combine(container.Uri.ToString(), BasePath));
+            logger.Info("Blob storage data bus started. Location: " + Path.Combine(container.Uri.ToString(), settings.BasePath));
         }
 
         public void Dispose()
@@ -79,7 +76,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                     if (blockBlob == null) continue;
 
                     blockBlob.FetchAttributes();
-                    var validUntil = GetValidUntil(blockBlob, DefaultTTL);
+                    var validUntil = GetValidUntil(blockBlob, settings.TTL);
                     if (validUntil < DateTime.UtcNow)
                     {
                         blockBlob.DeleteIfExists();
@@ -159,7 +156,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         }
 
         CloudBlobContainer container;
+        DataBusSettings settings;
         Timer timer;
         static ILog logger = LogManager.GetLogger(typeof(IDataBus));
+        ExponentialRetry retryPolicy;
     }
 }

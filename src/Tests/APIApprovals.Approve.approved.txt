@@ -8,13 +8,12 @@ namespace NServiceBus
         public AzureDataBus() { }
         protected override System.Type ProvidedByFeature() { }
     }
-    [System.ObsoleteAttribute("Default can be found in our documentation. Will be treated as an error from versi" +
-        "on 6.0.0. Will be removed in version 7.0.0.", false)]
+    [System.ObsoleteAttribute("Default can be found in our documentation. Will be removed in version 2.0.0.", true)]
     public class AzureDataBusDefaults
     {
         public AzureDataBusDefaults() { }
     }
-    [System.ObsoleteAttribute(@"Use `configuration.UseDataBus<AzureDataBus>()`, where `configuration` is an instance of `EndpointConfiguration`. If self-hosting the instance can be obtained from `new EndpointConfiguration()`. if using the NServiceBus Host the instance of `EndpointConfiguration` will be passed in via the `INeedInitialization` or `IConfigureThisEndpoint` interfaces. Use `UseDataBusExtensions.UseDataBus<AzureDataBus>()` instead. Will be treated as an error from version 6.0.0. Will be removed in version 7.0.0.", false)]
+    [System.ObsoleteAttribute(@"Use `configuration.UseDataBus<AzureDataBus>()`, where `configuration` is an instance of `EndpointConfiguration`. If self-hosting the instance can be obtained from `new EndpointConfiguration()`. if using the NServiceBus Host the instance of `EndpointConfiguration` will be passed in via the `INeedInitialization` or `IConfigureThisEndpoint` interfaces. Use `UseDataBusExtensions.UseDataBus<AzureDataBus>()` instead. Will be removed in version 2.0.0.", true)]
     public class AzureDataBusPersistence : NServiceBus.Features.Feature
     {
         public AzureDataBusPersistence() { }
@@ -34,6 +33,8 @@ namespace NServiceBus
 }
 namespace NServiceBus.Config
 {
+    [System.ObsoleteAttribute("Configuration api no longer supported. Please use the code first api. Will be rem" +
+        "oved in version 2.0.0.", true)]
     public class AzureDataBusConfig : System.Configuration.ConfigurationSection
     {
         public AzureDataBusConfig() { }
@@ -49,10 +50,24 @@ namespace NServiceBus.Config
 }
 namespace NServiceBus.DataBus.Azure.BlobStorage
 {
-    [System.ObsoleteAttribute("No longer a public api. Will be treated as an error from version 6.0.0. Will be r" +
-        "emoved in version 7.0.0.", false)]
+    [System.ObsoleteAttribute("No longer a public api. Will be removed in version 2.0.0.", true)]
     public class BlobStorageDataBus
     {
         public BlobStorageDataBus() { }
+    }
+}
+namespace NServiceBus.DataBus.AzureBlobStorage
+{
+    public class DataBusSettings
+    {
+        public int BackOffInterval;
+        public string BasePath;
+        public int BlockSize;
+        public string ConnectionString;
+        public string Container;
+        public int MaxRetries;
+        public int NumberOfIOThreads;
+        public long TTL;
+        public DataBusSettings() { }
     }
 }
