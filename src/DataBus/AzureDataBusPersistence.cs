@@ -18,7 +18,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             if (config != null)
             {
-                throw new NotSupportedException($"The {nameof(AzureDataBusConfig)} configuration section is no longer supported. Remove this from this configuration section. Switch to the code API by using `{nameof(EndpointConfiguration)}. endpointConfiguration.UseDataBus<AzureDataBus>().SomeSetting()` instead.");
+                throw new NotSupportedException($"{nameof(AzureDataBusConfig)} configuration section is no longer supported. Remove this from this configuration section. Switch to the code API by using `{nameof(EndpointConfiguration)}. endpointConfiguration.UseDataBus<AzureDataBus>().SomeSetting()` instead.");
             }
 
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
