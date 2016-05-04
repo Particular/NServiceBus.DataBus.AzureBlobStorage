@@ -10,7 +10,7 @@ namespace NServiceBus
     {
         protected override Type ProvidedByFeature()
         {
-            return typeof(AzureDataBusPersistence);
+            return typeof(DataBus.AzureBlobStorage.AzureDataBusPersistence);
         }
     }
 }

@@ -14,7 +14,7 @@ public class When_sending_databus_properties
         endpointConfiguration.UseSerialization<JsonSerializer>();
 
         endpointConfiguration.UseDataBus<AzureDataBus>()
-            .ConnectionString(Environment.GetEnvironmentVariable("AzureStorageQueueTransport.ConnectionString"));
+            .ConnectionString(Environment.GetEnvironmentVariable("NServiceBus.DataBus.AzureBlobStorage.ConnectionString"));
 
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.EnableInstallers();
