@@ -70,7 +70,7 @@
 
         public static DataBusExtentions<AzureDataBus> Container(this DataBusExtentions<AzureDataBus> config, string containerName)
         {
-          
+
             if (!IsValidBlobContainerName(containerName))
             {
                 const string errorMessage =
@@ -83,11 +83,11 @@
                 throw new ArgumentException(errorMessage, nameof(containerName));
             }
 
-           
+
             GetSettings(config).Container = containerName;
             return config;
         }
-        
+
         public static DataBusExtentions<AzureDataBus> BasePath(this DataBusExtentions<AzureDataBus> config, string basePath)
         {
             var value = basePath != null ? basePath : " ";

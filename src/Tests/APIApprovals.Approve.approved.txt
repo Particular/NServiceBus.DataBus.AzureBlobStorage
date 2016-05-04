@@ -56,18 +56,3 @@ namespace NServiceBus.DataBus.Azure.BlobStorage
         public BlobStorageDataBus() { }
     }
 }
-namespace NServiceBus.DataBus.AzureBlobStorage
-{
-    public class DataBusSettings
-    {
-        public int BackOffInterval;
-        public string BasePath;
-        public int BlockSize;
-        public string ConnectionString;
-        public string Container;
-        public int MaxRetries;
-        public int NumberOfIOThreads;
-        public long TTL;
-        public DataBusSettings() { }
-    }
-}

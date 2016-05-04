@@ -4,7 +4,7 @@ namespace NServiceBus
     using DataBus;
 
     /// <summary>
-    /// Defines Azure databus that can be used by NServiceBus
+    /// DataBus implementation that uses azure blob storage.
     /// </summary>
     public class AzureDataBus : DataBusDefinition
     {
