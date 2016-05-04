@@ -31,5 +31,4 @@ public class APIApprovals
             .Where(l => !string.IsNullOrWhiteSpace(l))
             );
     }
-
 }

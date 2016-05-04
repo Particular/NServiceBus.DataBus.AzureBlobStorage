@@ -93,7 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureDataBus.cs" />
-    <Compile Include="AzureDataBusGuard.cs" />
     <Compile Include="AzureDataBusPersistence.cs" />
     <Compile Include="BlobStorageDataBus.cs" />
     <Compile Include="ConfigureAzureDataBus.cs" />

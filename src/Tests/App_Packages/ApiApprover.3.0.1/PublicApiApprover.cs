@@ -1,10 +1,10 @@
-﻿using System.IO;
-using ApprovalTests;
-using ApprovalTests.Namers;
-using Mono.Cecil;
-
-namespace ApiApprover
+﻿namespace ApiApprover
 {
+    using System.IO;
+    using ApprovalTests;
+    using ApprovalTests.Namers;
+    using Mono.Cecil;
+
     public static class PublicApiApprover
     {
         public static void ApprovePublicApi(string assemblyPath)
@@ -16,7 +16,7 @@ namespace ApiApprover
             var asm = AssemblyDefinition.ReadAssembly(assemblyPath, new ReaderParameters(ReadingMode.Deferred)
             {
                 ReadSymbols = readSymbols,
-                AssemblyResolver = assemblyResolver,
+                AssemblyResolver = assemblyResolver
             });
 
             var publicApi = PublicApiGenerator.CreatePublicApiForAssembly(asm);
@@ -27,17 +27,12 @@ namespace ApiApprover
 
         private class AssemblyPathNamer : UnitTestFrameworkNamer
         {
-            private readonly string name;
-
             public AssemblyPathNamer(string assemblyPath)
             {
-                name = Path.GetFileNameWithoutExtension(assemblyPath);
+                Name = Path.GetFileNameWithoutExtension(assemblyPath);
             }
 
-            public override string Name
-            {
-                get { return name; }
-            }
+            public override string Name { get; }
         }
     }
 }
