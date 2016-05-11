@@ -8,6 +8,7 @@ namespace NServiceBus
     /// </summary>
     public class AzureDataBus : DataBusDefinition
     {
+        /// <summary>The feature to enable when this databus is selected.</summary>
         protected override Type ProvidedByFeature()
         {
             return typeof(DataBus.AzureBlobStorage.AzureDataBusPersistence);

@@ -6,8 +6,14 @@
     using DataBus;
     using DataBus.AzureBlobStorage;
 
+    /// <summary>
+    /// Configuration options for the Azure BlobStorage DataBus.
+    /// </summary>
     public static class ConfigureAzureDataBus
     {
+        /// <summary>
+        /// Sets the number of retries used by the blob storage client. Default is 5.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> MaxRetries(this DataBusExtentions<AzureDataBus> config, int maxRetries)
         {
             if (maxRetries < 0)
@@ -19,6 +25,9 @@
             return config;
         }
 
+        /// <summary>
+        /// Sets backoff intervall used by the blob storage client. Default is 30 seconds.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> BackOffInterval(this DataBusExtentions<AzureDataBus> config, int backOffInterval)
         {
             if (backOffInterval < 0)
@@ -30,6 +39,9 @@
             return config;
         }
 
+        /// <summary>
+        /// Sets the block size used by the blob storage client. Default is 4mb which also is the maximum for blob storage.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> BlockSize(this DataBusExtentions<AzureDataBus> config, int blockSize)
         {
             if (blockSize <= 0)
@@ -46,6 +58,9 @@
             return config;
         }
 
+        /// <summary>
+        /// Sets the number threads used the blob storage client. Default is 5.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> NumberOfIOThreads(this DataBusExtentions<AzureDataBus> config, int numberOfIOThreads)
         {
             if (numberOfIOThreads <= 0)
@@ -57,6 +72,9 @@
             return config;
         }
 
+        /// <summary>
+        /// The connection string to use. Default is `UseDevelopmentStorage=true`.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> ConnectionString(this DataBusExtentions<AzureDataBus> config, string connectionString)
         {
             if (string.IsNullOrWhiteSpace(connectionString))
@@ -68,6 +86,9 @@
             return config;
         }
 
+        /// <summary>
+        /// The blob container name to use. Default is ``.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> Container(this DataBusExtentions<AzureDataBus> config, string containerName)
         {
 
@@ -88,6 +109,9 @@
             return config;
         }
 
+        /// <summary>
+        /// The base path within the container. Default is ``.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> BasePath(this DataBusExtentions<AzureDataBus> config, string basePath)
         {
             var value = basePath != null ? basePath : " ";
@@ -102,6 +126,10 @@
             return config;
         }
 
+        /// <summary>
+        /// Sets the default TTL to use for messages with no specific TTL. By default no TTL is set and messages are kept forever.
+        /// Note that messages in flight or in the error queue can no longer be processed when DataBus entry has been removed.
+        /// </summary>
         public static DataBusExtentions<AzureDataBus> DefaultTTL(this DataBusExtentions<AzureDataBus> config, long defaultTTLInSeconds)
         {
             if (defaultTTLInSeconds < 0)

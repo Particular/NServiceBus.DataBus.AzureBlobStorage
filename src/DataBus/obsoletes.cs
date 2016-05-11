@@ -1,4 +1,6 @@
-﻿namespace NServiceBus
+﻿#pragma warning disable 1591
+
+namespace NServiceBus
 {
     using Features;
 
