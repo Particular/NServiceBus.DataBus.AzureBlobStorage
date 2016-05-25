@@ -37,7 +37,7 @@
         [TestCase(null)]
         public void Should_not_allow_invalid_connection_string(string connectionString)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.ConnectionString(connectionString));
+            Assert.Throws<ArgumentException>(() => config.ConnectionString(connectionString));
         }
 
         [TestCase("con")]
