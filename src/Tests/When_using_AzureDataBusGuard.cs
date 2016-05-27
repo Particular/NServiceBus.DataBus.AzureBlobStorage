@@ -76,6 +76,6 @@
             Assert.Throws<ArgumentOutOfRangeException>(() => config.DefaultTTL(-1L));
         }
 
-        DataBusExtentions<AzureDataBus> config = new DataBusExtentions<AzureDataBus>(new SettingsHolder());
+        DataBusExtensions<AzureDataBus> config = new DataBusExtensions<AzureDataBus>(new SettingsHolder());
     }
 }
