@@ -7,7 +7,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataBus;
     using Logging;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
@@ -25,9 +24,10 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         public async Task<Stream> Get(string key)
         {
-            Stream stream = new MemoryStream();
             var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
             await blob.FetchAttributesAsync().ConfigureAwait(false);
+
+            var stream = new MemoryStream((int) blob.Properties.Length);
 
             blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
             container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;
@@ -158,7 +158,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         CloudBlobContainer container;
         DataBusSettings settings;
         Timer timer;
-        static ILog logger = LogManager.GetLogger(typeof(IDataBus));
         ExponentialRetry retryPolicy;
+        static ILog logger = LogManager.GetLogger(typeof(IDataBus));
     }
 }
