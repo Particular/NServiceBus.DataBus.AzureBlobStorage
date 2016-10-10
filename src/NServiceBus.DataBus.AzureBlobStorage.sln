@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage", "DataBus\NServiceBus.DataBus.AzureBlobStorage.csproj", "{FB6302D6-25DC-470D-876E-D36EF81AFC97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage.Tests", "Tests\NServiceBus.DataBus.AzureBlobStorage.Tests.csproj", "{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4B9FD4F1-CAD0-4A40-90F4-0EFE912AEEEB}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests", "AcceptanceTests\NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests.csproj", "{30D8D310-671A-4C18-B0D7-1F16F46A5C83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{08A86324-B119-415C-A1EE-07876E61D6C2}"
+	ProjectSection(SolutionItems) = preProject
+		..\packaging\nuget\NServiceBus.DataBus.AzureBlobStorage.nuspec = ..\packaging\nuget\NServiceBus.DataBus.AzureBlobStorage.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB6302D6-25DC-470D-876E-D36EF81AFC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB6302D6-25DC-470D-876E-D36EF81AFC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB6302D6-25DC-470D-876E-D36EF81AFC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB6302D6-25DC-470D-876E-D36EF81AFC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D8D310-671A-4C18-B0D7-1F16F46A5C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D8D310-671A-4C18-B0D7-1F16F46A5C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D8D310-671A-4C18-B0D7-1F16F46A5C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D8D310-671A-4C18-B0D7-1F16F46A5C83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
