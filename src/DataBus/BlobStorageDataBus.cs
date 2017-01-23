@@ -14,8 +14,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
-        const int cleanupInterval = 300000;
-
         public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings)
         {
             this.container = container;
@@ -55,7 +53,10 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);
-            timer.Change(cleanupInterval, Timeout.Infinite);
+            if (settings.ShouldPerformCleanup())
+            {
+                timer.Change(settings.CleanupInterval, Timeout.Infinite);
+            }
             logger.Info("Blob storage data bus started. Location: " + Path.Combine(container.Uri.ToString(), settings.BasePath));
         }
 
@@ -88,7 +89,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
             finally
             {
-                timer.Change(cleanupInterval, Timeout.Infinite);
+                timer.Change(settings.CleanupInterval, Timeout.Infinite);
             }
         }
 
