@@ -53,16 +53,16 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);
-            timer.Change(0, 300000);
+            if (settings.ShouldPerformCleanup())
+            {
+                timer.Change(settings.CleanupInterval, Timeout.Infinite);
+            }
             logger.Info("Blob storage data bus started. Location: " + Path.Combine(container.Uri.ToString(), settings.BasePath));
         }
 
         public void Dispose()
         {
             timer.Dispose();
-
-            DeleteExpiredBlobs();
-
             logger.Info("Blob storage data bus stopped");
         }
 
@@ -75,17 +75,29 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 {
                     if (blockBlob == null) continue;
 
-                    blockBlob.FetchAttributes();
-                    var validUntil = GetValidUntil(blockBlob, settings.TTL);
-                    if (validUntil < DateTime.UtcNow)
+                    try
                     {
-                        blockBlob.DeleteIfExists();
+                        blockBlob.FetchAttributes();
+                        var validUntil = GetValidUntil(blockBlob, settings.TTL);
+                        if (validUntil < DateTime.UtcNow)
+                        {
+                            blockBlob.DeleteIfExists();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Another endpoint instance could have deleted the blob just a moment ago after blobs were listed by the current instance
+                        logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception while deleting blob {blockBlob.Name}.", ex);
                     }
                 }
             }
             catch (StorageException ex) // needs to stay as it runs on a background thread
             {
-                logger.Warn(ex.Message);
+                logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception.", ex);
+            }
+            finally
+            {
+                timer.Change(settings.CleanupInterval, Timeout.Infinite);
             }
         }
 
