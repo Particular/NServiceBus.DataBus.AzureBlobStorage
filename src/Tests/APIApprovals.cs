@@ -1,35 +1,23 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using ApiApprover;
-using ApprovalTests;
-using Mono.Cecil;
-using NServiceBus;
-using NUnit.Framework;
-
-[TestFixture]
-public class APIApprovals
+﻿namespace NServiceBus.Azure.WindowsAzureServiceBus.Tests.API
 {
-    [Test]
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    public void Approve()
-    {
-        Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-        var assemblyPath = Path.GetFullPath(typeof(AzureDataBus).Assembly.Location);
-        var asm = AssemblyDefinition.ReadAssembly(assemblyPath);
-        var publicApi = Filter(PublicApiGenerator.CreatePublicApiForAssembly(asm));
-        Approvals.Verify(publicApi);
-    }
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+    using ApiApprover;
+    using ApprovalTests.Reporters;
+    using NUnit.Framework;
 
-    string Filter(string text)
+    [TestFixture]
+    public class APIApprovals
     {
-        return string.Join(Environment.NewLine, text.Split(new[]
+        [Test]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [UseReporter(typeof(DiffReporter), typeof(AllFailingTestsClipboardReporter))]
+        public void Approve()
         {
-            Environment.NewLine
-        }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(l => !l.StartsWith("[assembly: ReleaseDateAttribute("))
-            .Where(l => !string.IsNullOrWhiteSpace(l))
-            );
+            var combine = Path.Combine(TestContext.CurrentContext.TestDirectory, "NServiceBus.DataBus.AzureBlobStorage.dll");
+            var assembly = Assembly.LoadFile(combine);
+            PublicApiApprover.ApprovePublicApi(assembly);
+        }
     }
 }
