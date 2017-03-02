@@ -12,6 +12,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             BlockSize = 4 * 1024 * 1024; // Maximum 4MB
             BackOffInterval = 30; // seconds
             TTL = long.MaxValue; // seconds
+            CleanupInterval = 300000; // milliseconds
+        }
+
+        internal bool ShouldPerformCleanup()
+        {
+            return CleanupInterval > 0;
         }
 
         public string ConnectionString;
@@ -22,5 +28,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public string BasePath;
         public int BlockSize;
         public long TTL;
+        public int CleanupInterval;
     }
 }
