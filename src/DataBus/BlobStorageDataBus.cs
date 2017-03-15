@@ -14,6 +14,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
+        const int cleanupInterval = 300000;
+
         public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings)
         {
             this.container = container;
@@ -100,7 +102,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 timer.Change(settings.CleanupInterval, Timeout.Infinite);
             }
         }
-
 
         internal static void SetValidUntil(ICloudBlob blob, TimeSpan timeToBeReceived)
         {
