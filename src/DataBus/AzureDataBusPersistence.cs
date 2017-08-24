@@ -14,13 +14,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         protected override void Setup(FeatureConfigurationContext context)
         {
-            var config = context.Settings.GetConfigSection<AzureDataBusConfig>();
-
-            if (config != null)
-            {
-                throw new NotSupportedException($"{nameof(AzureDataBusConfig)} configuration section is no longer supported. Remove this from this configuration section. Switch to the code API by using `{nameof(EndpointConfiguration)}. endpointConfiguration.UseDataBus<AzureDataBus>().SomeSetting()` instead.");
-            }
-
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
             var cloudBlobClient = CloudStorageAccount.Parse(dataBusSettings.ConnectionString).CreateCloudBlobClient();
