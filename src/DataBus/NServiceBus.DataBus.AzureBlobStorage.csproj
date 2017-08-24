@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AssemblyName>NServiceBus.DataBus.AzureBlobStorage</AssemblyName>
-    <NuSpecFileName>nservicebus.databus.azureblobstorage</NuSpecFileName>
+    <PackageId>nservicebus.databus.azureblobstorage</PackageId>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
