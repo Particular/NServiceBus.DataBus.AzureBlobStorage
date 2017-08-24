@@ -41,4 +41,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
+  <ItemGroup>
+      <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
+  </ItemGroup>
 </Project>
