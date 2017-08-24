@@ -14,10 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4B9FD4F1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests", "AcceptanceTests\NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests.csproj", "{30D8D310-671A-4C18-B0D7-1F16F46A5C83}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{08A86324-B119-415C-A1EE-07876E61D6C2}"
-	ProjectSection(SolutionItems) = preProject
-		..\packaging\nuget\NServiceBus.DataBus.AzureBlobStorage.nuspec = ..\packaging\nuget\NServiceBus.DataBus.AzureBlobStorage.nuspec
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
