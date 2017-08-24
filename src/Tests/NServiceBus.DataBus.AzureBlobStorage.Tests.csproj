@@ -15,7 +15,7 @@
 	<Compile Remove="NServiceBus.DataBus.AzureBlobStorage.received.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="6.3.1" />
+    <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4" />
