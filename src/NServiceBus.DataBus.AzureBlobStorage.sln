@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
-MinimumVisualStudioVersion = 10.0.40219.1
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 15.0.26430.12
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage", "DataBus\NServiceBus.DataBus.AzureBlobStorage.csproj", "{FB6302D6-25DC-470D-876E-D36EF81AFC97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.DataBus.AzureBlobStorage.Tests", "Tests\NServiceBus.DataBus.AzureBlobStorage.Tests.csproj", "{2A5ACF6D-0358-4F1E-BEE1-9BD2D267843C}"
@@ -41,4 +41,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+    GlobalSection(ExtensibilityGlobals) = postSolution
+        SolutionGuid = {8CCDC9BC-BF1F-44D9-B44B-5188892DFA67}
+    EndGlobalSection
 EndGlobal
