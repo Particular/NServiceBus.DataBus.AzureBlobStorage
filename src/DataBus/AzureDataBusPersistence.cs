@@ -1,7 +1,5 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    using System;
-    using Config;
     using Features;
     using Microsoft.WindowsAzure.Storage;
 
@@ -18,7 +16,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             var cloudBlobClient = CloudStorageAccount.Parse(dataBusSettings.ConnectionString).CreateCloudBlobClient();
 
-            var dataBus = new BlobStorageDataBus(cloudBlobClient.GetContainerReference(dataBusSettings.Container), dataBusSettings);
+            var dataBus = new BlobStorageDataBus(cloudBlobClient.GetContainerReference(dataBusSettings.Container), dataBusSettings, new AsyncTimer());
 
             context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
         }

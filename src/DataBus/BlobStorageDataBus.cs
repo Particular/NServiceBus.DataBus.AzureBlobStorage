@@ -5,7 +5,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Threading;
     using System.Threading.Tasks;
     using Logging;
     using Microsoft.WindowsAzure.Storage;
@@ -16,11 +15,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     {
         const int cleanupInterval = 300000;
 
-        public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings)
+        public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings, IAsyncTimer timer)
         {
             this.container = container;
             this.settings = settings;
-            timer = new Timer(o => DeleteExpiredBlobs());
+            this.timer = timer;
+
             retryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(settings.BackOffInterval), settings.MaxRetries);
         }
 
@@ -55,40 +55,42 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);
-            timer.Change(cleanupInterval, Timeout.Infinite);
+
+            timer.Start(DeleteExpiredBlobs, TimeSpan.FromMilliseconds(cleanupInterval), exception =>
+            {
+                logger.Error("Error deleting expired blobs", exception);
+            });
+
             logger.Info("Blob storage data bus started. Location: " + Path.Combine(container.Uri.ToString(), settings.BasePath));
         }
 
         public void Dispose()
         {
-            timer.Dispose();
+            timer.Stop().GetAwaiter().GetResult();
             logger.Info("Blob storage data bus stopped");
         }
 
-        void DeleteExpiredBlobs()
-        {
+        async Task DeleteExpiredBlobs()
+        {            
             try
             {
-                var blobs = container.ListBlobs();
+                var blobs = await container.ListBlobsAsync().ConfigureAwait(false);
+
                 foreach (var blockBlob in blobs.Select(blob => blob as CloudBlockBlob))
                 {
                     if (blockBlob == null) continue;
 
-                    blockBlob.FetchAttributes();
-                    var validUntil = GetValidUntil(blockBlob, settings.TTL);
+                    await blockBlob.FetchAttributesAsync().ConfigureAwait(false);
+                    var validUntil = await GetValidUntil(blockBlob, settings.TTL).ConfigureAwait(false);
                     if (validUntil < DateTime.UtcNow)
                     {
-                        blockBlob.DeleteIfExists();
+                        await blockBlob.DeleteIfExistsAsync().ConfigureAwait(false);
                     }
                 }
             }
             catch (StorageException ex) // needs to stay as it runs on a background thread
             {
                 logger.Warn(ex.Message);
-            }
-            finally
-            {
-                timer.Change(cleanupInterval, Timeout.Infinite);
             }
         }
 
@@ -104,7 +106,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         }
 
 
-        internal static DateTime GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
+        internal static async Task<DateTime> GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
         {
             string validUntilUtcString;
             if (blockBlob.Metadata.TryGetValue("ValidUntilUtc", out validUntilUtcString))
@@ -133,7 +135,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 //If we cant parse the datetime then assume data corruption and store for max time
                 SetValidUntil(blockBlob, TimeSpan.MaxValue);
                 //upload the changed metadata
-                blockBlob.SetMetadata();
+                await blockBlob.SetMetadataAsync().ConfigureAwait(false);
 
                 return ToDefault(defaultTtl, blockBlob);
             }
@@ -160,7 +162,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         CloudBlobContainer container;
         DataBusSettings settings;
-        Timer timer;
+        IAsyncTimer timer;
         ExponentialRetry retryPolicy;
         static ILog logger = LogManager.GetLogger(typeof(IDataBus));
     }
