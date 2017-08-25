@@ -9,7 +9,7 @@
     <NoWarn>PCR0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0-alpharelease0051" />
+    <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="NUnit" Version="3.6.1" />
 
     <ProjectReference Include="..\DataBus\NServiceBus.DataBus.AzureBlobStorage.csproj" />
