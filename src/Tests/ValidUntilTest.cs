@@ -135,7 +135,7 @@ abstract class ValidUntilTest
 
         var cloudBlob = MockRepository.GenerateStub<ICloudBlob>();
         cloudBlob.Stub(x => x.Metadata).Return(new Dictionary<string, string>());
-        cloudBlob.Stub(x => x.SetMetadata());
+        cloudBlob.Stub(x => x.SetMetadataAsync()).Return(Task.FromResult(0));
         cloudBlob.Stub(x => x.Properties).Return(cloudBlobProperties);
         return cloudBlob;
     }
