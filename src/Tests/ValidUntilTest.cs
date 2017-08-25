@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Blob;
 using NServiceBus.DataBus.AzureBlobStorage;
 using NUnit.Framework;
@@ -11,19 +12,19 @@ using Rhino.Mocks;
 abstract class ValidUntilTest
 {
     [Test]
-    public void ValidUntil_is_correctly_set()
+    public async Task ValidUntil_is_correctly_set()
     {
         var cloudBlob = StubACloudBlob();
 
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
     }
 
     [Test]
-    public virtual void ValidUntil_is_not_corrupt_by_change_in_local()
+    public virtual async Task ValidUntil_is_not_corrupt_by_change_in_local()
     {
         var currentCulture = Thread.CurrentThread.CurrentCulture;
         try
@@ -34,7 +35,7 @@ abstract class ValidUntilTest
             var timeSpan = dateTime - DateTime.UtcNow;
             SetValidUntil(cloudBlob, timeSpan);
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-AU");
-            var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob);
+            var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
             //Verify that day and month are not switched
             Assert.AreEqual(4, resultValidUntil.Day);
             Assert.AreEqual(1, resultValidUntil.Month);
@@ -47,80 +48,80 @@ abstract class ValidUntilTest
 
     [Test]
     [Explicit("Should not be possible to have a corrupted value")]
-    public void ValidUntil_should_default_to_DateTimeMax_for_corrupted_value()
+    public async Task ValidUntil_should_default_to_DateTimeMax_for_corrupted_value()
     {
         var cloudBlob = StubACloudBlob();
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         //HACK: set ValidUntil to be a non parsable string
         cloudBlob.Metadata["ValidUntil"] = "Not a date time";
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
     [Test]
-    public void ValidUntil_is_UtcKind()
+    public async Task ValidUntil_is_UtcKind()
     {
         var cloudBlob = StubACloudBlob();
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
         Assert.AreEqual(DateTimeKind.Utc, resultValidUntil.Kind);
     }
 
     [Test]
-    public virtual void ValidUntil_defaults_to_DateTimeMax()
+    public virtual async Task ValidUntil_defaults_to_DateTimeMax()
     {
         var cloudBlob = StubACloudBlob();
 
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
     [Test]
-    public virtual void ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet()
+    public virtual async Task ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet()
     {
         var validUntil = DateTime.UtcNow;
         var cloudBlob = StubACloudBlob(validUntil);
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
         Assert.AreEqual(validUntil.AddSeconds(defaultTtl), resultValidUntil);
     }
 
     [Test]
-    public virtual void ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet()
+    public virtual async Task ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet()
     {
         var cloudBlob = StubACloudBlob();
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
     [Test]
-    public virtual void ValidUntil_is_respected_IfDefaultTtlSet()
+    public virtual async Task ValidUntil_is_respected_IfDefaultTtlSet()
     {
         var lastModified = DateTime.UtcNow;
         var cloudBlob = StubACloudBlob(lastModified);
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
     }
 
     [Test]
-    public virtual void ValidUntil_is_respected_IfDefaultTtlSet_EvenWhenNoLastModifiedDateFound()
+    public virtual async Task ValidUntil_is_respected_IfDefaultTtlSet_EvenWhenNoLastModifiedDateFound()
     {
         var cloudBlob = StubACloudBlob();
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));

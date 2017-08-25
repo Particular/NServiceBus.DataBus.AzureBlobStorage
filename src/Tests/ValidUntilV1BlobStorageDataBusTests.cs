@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Blob;
 using NUnit.Framework;
 
@@ -12,26 +13,26 @@ class ValidUntilV1BlobStorageDataBusTests : ValidUntilTest
     }
 
     [Ignore("this never worked since TimeSpan.MaxValue would overflow the datetime math")]
-    public override void ValidUntil_defaults_to_DateTimeMax()
+    public override async Task ValidUntil_defaults_to_DateTimeMax()
     {
-        base.ValidUntil_defaults_to_DateTimeMax();
+        await base.ValidUntil_defaults_to_DateTimeMax().ConfigureAwait(false);
     }
 
     [Ignore("no way this can work since we cannot be sure what culture the value was writen in")]
-    public override void ValidUntil_is_not_corrupt_by_change_in_local()
+    public override async Task ValidUntil_is_not_corrupt_by_change_in_local()
     {
-        base.ValidUntil_is_not_corrupt_by_change_in_local();
+        await base.ValidUntil_is_not_corrupt_by_change_in_local().ConfigureAwait(false);
     }
 
     [Ignore("this never worked since TimeSpan.MaxValue would overflow the datetime math")]
-    public override void ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet()
+    public override async Task ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet()
     {
-        base.ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet();
+        await base.ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet().ConfigureAwait(false);
     }
 
     [Ignore("this never worked since TimeSpan.MaxValue would overflow the datetime math")]
-    public override void ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet()
+    public override async Task ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet()
     {
-        base.ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet();
+        await base.ValidUntil_defaults_to_DateTimeMax_IfDefaultTtlSet_ButNoLastModifiedDateSet().ConfigureAwait(false);
     }
 }
