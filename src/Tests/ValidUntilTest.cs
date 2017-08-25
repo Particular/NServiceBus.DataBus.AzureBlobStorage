@@ -17,7 +17,7 @@ abstract class ValidUntilTest
         var cloudBlob = StubACloudBlob();
 
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
@@ -35,7 +35,7 @@ abstract class ValidUntilTest
             var timeSpan = dateTime - DateTime.UtcNow;
             SetValidUntil(cloudBlob, timeSpan);
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-AU");
-            var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
+            var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
             //Verify that day and month are not switched
             Assert.AreEqual(4, resultValidUntil.Day);
             Assert.AreEqual(1, resultValidUntil.Month);
@@ -54,7 +54,7 @@ abstract class ValidUntilTest
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         //HACK: set ValidUntil to be a non parsable string
         cloudBlob.Metadata["ValidUntil"] = "Not a date time";
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
@@ -63,7 +63,7 @@ abstract class ValidUntilTest
     {
         var cloudBlob = StubACloudBlob();
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
         Assert.AreEqual(DateTimeKind.Utc, resultValidUntil.Kind);
     }
 
@@ -73,7 +73,7 @@ abstract class ValidUntilTest
         var cloudBlob = StubACloudBlob();
 
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
@@ -85,7 +85,7 @@ abstract class ValidUntilTest
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
         Assert.AreEqual(validUntil.AddSeconds(defaultTtl), resultValidUntil);
     }
 
@@ -96,7 +96,7 @@ abstract class ValidUntilTest
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
         Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
     }
 
@@ -108,7 +108,7 @@ abstract class ValidUntilTest
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
@@ -121,7 +121,7 @@ abstract class ValidUntilTest
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl).ConfigureAwait(false);
+        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
 
         Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
