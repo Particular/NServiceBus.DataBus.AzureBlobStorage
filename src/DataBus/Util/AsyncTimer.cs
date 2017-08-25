@@ -39,8 +39,10 @@
                 return TaskEx.CompletedTask;
             }
 
-            tokenSource.Cancel();
+            tokenSource.Cancel(false);
             tokenSource.Dispose();
+
+            tokenSource = null;
 
             return task ?? TaskEx.CompletedTask;
         }
