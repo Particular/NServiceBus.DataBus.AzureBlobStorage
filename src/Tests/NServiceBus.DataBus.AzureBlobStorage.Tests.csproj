@@ -15,7 +15,7 @@
 	<Compile Remove="NServiceBus.DataBus.AzureBlobStorage.received.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="6.3.1" />
+    <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4" />
@@ -26,7 +26,6 @@
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
     <PackageReference Include="NUnit" Version="3.6.1" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
-    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
     <PackageReference Include="ApiApprover" Version="6.1.0-beta2" />
     <PackageReference Include="PublicApiGenerator" Version="6.1.0-beta2" />
 	

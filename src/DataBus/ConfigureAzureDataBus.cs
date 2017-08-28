@@ -2,7 +2,7 @@
 {
     using System;
     using System.Text.RegularExpressions;
-    using Configuration.AdvanceExtensibility;
+    using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
 

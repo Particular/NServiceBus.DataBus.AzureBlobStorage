@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AssemblyName>NServiceBus.DataBus.AzureBlobStorage</AssemblyName>
-    <NuSpecFileName>nservicebus.databus.azureblobstorage</NuSpecFileName>
+    <PackageId>nservicebus.databus.azureblobstorage</PackageId>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
@@ -13,18 +13,17 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>..\..\binaries\</OutputPath>
-    <NoWarn>CS0419</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
-    <NoWarn>1591, 0618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Description>NServiceBus AzureBlobStorage DataBus</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\..\packaging\nuget\NServiceBus.DataBus.AzureBlobStorage.nuspec" Link="nservicebus.databus.azureblobstorage" />
-    <PackageReference Include="NServiceBus" Version="6.0.0" />
-    <PackageReference Include="Obsolete.Fody" Version="4.2.2" />
-    <PackageReference Include="Fody" Version="2.1.0" />
-    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
-    <PackageReference Include="NuGetPackager" Version="0.6.3" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" />
+    <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
+    <PackageReference Include="Obsolete.Fody" Version="4.2.4" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="2.1.2" PrivateAssets="all" />
+    <PackageReference Include="Particular.CodeRules" Version="0.2.0" PrivateAssets="all" />
 
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.2" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.2" />
@@ -36,8 +35,8 @@
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Spatial" Version="5.8.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.1.1" />
-
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <ItemGroup>
+      <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
   </ItemGroup>
 </Project>
