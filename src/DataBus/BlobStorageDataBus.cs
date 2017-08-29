@@ -99,7 +99,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
             catch (StorageException ex) // needs to stay as it runs on a background thread
             {
-                logger.Warn(ex.Message);
+                logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception.", ex);
             }
         }
 
