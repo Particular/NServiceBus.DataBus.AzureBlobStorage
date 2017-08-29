@@ -15,6 +15,7 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BackOffInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int backOffInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BasePath(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string basePath) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BlockSize(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int blockSize) { }
+        public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> CleanupInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int cleanupInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> ConnectionString(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string connectionString) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> Container(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string containerName) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> DefaultTTL(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, long defaultTTLInSeconds) { }
