@@ -34,7 +34,7 @@
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Spatial" Version="5.8.2" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.1.1" />
+    <PackageReference Include="WindowsAzure.Storage" Version="[8.0.0,9.0.0)" />
   </ItemGroup>
   <ItemGroup>
       <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
