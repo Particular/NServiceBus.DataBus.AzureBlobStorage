@@ -7,7 +7,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             Container = "databus";
             BasePath = "";
             MaxRetries = 5;
-            NumberOfIOThreads = 5;
+            NumberOfIOThreads = 1;
             ConnectionString = "UseDevelopmentStorage=true";
             BlockSize = 4 * 1024 * 1024; // Maximum 4MB
             BackOffInterval = 30; // seconds
