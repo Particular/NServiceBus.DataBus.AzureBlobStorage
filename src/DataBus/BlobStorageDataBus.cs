@@ -117,14 +117,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         internal static async Task<DateTime> GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
         {
-            string validUntilUtcString;
-            if (blockBlob.Metadata.TryGetValue("ValidUntilUtc", out validUntilUtcString))
+            if (blockBlob.Metadata.TryGetValue("ValidUntilUtc", out var validUntilUtcString))
             {
                 return DateTimeExtensions.ToUtcDateTime(validUntilUtcString);
             }
 
-            string validUntilString;
-            if (!blockBlob.Metadata.TryGetValue("ValidUntil", out validUntilString))
+            if (!blockBlob.Metadata.TryGetValue("ValidUntil", out var validUntilString))
             {
                 // no ValidUntil and no ValidUntilUtc will be considered non-expiring or whatever default ttl is set
                 return ToDefault(defaultTtl, blockBlob);
@@ -135,11 +133,10 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 style = DateTimeStyles.AdjustToUniversal;
             }
 
-            DateTime validUntil;
             //since this is the old version that could be written in any culture we cannot be certain it will parse so need to handle failure
-            if (!DateTime.TryParse(validUntilString, null, style, out validUntil))
+            if (!DateTime.TryParse(validUntilString, null, style, out var validUntil))
             {
-                var message = string.Format("Could not parse the 'ValidUntil' value `{0}` for blob {1}. Resetting 'ValidUntil' to not expire. You may consider manually removing this entry if non-expiry is incorrect.", validUntilString, blockBlob.Uri);
+                var message = $"Could not parse the 'ValidUntil' value `{validUntilString}` for blob {blockBlob.Uri}. Resetting 'ValidUntil' to not expire. You may consider manually removing this entry if non-expiry is incorrect.";
                 logger.Error(message);
                 //If we cant parse the datetime then assume data corruption and store for max time
                 SetValidUntil(blockBlob, TimeSpan.MaxValue);
