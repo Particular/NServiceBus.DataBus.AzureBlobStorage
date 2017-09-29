@@ -48,11 +48,11 @@ abstract class ValidUntilTest
     }
 
     [Test]
-    [Explicit("Should not be possible to have a corrupted value")]
     public async Task ValidUntil_should_default_to_DateTimeMax_for_corrupted_value()
     {
         var cloudBlob = StubACloudBlob();
-        SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
+        // When testing "ValidUntil" metadata, can't set "ValidUntilUtc" as it trumps "ValidUntil" case.
+        //SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         //HACK: set ValidUntil to be a non parsable string
         cloudBlob.Metadata["ValidUntil"] = "Not a date time";
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
@@ -1054,7 +1054,7 @@ abstract class ValidUntilTest
         public int StreamWriteSizeInBytes { get; set; }
         public int StreamMinimumReadSizeInBytes { get; set; }
         public BlobProperties Properties { get; set; }
-        public IDictionary<string, string> Metadata => new Dictionary<string, string>();
+        public IDictionary<string, string> Metadata {get; } = new Dictionary<string, string>();
         public DateTimeOffset? SnapshotTime { get; }
         public bool IsSnapshot { get; }
         public Uri SnapshotQualifiedUri { get; }
@@ -1312,7 +1312,7 @@ abstract class ValidUntilTest
         public int StreamWriteSizeInBytes { get; set; }
         public int StreamMinimumReadSizeInBytes { get; set; }
         public BlobProperties Properties { get; set; }
-        public IDictionary<string, string> Metadata => new Dictionary<string, string>();
+        public IDictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
         public DateTimeOffset? SnapshotTime { get; }
         public bool IsSnapshot { get; }
         public Uri SnapshotQualifiedUri { get; }
