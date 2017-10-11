@@ -162,8 +162,7 @@
 
         static DataBusSettings GetSettings(DataBusExtensions<AzureDataBus> config)
         {
-            DataBusSettings settings;
-            if (!config.GetSettings().TryGet(out settings))
+            if (!config.GetSettings().TryGet<DataBusSettings>(out var settings))
             {
                 settings = new DataBusSettings();
                 config.GetSettings().Set<DataBusSettings>(settings);
