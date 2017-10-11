@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AssemblyName>NServiceBus.DataBus.AzureBlobStorage</AssemblyName>
@@ -7,36 +7,32 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OutputPath>..\..\binaries\</OutputPath>
-    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
   </PropertyGroup>
+  
   <PropertyGroup>
     <Description>NServiceBus AzureBlobStorage DataBus</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="Obsolete.Fody" Version="4.2.4" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="2.1.2" PrivateAssets="all" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.0" PrivateAssets="all" />
+    <PackageReference Include="Particular.Packaging" Version="*" PrivateAssets="All" />
 
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+
+    <PackageReference Include="WindowsAzure.Storage" Version="[8.0.0,9.0.0)" />
+    <!-- specific versions of the dependencies are required for propers netstandard support -->
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.2" />
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.2" />
     <PackageReference Include="Microsoft.Data.Services.Client" Version="5.8.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Spatial" Version="5.8.2" />
-    <PackageReference Include="WindowsAzure.Storage" Version="[8.0.0,9.0.0)" />
   </ItemGroup>
-  <ItemGroup>
-      <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
-  </ItemGroup>
+  
 </Project>
