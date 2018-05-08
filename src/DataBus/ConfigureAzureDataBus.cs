@@ -2,7 +2,7 @@
 {
     using System;
     using System.Text.RegularExpressions;
-    using Configuration.AdvanceExtensibility;
+    using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
 
@@ -144,7 +144,7 @@
         /// Sets the default time interval to perform periodic clean up of blobs for expired messages with specific TTL. Default is 5 minutes.
         /// Note that value of zero (0) will disable periodic cleanup.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> CleanupInterval(this DataBusExtensions<AzureDataBus> config, int cleanupInterval )
+        public static DataBusExtensions<AzureDataBus> CleanupInterval(this DataBusExtensions<AzureDataBus> config, int cleanupInterval)
         {
             if (cleanupInterval < 0)
             {
@@ -162,8 +162,7 @@
 
         static DataBusSettings GetSettings(DataBusExtensions<AzureDataBus> config)
         {
-            DataBusSettings settings;
-            if (!config.GetSettings().TryGet(out settings))
+            if (!config.GetSettings().TryGet<DataBusSettings>(out var settings))
             {
                 settings = new DataBusSettings();
                 config.GetSettings().Set<DataBusSettings>(settings);

@@ -11,10 +11,15 @@ public class When_sending_databus_properties
     {
         var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
         endpointConfiguration.SendFailedMessagesTo("error");
-        endpointConfiguration.UseSerialization<JsonSerializer>();
-
+        endpointConfiguration.UseTransport<LearningTransport>();
+        var environmentVariable = "NServiceBus_DataBus_AzureBlobStorage_ConnectionString";
+        var connectionString = Environment.GetEnvironmentVariable(environmentVariable);
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new Exception($"Oh no! We couldn't find an environment variable '{environmentVariable}' with Azure Storage connection string.");
+        }
         endpointConfiguration.UseDataBus<AzureDataBus>()
-            .ConnectionString(Environment.GetEnvironmentVariable("NServiceBus.DataBus.AzureBlobStorage.ConnectionString"));
+            .ConnectionString(connectionString);
 
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.EnableInstallers();
