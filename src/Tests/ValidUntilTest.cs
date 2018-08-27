@@ -1061,7 +1061,7 @@ abstract class ValidUntilTest
         public StorageUri SnapshotQualifiedStorageUri { get; }
         public CopyState CopyState { get; }
         public BlobType BlobType { get; }
-#elif NETCOREAPP2_0
+#elif NETCOREAPP
         public Uri Uri { get; }
 
         public StorageUri StorageUri { get; }
