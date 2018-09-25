@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using NServiceBus.DataBus.AzureBlobStorage;
 using NUnit.Framework;
 
@@ -1024,6 +1025,46 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
+        public ICancellableAsyncResult BeginGetAccountProperties(AsyncCallback callback, object state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICancellableAsyncResult BeginGetAccountProperties(BlobRequestOptions requestOptions, OperationContext operationContext, AsyncCallback callback, object state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AccountProperties EndGetAccountProperties(IAsyncResult asyncResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AccountProperties GetAccountProperties(BlobRequestOptions requestOptions = null, OperationContext operationContext = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
         {
             throw new NotImplementedException();
@@ -1303,6 +1344,26 @@ abstract class ValidUntilTest
         }
 
         public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
