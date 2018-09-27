@@ -72,14 +72,17 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         }
 
         async Task DeleteExpiredBlobs()
-        {            
+        {
             try
             {
                 var blobs = await container.ListBlobsAsync().ConfigureAwait(false);
 
                 foreach (var blockBlob in blobs.Select(blob => blob as CloudBlockBlob))
                 {
-                    if (blockBlob == null) continue;
+                    if (blockBlob == null)
+                    {
+                        continue;
+                    }
 
                     try
                     {
