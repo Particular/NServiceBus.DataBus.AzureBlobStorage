@@ -51,7 +51,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         public async Task Start()
         {
-            ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             if (settings.ShouldPerformCleanup())
