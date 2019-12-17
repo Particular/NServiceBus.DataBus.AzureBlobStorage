@@ -4,7 +4,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
     using Logging;
     using Microsoft.WindowsAzure.Storage;
@@ -51,7 +50,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         public async Task Start()
         {
-            ServicePointManager.DefaultConnectionLimit = settings.NumberOfIOThreads;
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             if (settings.ShouldPerformCleanup())
