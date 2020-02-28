@@ -116,7 +116,7 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> BasePath(this DataBusExtensions<AzureDataBus> config, string basePath)
         {
-            var value = basePath != null ? basePath : " ";
+            var value = basePath ?? " ";
             var spacesOnly = value.Trim().Length == 0 && value.Length != 0;
 
             if (spacesOnly)
