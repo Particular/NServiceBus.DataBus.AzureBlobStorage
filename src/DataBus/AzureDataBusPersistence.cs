@@ -19,6 +19,23 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             ThrowIfConnectionStringAndTokenProviderSpecified(dataBusSettings);
 
+            var container = CreateCloudBlobContainer(dataBusSettings);
+
+            var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
+
+            context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
+        }
+
+        static void ThrowIfConnectionStringAndTokenProviderSpecified(DataBusSettings dataBusSettings)
+        {
+            if (dataBusSettings.TokenCredential != null && dataBusSettings.UserProvidedConnectionString)
+            {
+                throw new Exception("More than one method to connect to the storage account was supplied (using connection string and token provider). Use one method only.");
+            }
+        }
+
+        static CloudBlobContainer CreateCloudBlobContainer(DataBusSettings dataBusSettings)
+        {
             CloudBlobContainer container;
 
             // Attempt managed identity identity first
@@ -34,17 +51,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 container = cloudBlobClient.GetContainerReference(dataBusSettings.Container);
             }
 
-            var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
-
-            context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
-        }
-
-        static void ThrowIfConnectionStringAndTokenProviderSpecified(DataBusSettings dataBusSettings)
-        {
-            if (dataBusSettings.TokenCredential != null && dataBusSettings.UserProvidedConnectionString)
-            {
-                throw new Exception("More than one method to connect to the storage account was supplied (using connection string and token provider). Use one method only.");
-            }
+            return container;
         }
     }
 }
