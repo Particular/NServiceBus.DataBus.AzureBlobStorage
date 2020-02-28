@@ -84,7 +84,11 @@
                 throw new ArgumentException("Should not be an empty string.", nameof(connectionString));
             }
 
-            GetSettings(config).ConnectionString = connectionString;
+            var dataBusSettings = GetSettings(config);
+
+            dataBusSettings.ConnectionString = connectionString;
+            dataBusSettings.UserProvidedConnectionString = true;
+
             return config;
         }
 
