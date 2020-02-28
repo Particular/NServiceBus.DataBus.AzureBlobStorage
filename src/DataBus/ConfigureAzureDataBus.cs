@@ -5,6 +5,8 @@
     using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
+    using Microsoft.Azure.Services.AppAuthentication;
+    using Microsoft.WindowsAzure.Storage.Auth;
 
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
@@ -136,6 +138,7 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(defaultTTLInSeconds), defaultTTLInSeconds, "Should not be negative.");
             }
+
             GetSettings(config).TTL = defaultTTLInSeconds;
             return config;
         }
@@ -150,7 +153,32 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(cleanupInterval), cleanupInterval, "Should not be negative.");
             }
+
             GetSettings(config).CleanupInterval = cleanupInterval;
+            return config;
+        }
+
+        /// <summary>
+        ///  Sets token credential to authenticate with Storage Blob service
+        /// <remarks>Token credentials can be created using <see cref="AzureServiceTokenProvider"/> with token renewal configured.</remarks>
+        /// </summary>
+        public static DataBusExtensions<AzureDataBus> UseTokenCredentialForAccount(this DataBusExtensions<AzureDataBus> config, TokenCredential tokenCredential, string storageAccountName)
+        {
+            if (tokenCredential == null)
+            {
+                throw new ArgumentException("Should not be null", nameof(tokenCredential));
+            }
+
+            if (string.IsNullOrWhiteSpace(storageAccountName))
+            {
+                throw new ArgumentException("Should not be null or empty", nameof(storageAccountName));
+            }
+
+            var dataBusSettings = GetSettings(config);
+
+            dataBusSettings.TokenCredential = tokenCredential;
+            dataBusSettings.StorageAccountName = storageAccountName;
+
             return config;
         }
 

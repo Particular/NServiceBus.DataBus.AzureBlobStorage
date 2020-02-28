@@ -1,7 +1,10 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
+    using System;
     using Features;
     using Microsoft.WindowsAzure.Storage;
+    using Microsoft.WindowsAzure.Storage.Auth;
+    using Microsoft.WindowsAzure.Storage.Blob;
 
     class AzureDataBusPersistence : Feature
     {
@@ -14,9 +17,24 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            var cloudBlobClient = CloudStorageAccount.Parse(dataBusSettings.ConnectionString).CreateCloudBlobClient();
+            // TODO: guard against scenario when both TokenCredential and connection string are provided
 
-            var dataBus = new BlobStorageDataBus(cloudBlobClient.GetContainerReference(dataBusSettings.Container), dataBusSettings, new AsyncTimer());
+            CloudBlobContainer container;
+
+            // using managed identity
+            if (dataBusSettings.TokenCredential != null)
+            {
+                var storageCredentials = new StorageCredentials(dataBusSettings.TokenCredential);
+                var containerPath = $"https://{dataBusSettings.StorageAccountName}.blob.core.windows.net/{dataBusSettings.Container}";
+                container = new CloudBlobContainer(new StorageUri(new Uri(containerPath)), storageCredentials);
+            }
+            else // using connection string
+            {
+                var cloudBlobClient = CloudStorageAccount.Parse(dataBusSettings.ConnectionString).CreateCloudBlobClient();
+                container = cloudBlobClient.GetContainerReference(dataBusSettings.Container);
+            }
+
+            var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
 
             context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
         }
