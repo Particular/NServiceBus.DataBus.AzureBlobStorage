@@ -4,13 +4,15 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class DataBusSettings
     {
+        public const string DevelopmentStorageConnectionString = "UseDevelopmentStorage=true";
+
         public DataBusSettings()
         {
             Container = "databus";
             BasePath = "";
             MaxRetries = 5;
             NumberOfIOThreads = 1;
-            ConnectionString = "UseDevelopmentStorage=true";
+            ConnectionString = DevelopmentStorageConnectionString;
             BlockSize = 4 * 1024 * 1024; // Maximum 4MB
             BackOffInterval = 30; // seconds
             TTL = long.MaxValue; // seconds
@@ -19,7 +21,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             StorageAccountName = null;
         }
 
-        internal bool ShouldPerformCleanup()
+        public bool ShouldPerformCleanup()
         {
             return CleanupInterval > 0;
         }
