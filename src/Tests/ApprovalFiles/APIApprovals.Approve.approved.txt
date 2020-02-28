@@ -18,5 +18,6 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> DefaultTTL(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, long defaultTTLInSeconds) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> MaxRetries(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int maxRetries) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> NumberOfIOThreads(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int numberOfIOThreads) { }
+        public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseTokenCredentialForAccount(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Microsoft.WindowsAzure.Storage.Auth.TokenCredential tokenCredential, string storageAccountName) { }
     }
 }
