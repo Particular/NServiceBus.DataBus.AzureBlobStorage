@@ -17,7 +17,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            // TODO: guard against scenario when both TokenCredential and connection string are provided
+            ThrowIfConnectionStringAndTokenProviderProvided(dataBusSettings);
 
             CloudBlobContainer container;
 
@@ -37,6 +37,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
 
             context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
+        }
+
+        static void ThrowIfConnectionStringAndTokenProviderProvided(DataBusSettings dataBusSettings)
+        {
+            if (dataBusSettings.ConnectionString != null && dataBusSettings.TokenCredential != null)
+            {
+                throw new Exception("More than one method to connect to the storage account was supplied (connection string and token provider supplied). Use only one method.");
+            }
         }
     }
 }
