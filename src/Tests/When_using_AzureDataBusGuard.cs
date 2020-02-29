@@ -82,6 +82,21 @@
             Assert.Throws<ArgumentOutOfRangeException>(() => config.CleanupInterval(-1));
         }
 
+        [TestCase("0.00:00:00")]
+        [TestCase("-0.00:01:00")]
+        public void Should_not_allow_managed_identity_authentication_with_renewal_time_of_less_or_equal_than_timespan_zero(string renewBeforeExpires)
+        {
+            var value = TimeSpan.Parse(renewBeforeExpires);
+            Assert.Throws<ArgumentException>(() => config.AuthenticateWithManagedIdentity("account", value));
+        }
+
+        [TestCase(null)]
+        [TestCase(" ")]
+        public void Should_not_allow_managed_identity_authentication_with_no_account_name_specified(string accountName)
+        {
+            Assert.Throws<ArgumentException>(() => config.AuthenticateWithManagedIdentity(accountName, TimeSpan.MaxValue));
+        }
+
         DataBusExtensions<AzureDataBus> config = new DataBusExtensions<AzureDataBus>(new SettingsHolder());
     }
 }
