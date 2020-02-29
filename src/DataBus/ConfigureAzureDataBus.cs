@@ -6,7 +6,6 @@
     using DataBus;
     using DataBus.AzureBlobStorage;
     using Microsoft.Azure.Services.AppAuthentication;
-    using Microsoft.WindowsAzure.Storage.Auth;
 
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
