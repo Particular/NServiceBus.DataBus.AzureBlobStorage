@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.WindowsAzure.Storage.Auth;
 using NServiceBus;
 using NUnit.Framework;
 
-public class When_configuring_token_provider_and_connection_string
+public class When_authenticating_with_managed_identity
 {
     [Test]
-    public void Should_throw()
+    public void Should_throw_if_connection_string_is_also_provided()
     {
         var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
         endpointConfiguration.SendFailedMessagesTo("error");
@@ -16,7 +15,7 @@ public class When_configuring_token_provider_and_connection_string
 
         var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>();
         dataBus.ConnectionString("user-provided-connection-string");
-        dataBus.UseTokenCredentialForAccount(new TokenCredential(""), "user-provided-storage-account-name");
+        dataBus.AuthenticateWithManagedIdentity("user-provided-storage-account-name", TimeSpan.FromMinutes(5));
 
         Assert.ThrowsAsync<Exception>(() => Endpoint.Start(endpointConfiguration));
     }
