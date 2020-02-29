@@ -1,6 +1,6 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    using Microsoft.WindowsAzure.Storage.Auth;
+    using System;
 
     class DataBusSettings
     {
@@ -14,7 +14,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             BackOffInterval = 30; // seconds
             TTL = long.MaxValue; // seconds
             CleanupInterval = 0; // milliseconds, off by default
-            TokenCredential = null;
+            RenewalTimeBeforeTokenExpires = TimeSpan.FromMinutes(5);
             StorageAccountName = null;
             ConnectionString = "UseDevelopmentStorage=true";
             UserProvidedConnectionString = false;
@@ -33,7 +33,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public int BlockSize;
         public long TTL;
         public int CleanupInterval;
-        public TokenCredential TokenCredential;
+        public TimeSpan RenewalTimeBeforeTokenExpires;
         public string StorageAccountName;
         public string ConnectionString;
         public bool UserProvidedConnectionString;

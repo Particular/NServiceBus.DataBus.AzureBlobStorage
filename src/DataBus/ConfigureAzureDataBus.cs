@@ -166,38 +166,11 @@
         ///  Sets token credential to authenticate with Storage Blob service
         /// <remarks>Token credentials can be created using <see cref="AzureServiceTokenProvider"/> with token renewal configured.</remarks>
         /// </summary>
-        /// <example>
-        /// Creating a token provider
-        /// <code>
-        ///  var azureServiceTokenProvider = new AzureServiceTokenProvider();
-        ///  var tokenAndFrequency = await TokenRenewerAsync(azureServiceTokenProvider, cancellationToken);
-        ///  var tokenCredential = new TokenCredential(initialToken: string, periodicTokenRenewer: RenewTokenFuncAsync, state: azureServiceTokenProvider, renewFrequency: TimeSpan);
-        /// </code>
-        /// </example>
-        /// <example>
-        /// Defining a periodic token renewer callback
-        /// <code>
-        ///  static async Task&lt;NewTokenAndFrequency&gt; TokenRenewerAsync(object state, CancellationToken token = default)
-        ///  {
-        ///    // Use the same token provider to request a new token.
-        ///    var result = await((AzureServiceTokenProvider)state).GetAuthenticationResultAsync("https://storage.azure.com", cancellationToken: token);
-        ///
-        ///    // Renew the token 5 minutes before it expires.
-        ///    var next = (result.ExpiresOn - DateTimeOffset.UtcNow) - TimeSpan.FromMinutes(5);
-        ///    if (next.Ticks &lt; 0)
-        ///    {
-        ///      next = default(TimeSpan);
-        ///    }
-        ///
-        ///    return new NewTokenAndFrequency(result.AccessToken, next);
-        ///  }
-        /// </code>
-        /// </example>
-        public static DataBusExtensions<AzureDataBus> UseTokenCredentialForAccount(this DataBusExtensions<AzureDataBus> config, TokenCredential tokenCredential, string storageAccountName)
+        public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(this DataBusExtensions<AzureDataBus> config, string storageAccountName, TimeSpan renewalTimeBeforeTokenExpires)
         {
-            if (tokenCredential == null)
+            if (renewalTimeBeforeTokenExpires <= TimeSpan.Zero)
             {
-                throw new ArgumentException("Should not be null", nameof(tokenCredential));
+                throw new ArgumentException($"Should not be less or equal to {nameof(TimeSpan.Zero)}", nameof(renewalTimeBeforeTokenExpires));
             }
 
             if (string.IsNullOrWhiteSpace(storageAccountName))
@@ -207,7 +180,7 @@
 
             var dataBusSettings = GetSettings(config);
 
-            dataBusSettings.TokenCredential = tokenCredential;
+            dataBusSettings.RenewalTimeBeforeTokenExpires = renewalTimeBeforeTokenExpires;
             dataBusSettings.StorageAccountName = storageAccountName;
 
             return config;
