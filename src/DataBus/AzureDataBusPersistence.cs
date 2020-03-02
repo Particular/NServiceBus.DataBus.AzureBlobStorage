@@ -33,7 +33,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             if (dataBusSettings.RenewalTimeBeforeTokenExpires != null && dataBusSettings.UserProvidedConnectionString)
             {
-                throw new Exception("More than one method to connect to the storage account was supplied (using connection string and token provider). Use one method only.");
+                throw new Exception("More than one authentication method to Azure Service was supplied (using connection string and Managed Identity). Use one method only.");
             }
         }
 
