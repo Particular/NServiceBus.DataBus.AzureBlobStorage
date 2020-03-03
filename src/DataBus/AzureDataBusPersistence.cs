@@ -45,7 +45,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             if (!string.IsNullOrWhiteSpace(dataBusSettings.StorageAccountName))
             {
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                var state = (azureServiceTokenProvider, dataBusSettings.RenewalTimeBeforeTokenExpires);
+                var state = (azureServiceTokenProvider, dataBusSettings);
                 var tokenAndFrequency = TokenRenewerAsync(state, CancellationToken.None).GetAwaiter().GetResult();
                 var tokenCredential = new TokenCredential(tokenAndFrequency.Token, TokenRenewerAsync, azureServiceTokenProvider, tokenAndFrequency.Frequency.Value);
                 var storageCredentials = new StorageCredentials(tokenCredential);
@@ -64,13 +64,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         static async Task<NewTokenAndFrequency> TokenRenewerAsync(object state, CancellationToken token = default)
         {
-            var (azureServiceTokenProvider, renewal) = (ValueTuple<AzureServiceTokenProvider, TimeSpan>)state;
+            var (azureServiceTokenProvider, settings) = (ValueTuple<AzureServiceTokenProvider, DataBusSettings>)state;
 
             // Use the same token provider to request a new token.
-            var result = await azureServiceTokenProvider.GetAuthenticationResultAsync("https://storage.azure.com", cancellationToken: token).ConfigureAwait(false);
+            var resourceUri = $"https://{settings.StorageAccountName}.blob.{settings.EndpointSuffix}";
+            var result = await azureServiceTokenProvider.GetAuthenticationResultAsync(resourceUri, cancellationToken: token).ConfigureAwait(false);
 
             // Renew the token before it expires.
-            var next = (result.ExpiresOn - DateTimeOffset.UtcNow) - renewal;
+            var next = (result.ExpiresOn - DateTimeOffset.UtcNow) - settings.RenewalTimeBeforeTokenExpires;
             if (next.Ticks < 0)
             {
                 next = default;

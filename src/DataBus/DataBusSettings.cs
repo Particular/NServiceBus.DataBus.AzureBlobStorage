@@ -16,6 +16,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             CleanupInterval = 0; // milliseconds, off by default
             RenewalTimeBeforeTokenExpires = TimeSpan.FromMinutes(5);
             StorageAccountName = null;
+            EndpointSuffix = null;
             ConnectionString = "UseDevelopmentStorage=true";
             UserProvidedConnectionString = false;
         }
@@ -35,6 +36,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public int CleanupInterval;
         public TimeSpan RenewalTimeBeforeTokenExpires;
         public string StorageAccountName;
+        public string EndpointSuffix;
         public string ConnectionString;
         public bool UserProvidedConnectionString;
     }

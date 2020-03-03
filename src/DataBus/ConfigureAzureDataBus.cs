@@ -165,7 +165,11 @@
         ///  Sets token credential to authenticate with Storage Blob service
         /// <remarks>Token credentials can be created using <see cref="AzureServiceTokenProvider"/> with token renewal configured.</remarks>
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(this DataBusExtensions<AzureDataBus> config, string storageAccountName, TimeSpan renewalTimeBeforeTokenExpires)
+        /// <param name="config"></param>
+        /// <param name="storageAccountName"></param>
+        /// <param name="renewalTimeBeforeTokenExpires"></param>
+        /// <param name="endpointSuffix">Endpoint suffix associated with storage blob service per type of data center. Default is "core.windows.net" for public Azure data centers.</param>
+        public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(this DataBusExtensions<AzureDataBus> config, string storageAccountName, TimeSpan renewalTimeBeforeTokenExpires, string endpointSuffix = "core.windows.net")
         {
             if (renewalTimeBeforeTokenExpires <= TimeSpan.Zero)
             {
@@ -181,6 +185,7 @@
 
             dataBusSettings.RenewalTimeBeforeTokenExpires = renewalTimeBeforeTokenExpires;
             dataBusSettings.StorageAccountName = storageAccountName;
+            dataBusSettings.EndpointSuffix = endpointSuffix;
 
             return config;
         }
