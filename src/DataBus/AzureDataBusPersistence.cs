@@ -49,7 +49,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 var tokenAndFrequency = TokenRenewerAsync(state, CancellationToken.None).GetAwaiter().GetResult();
                 var tokenCredential = new TokenCredential(tokenAndFrequency.Token, TokenRenewerAsync, azureServiceTokenProvider, tokenAndFrequency.Frequency.Value);
                 var storageCredentials = new StorageCredentials(tokenCredential);
-                var containerPath = $"https://{dataBusSettings.StorageAccountName}.blob.core.windows.net/{dataBusSettings.Container}";
+                var containerPath = $"https://{dataBusSettings.StorageAccountName}.blob.{dataBusSettings.EndpointSuffix}/{dataBusSettings.Container}";
 
                 container = new CloudBlobContainer(new StorageUri(new Uri(containerPath)), storageCredentials);
             }
