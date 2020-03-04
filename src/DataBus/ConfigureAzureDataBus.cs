@@ -5,6 +5,7 @@
     using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
+    using Microsoft.Azure.Services.AppAuthentication;
 
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
@@ -82,7 +83,11 @@
                 throw new ArgumentException("Should not be an empty string.", nameof(connectionString));
             }
 
-            GetSettings(config).ConnectionString = connectionString;
+            var dataBusSettings = GetSettings(config);
+
+            dataBusSettings.ConnectionString = connectionString;
+            dataBusSettings.UserProvidedConnectionString = true;
+
             return config;
         }
 
@@ -114,7 +119,7 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> BasePath(this DataBusExtensions<AzureDataBus> config, string basePath)
         {
-            var value = basePath != null ? basePath : " ";
+            var value = basePath ?? " ";
             var spacesOnly = value.Trim().Length == 0 && value.Length != 0;
 
             if (spacesOnly)
@@ -136,6 +141,7 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(defaultTTLInSeconds), defaultTTLInSeconds, "Should not be negative.");
             }
+
             GetSettings(config).TTL = defaultTTLInSeconds;
             return config;
         }
@@ -150,7 +156,37 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(cleanupInterval), cleanupInterval, "Should not be negative.");
             }
+
             GetSettings(config).CleanupInterval = cleanupInterval;
+            return config;
+        }
+
+        /// <summary>
+        ///  Sets token credential to authenticate with Storage Blob service
+        /// <remarks>Token credentials can be created using <see cref="AzureServiceTokenProvider"/> with token renewal configured.</remarks>
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="storageAccountName"></param>
+        /// <param name="renewalTimeBeforeTokenExpires"></param>
+        /// <param name="endpointSuffix">Endpoint suffix associated with storage blob service per type of data center. Default is "core.windows.net" for public Azure data centers.</param>
+        public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(this DataBusExtensions<AzureDataBus> config, string storageAccountName, TimeSpan renewalTimeBeforeTokenExpires, string endpointSuffix = "core.windows.net")
+        {
+            if (renewalTimeBeforeTokenExpires <= TimeSpan.Zero)
+            {
+                throw new ArgumentException($"Should not be less or equal to {nameof(TimeSpan.Zero)}", nameof(renewalTimeBeforeTokenExpires));
+            }
+
+            if (string.IsNullOrWhiteSpace(storageAccountName))
+            {
+                throw new ArgumentException("Should not be null or empty", nameof(storageAccountName));
+            }
+
+            var dataBusSettings = GetSettings(config);
+
+            dataBusSettings.RenewalTimeBeforeTokenExpires = renewalTimeBeforeTokenExpires;
+            dataBusSettings.StorageAccountName = storageAccountName;
+            dataBusSettings.EndpointSuffix = endpointSuffix;
+
             return config;
         }
 

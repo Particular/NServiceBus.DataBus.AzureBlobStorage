@@ -9,6 +9,7 @@ namespace NServiceBus
     }
     public class static ConfigureAzureDataBus
     {
+        public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> AuthenticateWithManagedIdentity(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string storageAccountName, System.TimeSpan renewalTimeBeforeTokenExpires, string endpointSuffix = "core.windows.net") { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BackOffInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int backOffInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BasePath(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string basePath) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BlockSize(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int blockSize) { }
