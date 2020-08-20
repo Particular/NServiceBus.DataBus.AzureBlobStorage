@@ -145,7 +145,7 @@ abstract class ValidUntilTest
 
     class FakeCloudBlob : ICloudBlob
     {
-#if NET452
+#if NET472
         public Uri Uri { get; }
         public StorageUri StorageUri { get; }
         public CloudBlobDirectory Parent { get; }

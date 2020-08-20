@@ -201,7 +201,7 @@
             if (!config.GetSettings().TryGet<DataBusSettings>(out var settings))
             {
                 settings = new DataBusSettings();
-                config.GetSettings().Set<DataBusSettings>(settings);
+                config.GetSettings().Set(settings);
             }
 
             return settings;
