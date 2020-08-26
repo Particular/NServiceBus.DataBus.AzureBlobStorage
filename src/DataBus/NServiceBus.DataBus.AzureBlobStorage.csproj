@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
     <Description>NServiceBus AzureBlobStorage DataBus</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="[7.0.0, 8.0.0)" />
+    <PackageReference Include="NServiceBus" Version="[8.0.0-alpha.541, 9.0.0)" />
     <PackageReference Include="WindowsAzure.Storage" Version="[9.3.3, 10.0.0)" />
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="[1.4.0, 2.0.0)" />
     <PackageReference Include="Fody" Version="6.2.4" PrivateAssets="All" />
@@ -17,8 +17,8 @@
     <PackageReference Include="Particular.Packaging" Version="0.9.0" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'" Label="Needed for net452">
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-  </ItemGroup>
+<!--  <ItemGroup Condition="'$(TargetFramework)' == 'net472'" Label="Needed for net472">-->
+<!--    <PackageReference Include="System.ValueTuple" Version="4.5.0" />-->
+<!--  </ItemGroup>-->
 
 </Project>
