@@ -5,6 +5,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System.Threading.Tasks;
     using Features;
     using Microsoft.Azure.Services.AppAuthentication;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Auth;
     using Microsoft.WindowsAzure.Storage.Blob;
@@ -26,7 +27,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
 
-            context.Container.ConfigureComponent(b => dataBus, DependencyLifecycle.SingleInstance);
+            context.Services.AddSingleton<IDataBus>(b => dataBus);
         }
 
         static void ThrowIfConnectionStringAndTokenProviderSpecified(DataBusSettings dataBusSettings)
