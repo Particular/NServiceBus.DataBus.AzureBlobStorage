@@ -6,11 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\TestSuppressions.cs" Link="TestSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataBus\NServiceBus.DataBus.AzureBlobStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="8.0.0-alpha.561" />
+    <PackageReference Include="Particular.CodeRules" Version="0.7.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="NUnit" Version="3.12.0" />

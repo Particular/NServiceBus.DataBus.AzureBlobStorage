@@ -16,7 +16,8 @@
                 var segment = await container.ListBlobsSegmentedAsync(token).ConfigureAwait(false);
                 token = segment.ContinuationToken;
                 blobs.AddRange(segment.Results);
-            } while (token != null);
+            }
+            while (token != null);
 
             return blobs;
         }
