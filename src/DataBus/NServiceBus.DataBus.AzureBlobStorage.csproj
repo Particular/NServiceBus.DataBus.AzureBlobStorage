@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="[8.0.0-alpha.630, 9.0.0)" />
-    <PackageReference Include="WindowsAzure.Storage" Version="[9.3.3, 10.0.0)" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.2" />
+    <PackageReference Include="NServiceBus" Version="[8.0.0-alpha.631, 9.0.0)" />
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="[1.4.0, 2.0.0)" />
     <PackageReference Include="Fody" Version="6.2.6" PrivateAssets="All" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="All" />

@@ -5,9 +5,9 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Shared.Protocol;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
+using Microsoft.Azure.Storage.Shared.Protocol;
 using NServiceBus.DataBus.AzureBlobStorage;
 using NUnit.Framework;
 
@@ -133,15 +133,16 @@ abstract class ValidUntilTest
     }
 
     protected abstract void SetValidUntil(ICloudBlob cloudBlob, TimeSpan timeSpan);
-
+    
     class FakeCloudBlob : ICloudBlob
     {
-#if NET472
         public Uri Uri { get; }
         public StorageUri StorageUri { get; }
         public CloudBlobDirectory Parent { get; }
         public CloudBlobContainer Container { get; }
-        public Stream OpenRead(AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+
+        public Stream OpenRead(AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -151,7 +152,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginOpenRead(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginOpenRead(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -176,17 +178,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<Stream> OpenReadAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<Stream> OpenReadAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void UploadFromStream(Stream source, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void UploadFromStream(Stream source, AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public void UploadFromStream(Stream source, long length, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void UploadFromStream(Stream source, long length, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -196,7 +201,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginUploadFromStream(Stream source, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginUploadFromStream(Stream source, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -206,7 +212,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginUploadFromStream(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginUploadFromStream(Stream source, long length, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -226,12 +233,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task UploadFromStreamAsync(Stream source, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task UploadFromStreamAsync(Stream source, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task UploadFromStreamAsync(Stream source, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task UploadFromStreamAsync(Stream source, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -246,17 +255,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task UploadFromStreamAsync(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task UploadFromStreamAsync(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task UploadFromStreamAsync(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task UploadFromStreamAsync(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void UploadFromFile(string path, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void UploadFromFile(string path, AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -266,7 +278,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginUploadFromFile(string path, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginUploadFromFile(string path, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -286,27 +299,32 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task UploadFromFileAsync(string path, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task UploadFromFileAsync(string path, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task UploadFromFileAsync(string path, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task UploadFromFileAsync(string path, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void UploadFromByteArray(byte[] buffer, int index, int count, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void UploadFromByteArray(byte[] buffer, int index, int count, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginUploadFromByteArray(byte[] buffer, int index, int count, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginUploadFromByteArray(byte[] buffer, int index, int count, AsyncCallback callback,
+            object state)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginUploadFromByteArray(byte[] buffer, int index, int count, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginUploadFromByteArray(byte[] buffer, int index, int count, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -326,17 +344,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void DownloadToStream(Stream target, AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -346,7 +367,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadToStream(Stream target, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadToStream(Stream target, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -366,17 +388,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void DownloadToFile(string path, FileMode mode, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void DownloadToFile(string path, FileMode mode, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -386,7 +411,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadToFile(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadToFile(string path, FileMode mode, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -406,17 +432,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task DownloadToFileAsync(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task DownloadToFileAsync(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task DownloadToFileAsync(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task DownloadToFileAsync(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public int DownloadToByteArray(byte[] target, int index, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public int DownloadToByteArray(byte[] target, int index, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -426,7 +455,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadToByteArray(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadToByteArray(byte[] target, int index, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -446,27 +476,33 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<int> DownloadToByteArrayAsync(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<int> DownloadToByteArrayAsync(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> DownloadToByteArrayAsync(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<int> DownloadToByteArrayAsync(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void DownloadRangeToStream(Stream target, long? offset, long? length, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void DownloadRangeToStream(Stream target, long? offset, long? length, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadRangeToStream(Stream target, long? offset, long? length, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadRangeToStream(Stream target, long? offset, long? length, AsyncCallback callback,
+            object state)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadRangeToStream(Stream target, long? offset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadRangeToStream(Stream target, long? offset, long? length,
+            AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -486,27 +522,34 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public int DownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public int DownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length,
+            AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDownloadRangeToByteArray(byte[] target, int index, long? blobOffset, long? length,
+            AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -521,17 +564,21 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length, CancellationToken cancellationToken)
+        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length,
+            AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length,
+            AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -546,7 +593,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginExists(BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginExists(BlobRequestOptions options, OperationContext operationContext,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -576,7 +624,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public void FetchAttributes(AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void FetchAttributes(AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -586,7 +635,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginFetchAttributes(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginFetchAttributes(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -606,17 +656,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task FetchAttributesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task FetchAttributesAsync(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task FetchAttributesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task FetchAttributesAsync(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void SetMetadata(AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void SetMetadata(AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -626,7 +679,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginSetMetadata(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginSetMetadata(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -651,12 +705,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task SetMetadataAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task SetMetadataAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void SetProperties(AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void SetProperties(AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -666,7 +722,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginSetProperties(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginSetProperties(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -691,12 +748,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task SetPropertiesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task SetPropertiesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(DeleteSnapshotsOption deleteSnapshotsOption = DeleteSnapshotsOption.None, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void Delete(DeleteSnapshotsOption deleteSnapshotsOption = DeleteSnapshotsOption.None, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -706,7 +765,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDelete(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDelete(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -726,17 +786,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task DeleteAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task DeleteAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteIfExists(DeleteSnapshotsOption deleteSnapshotsOption = DeleteSnapshotsOption.None, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public bool DeleteIfExists(DeleteSnapshotsOption deleteSnapshotsOption = DeleteSnapshotsOption.None, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -746,7 +809,9 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginDeleteIfExists(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginDeleteIfExists(DeleteSnapshotsOption deleteSnapshotsOption,
+            AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -766,27 +831,32 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteIfExistsAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<bool> DeleteIfExistsAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteIfExistsAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<bool> DeleteIfExistsAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public string AcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public string AcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginAcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginAcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AsyncCallback callback,
+            object state)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginAcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginAcquireLease(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -806,17 +876,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void RenewLease(AccessCondition accessCondition, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void RenewLease(AccessCondition accessCondition, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -826,7 +899,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginRenewLease(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginRenewLease(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -851,22 +925,26 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task RenewLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task RenewLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public string ChangeLease(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public string ChangeLease(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginChangeLease(string proposedLeaseId, AccessCondition accessCondition, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginChangeLease(string proposedLeaseId, AccessCondition accessCondition,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginChangeLease(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginChangeLease(string proposedLeaseId, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -886,17 +964,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void ReleaseLease(AccessCondition accessCondition, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void ReleaseLease(AccessCondition accessCondition, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -906,7 +987,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginReleaseLease(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginReleaseLease(AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -931,12 +1013,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task ReleaseLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task ReleaseLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public TimeSpan BreakLease(TimeSpan? breakPeriod = null, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public TimeSpan BreakLease(TimeSpan? breakPeriod = null, AccessCondition accessCondition = null,
+            BlobRequestOptions options = null, OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -946,7 +1030,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginBreakLease(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginBreakLease(TimeSpan? breakPeriod, AccessCondition accessCondition,
+            BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -966,17 +1051,20 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public void AbortCopy(string copyId, AccessCondition accessCondition = null, BlobRequestOptions options = null, OperationContext operationContext = null)
+        public void AbortCopy(string copyId, AccessCondition accessCondition = null, BlobRequestOptions options = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -986,7 +1074,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginAbortCopy(string copyId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginAbortCopy(string copyId, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -1006,12 +1095,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
+        public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext)
         {
             throw new NotImplementedException();
         }
 
-        public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options,
+            OperationContext operationContext, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -1021,7 +1112,8 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public ICancellableAsyncResult BeginGetAccountProperties(BlobRequestOptions requestOptions, OperationContext operationContext, AsyncCallback callback, object state)
+        public ICancellableAsyncResult BeginGetAccountProperties(BlobRequestOptions requestOptions, OperationContext operationContext,
+            AsyncCallback callback, object state)
         {
             throw new NotImplementedException();
         }
@@ -1046,12 +1138,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext, CancellationToken cancellationToken)
+        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public AccountProperties GetAccountProperties(BlobRequestOptions requestOptions = null, OperationContext operationContext = null)
+        public AccountProperties GetAccountProperties(BlobRequestOptions requestOptions = null,
+            OperationContext operationContext = null)
         {
             throw new NotImplementedException();
         }
@@ -1071,12 +1165,14 @@ abstract class ValidUntilTest
             throw new NotImplementedException();
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers, string groupPolicyIdentifier)
+        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers,
+            string groupPolicyIdentifier)
         {
             throw new NotImplementedException();
         }
 
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers, string groupPolicyIdentifier, SharedAccessProtocol? protocols, IPAddressOrRange ipAddressOrRange)
+        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers,
+            string groupPolicyIdentifier, SharedAccessProtocol? protocols, IPAddressOrRange ipAddressOrRange)
         {
             throw new NotImplementedException();
         }
@@ -1093,284 +1189,5 @@ abstract class ValidUntilTest
         public StorageUri SnapshotQualifiedStorageUri { get; }
         public CopyState CopyState { get; }
         public BlobType BlobType { get; }
-#elif NETCOREAPP
-        public Uri Uri { get; }
-
-        public StorageUri StorageUri { get; }
-        public CloudBlobDirectory Parent { get; }
-        public CloudBlobContainer Container { get; }
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, string groupPolicyIdentifier)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers, string groupPolicyIdentifier)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSharedAccessSignature(SharedAccessBlobPolicy policy, SharedAccessBlobHeaders headers, string groupPolicyIdentifier, SharedAccessProtocol? protocols, IPAddressOrRange ipAddressOrRange)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Stream> OpenReadAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromStreamAsync(Stream source)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromStreamAsync(Stream source, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromStreamAsync(Stream source, long length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromStreamAsync(Stream source, long length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromFileAsync(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromFileAsync(string path, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UploadFromByteArrayAsync(byte[] buffer, int index, int count, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadToStreamAsync(Stream target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadToStreamAsync(Stream target, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadToFileAsync(string path, FileMode mode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadToFileAsync(string path, FileMode mode, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DownloadToByteArrayAsync(byte[] target, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DownloadToByteArrayAsync(byte[] target, int index, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DownloadRangeToStreamAsync(Stream target, long? offset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DownloadRangeToByteArrayAsync(byte[] target, int index, long? blobOffset, long? length, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ExistsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ExistsAsync(BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task FetchAttributesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task FetchAttributesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetMetadataAsync()
-        {
-            return Task.FromResult(0);
-        }
-
-        public Task SetMetadataAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetPropertiesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetPropertiesAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteIfExistsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteIfExistsAsync(DeleteSnapshotsOption deleteSnapshotsOption, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> AcquireLeaseAsync(TimeSpan? leaseTime, string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RenewLeaseAsync(AccessCondition accessCondition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RenewLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> ChangeLeaseAsync(string proposedLeaseId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ReleaseLeaseAsync(AccessCondition accessCondition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ReleaseLeaseAsync(AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TimeSpan> BreakLeaseAsync(TimeSpan? breakPeriod, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AbortCopyAsync(string copyId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AbortCopyAsync(string copyId, AccessCondition accessCondition, BlobRequestOptions options, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AccountProperties> GetAccountPropertiesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AccountProperties> GetAccountPropertiesAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AccountProperties> GetAccountPropertiesAsync(BlobRequestOptions requestOptions, OperationContext operationContext, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Name { get; }
-        public CloudBlobClient ServiceClient { get; }
-        public int StreamWriteSizeInBytes { get; set; }
-        public int StreamMinimumReadSizeInBytes { get; set; }
-        public BlobProperties Properties { get; set; }
-        public IDictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
-        public DateTimeOffset? SnapshotTime { get; }
-        public bool IsSnapshot { get; }
-        public Uri SnapshotQualifiedUri { get; }
-        public StorageUri SnapshotQualifiedStorageUri { get; }
-        public CopyState CopyState { get; }
-        public BlobType BlobType { get; }
-#endif
     }
 }

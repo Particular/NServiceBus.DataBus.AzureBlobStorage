@@ -3,12 +3,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using Logging;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using Microsoft.WindowsAzure.Storage.RetryPolicies;
+    using System.Linq;
+    using Microsoft.Azure.Storage;
+    using Microsoft.Azure.Storage.Blob;
+    using Microsoft.Azure.Storage.RetryPolicies;
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
