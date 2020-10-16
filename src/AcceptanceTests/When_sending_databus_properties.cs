@@ -21,7 +21,7 @@ public class When_sending_databus_properties
         endpointConfiguration.UseDataBus<AzureDataBus>()
             .ConnectionString(connectionString);
 
-        endpointConfiguration.UsePersistence<InMemoryPersistence>();
+        endpointConfiguration.UsePersistence<LearningPersistence>();
         endpointConfiguration.EnableInstallers();
 
         var endpoint = await Endpoint.Start(endpointConfiguration);
