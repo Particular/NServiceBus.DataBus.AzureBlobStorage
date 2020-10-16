@@ -9,8 +9,8 @@ public class When_authenticating_with_managed_identity
     {
         var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
         endpointConfiguration.SendFailedMessagesTo("error");
-        endpointConfiguration.UseTransport<LearningTransport>();
-        endpointConfiguration.UsePersistence<LearningPersistence>();
+        endpointConfiguration.UseTransport<AcceptanceTestingTransport>();
+        endpointConfiguration.UsePersistence<AcceptanceTestingPersistence>();
         endpointConfiguration.EnableInstallers();
 
         var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>();

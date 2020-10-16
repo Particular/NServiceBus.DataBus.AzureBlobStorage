@@ -11,7 +11,7 @@ public class When_sending_databus_properties
     {
         var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
         endpointConfiguration.SendFailedMessagesTo("error");
-        endpointConfiguration.UseTransport<LearningTransport>();
+        endpointConfiguration.UseTransport<AcceptanceTestingTransport>();
         var environmentVariable = "NServiceBus_DataBus_AzureBlobStorage_ConnectionString";
         var connectionString = Environment.GetEnvironmentVariable(environmentVariable);
         if (string.IsNullOrEmpty(connectionString))
@@ -21,7 +21,7 @@ public class When_sending_databus_properties
         endpointConfiguration.UseDataBus<AzureDataBus>()
             .ConnectionString(connectionString);
 
-        endpointConfiguration.UsePersistence<LearningPersistence>();
+        endpointConfiguration.UsePersistence<AcceptanceTestingPersistence>();
         endpointConfiguration.EnableInstallers();
 
         var endpoint = await Endpoint.Start(endpointConfiguration);
