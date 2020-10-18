@@ -21,7 +21,7 @@ abstract class ValidUntilTest
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
 
-        Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
+        Assert.That(resultValidUntil, Is.EqualTo(DateTimeOffset.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
     }
 
@@ -34,7 +34,7 @@ abstract class ValidUntilTest
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             var cloudBlob = StubACloudBlob();
             var dateTime = new DateTime(2100, 1, 4, 12, 0, 0);
-            var timeSpan = dateTime - DateTime.UtcNow;
+            var timeSpan = dateTime - DateTimeOffset.UtcNow;
             SetValidUntil(cloudBlob, timeSpan);
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-AU");
             var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
@@ -57,16 +57,7 @@ abstract class ValidUntilTest
         //HACK: set ValidUntil to be a non parsable string
         cloudBlob.Metadata["ValidUntil"] = "Not a date time";
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
-        Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
-    }
-
-    [Test]
-    public async Task ValidUntil_is_UtcKind()
-    {
-        var cloudBlob = StubACloudBlob();
-        SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
-        var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
-        Assert.AreEqual(DateTimeKind.Utc, resultValidUntil.Kind);
+        Assert.AreEqual(DateTimeOffset.MaxValue, resultValidUntil);
     }
 
     [Test]
@@ -76,13 +67,13 @@ abstract class ValidUntilTest
 
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
-        Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
+        Assert.AreEqual(DateTimeOffset.MaxValue, resultValidUntil);
     }
 
     [Test]
     public virtual async Task ValidUntil_defaults_to_DefaultTtl_IfDefaultTtlSet()
     {
-        var validUntil = DateTime.UtcNow;
+        var validUntil = DateTimeOffset.UtcNow;
         var cloudBlob = StubACloudBlob(validUntil);
 
         const int defaultTtl = 1;
@@ -99,20 +90,20 @@ abstract class ValidUntilTest
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.MaxValue);
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
-        Assert.AreEqual(DateTime.MaxValue, resultValidUntil);
+        Assert.AreEqual(DateTimeOffset.MaxValue, resultValidUntil);
     }
 
     [Test]
     public virtual async Task ValidUntil_is_respected_IfDefaultTtlSet()
     {
-        var lastModified = DateTime.UtcNow;
+        var lastModified = DateTimeOffset.UtcNow;
         var cloudBlob = StubACloudBlob(lastModified);
 
         const int defaultTtl = 1;
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
 
-        Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
+        Assert.That(resultValidUntil, Is.EqualTo(DateTimeOffset.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
     }
 
@@ -125,7 +116,7 @@ abstract class ValidUntilTest
         SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob, defaultTtl);
 
-        Assert.That(resultValidUntil, Is.EqualTo(DateTime.UtcNow.AddHours(1))
+        Assert.That(resultValidUntil, Is.EqualTo(DateTimeOffset.UtcNow.AddHours(1))
             .Within(TimeSpan.FromSeconds(10)));
     }
 

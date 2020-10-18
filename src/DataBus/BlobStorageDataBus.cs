@@ -109,18 +109,18 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             if (timeToBeReceived != TimeSpan.MaxValue)
             {
-                var validUntil = DateTime.UtcNow + timeToBeReceived;
-                blob.Metadata["ValidUntilUtc"] = DateTimeExtensions.ToWireFormattedString(validUntil);
+                var validUntil = DateTimeOffset.UtcNow + timeToBeReceived;
+                blob.Metadata["ValidUntilUtc"] = DateTimeOffsetHelper.ToWireFormattedString(validUntil);
             }
             // else no ValidUntil will be considered it to be non-expiring or subject to maximum ttl
         }
 
 
-        internal static async Task<DateTime> GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
+        internal static async Task<DateTimeOffset> GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
         {
             if (blockBlob.Metadata.TryGetValue("ValidUntilUtc", out var validUntilUtcString))
             {
-                return DateTimeExtensions.ToUtcDateTime(validUntilUtcString);
+                return DateTimeOffsetHelper.ToDateTimeOffset(validUntilUtcString);
             }
 
             if (!blockBlob.Metadata.TryGetValue("ValidUntil", out var validUntilString))
