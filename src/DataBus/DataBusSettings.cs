@@ -37,6 +37,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public TimeSpan RenewalTimeBeforeTokenExpires;
         public string StorageAccountName;
         public string EndpointSuffix;
+        // todo deprecate
         public string ConnectionString;
         public bool UserProvidedConnectionString;
     }

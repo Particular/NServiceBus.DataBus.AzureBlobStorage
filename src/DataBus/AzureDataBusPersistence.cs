@@ -1,84 +1,57 @@
+using System;
+using Azure.Core;
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.DependencyInjection;
+using NServiceBus.Features;
+
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Features;
-    using Microsoft.Azure.Services.AppAuthentication;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Azure.Storage.Blob;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.Auth;
-    
-    class AzureDataBusPersistence : Feature
+    internal class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
         {
-            DependsOn<DataBus>();
+            DependsOn<Features.DataBus>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            ThrowIfConnectionStringAndTokenProviderSpecified(dataBusSettings);
+            BlobContainerClient blobContainerClient;
+            var blobContainerClientConfiguredByUser = context.Settings.TryGet(out blobContainerClient);
+            ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
+            if (!blobContainerClientConfiguredByUser)
+            {
+                blobContainerClient = CreateBlobContainerClient(dataBusSettings);
+            }
 
-            var container = CreateCloudBlobContainer(dataBusSettings);
-
-            var dataBus = new BlobStorageDataBus(container, dataBusSettings, new AsyncTimer());
-
+            var dataBus = new BlobStorageDataBus(blobContainerClient, dataBusSettings, new AsyncTimer());
             context.Services.AddSingleton<IDataBus>(b => dataBus);
         }
 
-        static void ThrowIfConnectionStringAndTokenProviderSpecified(DataBusSettings dataBusSettings)
+        private BlobContainerClient CreateBlobContainerClient(DataBusSettings dataBusSettings)
         {
-            if (dataBusSettings.StorageAccountName != null && dataBusSettings.UserProvidedConnectionString)
+            var clientOptions = new BlobClientOptions
             {
-                throw new Exception("More than one authentication method to Azure Service was supplied (using connection string and Managed Identity). Use one method only.");
-            }
+                Retry =
+                {
+                    Delay = TimeSpan.FromSeconds(dataBusSettings.BackOffInterval),
+                    MaxRetries = dataBusSettings.MaxRetries,
+                    Mode = RetryMode.Fixed
+                }
+            };
+            return new BlobContainerClient(dataBusSettings.ConnectionString, dataBusSettings.Container, clientOptions);
         }
 
-        static CloudBlobContainer CreateCloudBlobContainer(DataBusSettings dataBusSettings)
+        private void ThrowIfMissingConfigurationForBlobContainer(bool isBlobClientConfiguredByUser,
+            DataBusSettings dataBusSettings)
         {
-            CloudBlobContainer container;
+            if (isBlobClientConfiguredByUser)
+                return;
 
-            // Attempt managed identity identity first
-            if (!string.IsNullOrWhiteSpace(dataBusSettings.StorageAccountName))
-            {
-                var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                var state = (azureServiceTokenProvider, dataBusSettings);
-                var tokenAndFrequency = TokenRenewerAsync(state, CancellationToken.None).GetAwaiter().GetResult();
-                var tokenCredential = new TokenCredential(tokenAndFrequency.Token, TokenRenewerAsync, state, tokenAndFrequency.Frequency.Value);
-                var storageCredentials = new StorageCredentials(tokenCredential);
-                var containerPath = $"https://{dataBusSettings.StorageAccountName}.blob.{dataBusSettings.EndpointSuffix}/{dataBusSettings.Container}";
-
-                container = new CloudBlobContainer(new StorageUri(new Uri(containerPath)), storageCredentials);
-            }
-            else // fallback to connection string
-            {
-                var cloudBlobClient = CloudStorageAccount.Parse(dataBusSettings.ConnectionString).CreateCloudBlobClient();
-                container = cloudBlobClient.GetContainerReference(dataBusSettings.Container);
-            }
-
-            return container;
-        }
-
-        static async Task<NewTokenAndFrequency> TokenRenewerAsync(object state, CancellationToken token = default)
-        {
-            var (azureServiceTokenProvider, settings) = (ValueTuple<AzureServiceTokenProvider, DataBusSettings>)state;
-
-            // Use the same token provider to request a new token.
-            var resourceUri = $"https://{settings.StorageAccountName}.blob.{settings.EndpointSuffix}";
-            var result = await azureServiceTokenProvider.GetAuthenticationResultAsync(resourceUri, cancellationToken: token).ConfigureAwait(false);
-
-            // Renew the token before it expires.
-            var next = (result.ExpiresOn - DateTimeOffset.UtcNow) - settings.RenewalTimeBeforeTokenExpires;
-            if (next.Ticks < 0)
-            {
-                next = default;
-            }
-
-            return new NewTokenAndFrequency(result.AccessToken, next);
+            if (string.IsNullOrWhiteSpace(dataBusSettings.ConnectionString) ||
+                string.IsNullOrWhiteSpace(dataBusSettings.Container))
+                throw new Exception("Unable to find a configured BlobClient in the container and unable to fall back to a connectionstring + container as none were supplied.");
         }
     }
 }
