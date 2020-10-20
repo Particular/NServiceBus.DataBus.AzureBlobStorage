@@ -1,4 +1,6 @@
-﻿namespace NServiceBus
+﻿using Azure.Storage.Blobs;
+
+namespace NServiceBus
 {
     using System;
     using System.Text.RegularExpressions;
@@ -139,6 +141,18 @@
             }
 
             GetSettings(config).CleanupInterval = cleanupInterval;
+            return config;
+        }
+
+        /// <summary>
+        /// For advanced authentication scenarios, provide a properly configured BlobContainerClient instead of a connectionstring
+        /// </summary>
+        public static DataBusExtensions<AzureDataBus> BlobContainerClient(this DataBusExtensions<AzureDataBus> config,
+            BlobContainerClient blobContainerClient)
+        {
+            Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
+            
+            config.GetSettings().Set(blobContainerClient);
             return config;
         }
 

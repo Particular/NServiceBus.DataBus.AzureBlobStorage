@@ -7,7 +7,8 @@ namespace NServiceBus
     public static partial class ConfigureAzureDataBus
     {
         [ObsoleteEx(
-            Message = "Deprecated because of changes to the unified authentication model. Set a properly setup BlobClientContainer or use ConnectionString instead.",
+            Message = "Authentication mechanism are supported by setting a BlobContainerClient. For simple cases, use ConnectionString",
+            ReplacementTypeOrMember = nameof(ConfigureAzureDataBus) + "BlobContainerClient",
             RemoveInVersion = "5.0.0",
             TreatAsErrorFromVersion = "4.0.0")]
         public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(
@@ -18,7 +19,7 @@ namespace NServiceBus
         }
         
         [ObsoleteEx(
-            Message = "Blocksize has been removed from the new SDK",
+            Message = "It's no longer possible to override the blocksize due to restrictions of the underlying SDK",
             RemoveInVersion = "5.0.0",
             TreatAsErrorFromVersion = "4.0.0")]
         public static DataBusExtensions<AzureDataBus> BlockSize(this DataBusExtensions<AzureDataBus> config, int blockSize)
