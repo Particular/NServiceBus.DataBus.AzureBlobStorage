@@ -1,3 +1,5 @@
+using Azure.Storage;
+
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
     using System;
@@ -147,7 +149,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
             
             //since this is the old version that could be written in any culture we cannot be certain it will parse so need to handle failure
-            if (!DateTime.TryParse(validUntilString, null, style, out var validUntil))
+            if (!DateTimeOffset.TryParse(validUntilString, null, style, out var validUntil))
             {
                  var message = $"Could not parse the 'ValidUntil' value `{validUntilString}` for blob {blobClient.Uri}. Resetting 'ValidUntil' to not expire. You may consider manually removing this entry if non-expiry is incorrect.";
                  logger.Error(message);
@@ -163,7 +165,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             return validUntil.ToUniversalTime();
         }
 
-        static async Task<DateTime> ToDefault(long defaultTtl, BlobClient blobClient)
+        static async Task<DateTimeOffset> ToDefault(long defaultTtl, BlobClient blobClient)
         {
             var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
             if (defaultTtl != long.MaxValue && properties.Value.LastModified != DateTimeOffset.MinValue)
@@ -178,7 +180,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 }
             }
 
-            return DateTime.MaxValue;
+            return DateTimeOffset.MaxValue;
         }
 
         BlobContainerClient container;
