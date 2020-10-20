@@ -166,7 +166,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         static async Task<DateTime> ToDefault(long defaultTtl, BlobClient blobClient)
         {
             var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
-            if (defaultTtl != long.MaxValue)
+            if (defaultTtl != long.MaxValue && properties.Value.LastModified != DateTimeOffset.MinValue)
             {
                 try
                 {

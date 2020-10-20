@@ -54,7 +54,10 @@ abstract class ValidUntilTest
         // When testing "ValidUntil" metadata, can't set "ValidUntilUtc" as it trumps "ValidUntil" case.
         //SetValidUntil(cloudBlob, TimeSpan.FromHours(1));
         //HACK: set ValidUntil to be a non parsable string
-        cloudBlob.Metadata["ValidUntil"] = "Not a date time";
+        var metadata= new Dictionary<string, string>();
+        metadata.Add("ValidUntil", "Not a date time");
+        cloudBlob.SetMetadataResult(metadata);
+        
         var resultValidUntil = await BlobStorageDataBus.GetValidUntil(cloudBlob);
         Assert.AreEqual(DateTimeOffset.MaxValue, resultValidUntil);
     }
@@ -119,26 +122,68 @@ abstract class ValidUntilTest
             .Within(TimeSpan.FromSeconds(10)));
     }
 
-    protected ICloudBlob StubACloudBlob(DateTimeOffset? lastModified = default(DateTimeOffset?))
+    protected FakeCloudBlob StubACloudBlob(DateTimeOffset? lastModified = default(DateTimeOffset?))
     {
         var cloudBlobProperties = new BlobProperties();
         var property = typeof(BlobProperties).GetProperty("LastModified");
         property.SetValue(cloudBlobProperties, lastModified, BindingFlags.NonPublic, null, null, null);
 
-
         var cloudBlob = new FakeCloudBlob();
-        cloudBlob.Properties = cloudBlobProperties;
+        cloudBlob.SetPropertiesResult(cloudBlobProperties);
         return cloudBlob;
     }
 
-    protected abstract void SetValidUntil(ICloudBlob cloudBlob, TimeSpan timeSpan);
-    
-    class FakeCloudBlob : BlobClient
+    protected abstract void SetValidUntil(BlobClient blobClient, TimeSpan timeSpan);
+
+    protected class FakeCloudBlob : BlobClient
     {
+        public void SetPropertiesResult(BlobProperties blobProperties)
+        {
+            properties = blobProperties;
+        }
+
+        public void SetMetadataResult(IDictionary<string, string> metadata)
+        {
+            properties = new BlobProperties();
+            properties.Metadata.Clear();
+            foreach (var metadataItem in metadata)
+            {
+                properties.Metadata.Add(metadataItem);
+            }
+        }
+        
         public override Task<Response<BlobInfo>> SetMetadataAsync(IDictionary<string, string> metadata, BlobRequestConditions conditions = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
             return Task.FromResult<Response<BlobInfo>>(null);
+        }
+
+        public override Task<Response<BlobProperties>> GetPropertiesAsync(BlobRequestConditions conditions = null,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult<Response<BlobProperties>>(new FakeResponse(properties));
+        }
+
+        public override Response<BlobProperties> GetProperties(BlobRequestConditions conditions = null,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return new FakeResponse(properties);
+        }
+
+        private BlobProperties properties;
+        
+        public class FakeResponse : Response<BlobProperties>
+        {
+            private readonly Response response = null;
+
+            public FakeResponse(BlobProperties value)
+            {
+                Value = value;
+            }
+
+            public override BlobProperties Value { get; }
+
+            public override Response GetRawResponse() => response;
         }
     }
 }
