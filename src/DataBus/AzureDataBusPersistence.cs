@@ -50,8 +50,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(dataBusSettings.ConnectionString) ||
-                string.IsNullOrWhiteSpace(dataBusSettings.Container))
+            if (!dataBusSettings.UserProvidedConnectionString)
             {
                 throw new Exception("Unable to find a configured BlobClient in the container and unable to fall back to a connectionstring + container as none were supplied.");
             }

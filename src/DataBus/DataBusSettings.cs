@@ -10,13 +10,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             BasePath = "";
             MaxRetries = 5;
             NumberOfIOThreads = 1;
-            BlockSize = 4 * 1024 * 1024; // Maximum 4MB
             BackOffInterval = 30; // seconds
             TTL = long.MaxValue; // seconds
             CleanupInterval = 0; // milliseconds, off by default
-            RenewalTimeBeforeTokenExpires = TimeSpan.FromMinutes(5);
-            StorageAccountName = null;
-            EndpointSuffix = null;
             ConnectionString = "UseDevelopmentStorage=true";
             UserProvidedConnectionString = false;
         }
@@ -31,13 +27,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public int BackOffInterval;
         public int NumberOfIOThreads;
         public string BasePath;
-        public int BlockSize;
         public long TTL;
         public int CleanupInterval;
-        public TimeSpan RenewalTimeBeforeTokenExpires;
-        public string StorageAccountName;
-        public string EndpointSuffix;
-        // todo deprecate
         public string ConnectionString;
         public bool UserProvidedConnectionString;
     }
