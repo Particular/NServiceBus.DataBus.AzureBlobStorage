@@ -1,5 +1,3 @@
-using Azure.Storage;
-
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
     using System;
@@ -8,9 +6,10 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System.Threading.Tasks;
     using Logging;
     using Azure;
+    using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
-    
+
     class BlobStorageDataBus : IDataBus, IDisposable
     {
         public BlobStorageDataBus(BlobContainerClient container, DataBusSettings settings, IAsyncTimer timer)
@@ -30,7 +29,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             {
                 MaximumConcurrency = settings.NumberOfIOThreads,
             };
-            
+
             await blobClient.DownloadToAsync(stream, null, transferOptions).ConfigureAwait(false);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
@@ -40,9 +39,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var key = Guid.NewGuid().ToString();
             var blobClient = container.GetBlobClient(Path.Combine(settings.BasePath, key));
-            
+
             SetValidUntil(blobClient, timeToBeReceived);
-            
+
             //blobClient.StreamWriteSizeInBytes = settings.BlockSize;
             var blobUploadOptions = new BlobUploadOptions
             {
@@ -52,7 +51,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 }
             };
             await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
-            
+
             return key;
         }
 
@@ -80,7 +79,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         async Task DeleteExpiredBlobs()
         {
             string continuationToken = null;
-            
+
             try
             {
                 // Call the listing operation and enumerate the result segment.
@@ -105,14 +104,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                         continuationToken = blobPage.ContinuationToken;
                     }
 
-                } 
+                }
                 while (continuationToken != string.Empty);
 
             }
             catch (RequestFailedException ex)
             {
                 logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception.", ex);
-            } 
+            }
         }
 
         internal static async void SetValidUntil(BlobClient blobClient, TimeSpan timeToBeReceived)
@@ -147,7 +146,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             {
                 style = DateTimeStyles.AdjustToUniversal;
             }
-            
+
             //since this is the old version that could be written in any culture we cannot be certain it will parse so need to handle failure
             if (!DateTimeOffset.TryParse(validUntilString, null, style, out var validUntil))
             {
@@ -157,7 +156,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                  SetValidUntil(blobClient, TimeSpan.MaxValue);
                  // upload the changed metadata
                  await blobClient.SetMetadataAsync(metadata).ConfigureAwait(false);
-            
+
                  var defaultedTtl = await ToDefault(defaultTtl, blobClient).ConfigureAwait(false);
                  return defaultedTtl;
             }
