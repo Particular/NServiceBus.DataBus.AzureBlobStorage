@@ -1,11 +1,11 @@
-using System;
-using Azure.Core;
-using Azure.Storage.Blobs;
-using Microsoft.Extensions.DependencyInjection;
-using NServiceBus.Features;
-
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
+    using System;
+    using Azure.Core;
+    using Azure.Storage.Blobs;
+    using Microsoft.Extensions.DependencyInjection;
+    using Features;
+
     internal class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
