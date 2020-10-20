@@ -10,15 +10,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     {
         public AzureDataBusPersistence()
         {
-            DependsOn<Features.DataBus>();
+            DependsOn<DataBus>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            BlobContainerClient blobContainerClient;
-            var blobContainerClientConfiguredByUser = context.Settings.TryGet(out blobContainerClient);
+            var blobContainerClientConfiguredByUser = context.Settings.TryGet(out BlobContainerClient blobContainerClient);
             ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
             if (!blobContainerClientConfiguredByUser)
             {
@@ -47,11 +46,15 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             DataBusSettings dataBusSettings)
         {
             if (isBlobClientConfiguredByUser)
+            {
                 return;
+            }
 
             if (string.IsNullOrWhiteSpace(dataBusSettings.ConnectionString) ||
                 string.IsNullOrWhiteSpace(dataBusSettings.Container))
+            {
                 throw new Exception("Unable to find a configured BlobClient in the container and unable to fall back to a connectionstring + container as none were supplied.");
+            }
         }
     }
 }
