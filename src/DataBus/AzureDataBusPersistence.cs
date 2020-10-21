@@ -17,7 +17,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            var blobContainerClientConfiguredByUser = context.Settings.TryGet(out BlobContainerClient blobContainerClient);
+            var blobContainerClientConfiguredByUser = context.Settings.TryGet(SettingsKeys.BlobContainerClient, out BlobContainerClient blobContainerClient);
             ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
             if (!blobContainerClientConfiguredByUser)
             {
@@ -52,7 +52,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             if (!dataBusSettings.UserProvidedConnectionString)
             {
-                throw new Exception("Unable to find a configured BlobClient in the container and unable to fall back to a connectionstring + container as none were supplied.");
+                throw new Exception("Azure databus was not configured to use a BlobContainerClient. Use '.UseBlobContainerClient()' to provide a BlobContainerClient to be used. Alternatively, configure the data bus using a connection string and a container name.");
             }
         }
     }

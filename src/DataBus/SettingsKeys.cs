@@ -2,6 +2,6 @@
 {
     static class SettingsKeys
     {
-        public const string BlobClient = "Databus.BlobClient";
+        public const string BlobContainerClient = "Databus.BlobContainerClient";
     }
 }

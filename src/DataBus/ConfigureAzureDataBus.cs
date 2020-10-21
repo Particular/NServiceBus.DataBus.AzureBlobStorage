@@ -145,14 +145,15 @@ namespace NServiceBus
         }
 
         /// <summary>
-        /// For advanced authentication scenarios, provide a properly configured BlobContainerClient instead of a connectionstring
+        /// Set the BlobContainerClient to use to control authentication against the service.
+        /// Allows token-based, account shared key and connection string based authentication.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> BlobContainerClient(this DataBusExtensions<AzureDataBus> config,
+        public static DataBusExtensions<AzureDataBus> UseBlobContainerClient(this DataBusExtensions<AzureDataBus> config,
             BlobContainerClient blobContainerClient)
         {
             Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
             
-            config.GetSettings().Set(blobContainerClient);
+            config.GetSettings().Set(SettingsKeys.BlobContainerClient, blobContainerClient);
             return config;
         }
 
