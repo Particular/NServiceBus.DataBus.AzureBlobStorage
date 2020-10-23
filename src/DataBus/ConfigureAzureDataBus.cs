@@ -168,7 +168,7 @@ namespace NServiceBus
             if (!config.GetSettings().TryGet<DataBusSettings>(out var settings))
             {
                 settings = new DataBusSettings();
-                config.GetSettings().Set(settings);
+                config.GetSettings().Set<DataBusSettings>(settings);
             }
 
             return settings;

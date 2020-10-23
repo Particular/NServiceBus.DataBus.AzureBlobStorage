@@ -3,7 +3,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System;
     using Azure.Core;
     using Azure.Storage.Blobs;
-    using Microsoft.Extensions.DependencyInjection;
     using Features;
 
     internal class AzureDataBusPersistence : Feature
@@ -25,7 +24,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
 
             var dataBus = new BlobStorageDataBus(blobContainerClient, dataBusSettings, new AsyncTimer());
-            context.Services.AddSingleton<IDataBus>(b => dataBus);
+            context.Container.RegisterSingleton(dataBus);
         }
 
         private BlobContainerClient CreateBlobContainerClient(DataBusSettings dataBusSettings)

@@ -24,15 +24,15 @@ public class When_sending_databus_properties
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.EnableInstallers();
 
-        var endpoint = await Endpoint.Start(endpointConfiguration);
+        var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
         await endpoint.SendLocal(new MyMessageWithLargePayload
         {
             Payload = new DataBusProperty<byte[]>(PayloadToSend)
-        });
+        }).ConfigureAwait(false);
 
         ManualResetEvent.WaitOne(TimeSpan.FromSeconds(30));
-        await endpoint.Stop();
+        await endpoint.Stop().ConfigureAwait(false);
         Assert.AreEqual(PayloadToSend, PayloadReceived, "The large payload should be marshalled correctly using the databus");
     }
 

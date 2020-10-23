@@ -88,9 +88,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 do
                 {
                     var resultSegment = container.GetBlobs().AsPages(continuationToken);
-                    foreach (Page<BlobItem> blobPage in resultSegment)
+                    foreach (var blobPage in resultSegment)
                     {
-                        foreach (BlobItem blobItem in blobPage.Values)
+                        foreach (var blobItem in blobPage.Values)
                         {
                             var blobClient = container.GetBlobClient(blobItem.Name);
                             var validUntil = await GetValidUntil(blobClient, settings.TTL).ConfigureAwait(false);
@@ -118,9 +118,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             if (timeToBeReceived != TimeSpan.MaxValue)
             {
-                var validUntil = DateTimeOffset.UtcNow + timeToBeReceived;
+                var validUntil = DateTime.UtcNow + timeToBeReceived;
                 var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
-                properties.Value.Metadata["ValidUntilUtc"] = DateTimeOffsetHelper.ToWireFormattedString(validUntil);
+                properties.Value.Metadata["ValidUntilUtc"] = DateTimeExtensions.ToWireFormattedString(validUntil);
                 await blobClient.SetMetadataAsync(properties.Value.Metadata).ConfigureAwait(false);
             }
             // else no ValidUntil will be considered it to be non-expiring or subject to maximum ttl
@@ -132,7 +132,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var metadata = properties.Value.Metadata;
             if (metadata.TryGetValue("ValidUntilUtc", out var validUntilUtcString))
             {
-                return DateTimeOffsetHelper.ToDateTimeOffset(validUntilUtcString);
+                return DateTimeExtensions.ToUtcDateTime(validUntilUtcString);
             }
 
             if (!metadata.TryGetValue("ValidUntil", out var validUntilString))
