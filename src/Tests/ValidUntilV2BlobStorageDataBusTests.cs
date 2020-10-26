@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure.Storage.Blobs;
 using NUnit.Framework;
 
 [TestFixture]
 class ValidUntilV2BlobStorageDataBusTests : ValidUntilTest
 {
     //https://github.com/Particular/NServiceBus.Azure/blob/e9db29beb21d1fd914191e479cb5948fffd92f3b/src/NServiceBus.Azure/DataBus/Azure/BlobStorage/BlobStorageDataBus.cs#L41
-    protected override void SetValidUntil(ICloudBlob cloudBlob, TimeSpan timeToBeReceived)
+    protected override void SetValidUntil(BlobClient blobClient, TimeSpan timeToBeReceived)
     {
+        var properties = blobClient.GetProperties();
         if (timeToBeReceived == TimeSpan.MaxValue)
         {
-            cloudBlob.Metadata["ValidUntil"] = TimeSpan.MaxValue.ToString();
+            properties.Value.Metadata["ValidUntil"] = TimeSpan.MaxValue.ToString();
         }
         else
         {
-            cloudBlob.Metadata["ValidUntil"] = (DateTime.Now + timeToBeReceived).ToString();
+            properties.Value.Metadata["ValidUntil"] = (DateTime.Now + timeToBeReceived).ToString();
         }
     }
 

@@ -9,9 +9,13 @@ namespace NServiceBus
     }
     public class static ConfigureAzureDataBus
     {
+        [System.ObsoleteAttribute(@"Managed Identity authentication is supported by configuring Azure databus with a BlobContainerClient using the '.UseBlobContainerClient()' configuration API. Use `ConfigureAzureDataBusBlobContainerClient` instead. The member currently throws a NotImplementedException. Will be removed in version 5.0.0.", true)]
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> AuthenticateWithManagedIdentity(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string storageAccountName, System.TimeSpan renewalTimeBeforeTokenExpires, string endpointSuffix = "core.windows.net") { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BackOffInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int backOffInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BasePath(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string basePath) { }
+        [System.ObsoleteAttribute("It\'s no longer possible to override the blocksize due to restrictions of the unde" +
+            "rlying SDK. The member currently throws a NotImplementedException. Will be remov" +
+            "ed in version 5.0.0.", true)]
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BlockSize(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int blockSize) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> CleanupInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int cleanupInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> ConnectionString(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string connectionString) { }
@@ -19,5 +23,6 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> DefaultTTL(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, long defaultTTLInSeconds) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> MaxRetries(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int maxRetries) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> NumberOfIOThreads(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int numberOfIOThreads) { }
+        public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseBlobContainerClient(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Azure.Storage.Blobs.BlobContainerClient blobContainerClient) { }
     }
 }

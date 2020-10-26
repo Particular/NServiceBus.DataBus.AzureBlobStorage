@@ -2,10 +2,10 @@
 using NServiceBus;
 using NUnit.Framework;
 
-public class When_authenticating_with_managed_identity
+public class When_validating_settings
 {
     [Test]
-    public void Should_throw_if_connection_string_is_also_provided()
+    public void Should_throw_when_no_configured_blobcontainerclient_nor_connectionstring()
     {
         var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
         endpointConfiguration.SendFailedMessagesTo("error");
@@ -13,10 +13,8 @@ public class When_authenticating_with_managed_identity
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.EnableInstallers();
 
-        var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>();
-        dataBus.ConnectionString("user-provided-connection-string");
-        dataBus.AuthenticateWithManagedIdentity("user-provided-storage-account-name", TimeSpan.FromMinutes(5));
-
+        endpointConfiguration.UseDataBus<AzureDataBus>();
+       
         Assert.ThrowsAsync<Exception>(() => Endpoint.Start(endpointConfiguration));
     }
 }

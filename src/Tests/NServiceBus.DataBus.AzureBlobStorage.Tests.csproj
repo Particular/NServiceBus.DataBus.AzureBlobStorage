@@ -8,15 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\TestSuppressions.cs" Link="TestSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataBus\NServiceBus.DataBus.AzureBlobStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
     <PackageReference Include="NServiceBus" Version="7.2.3" />
-    <PackageReference Include="WindowsAzure.Storage" Version="9.*" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Particular.CodeRules" Version="0.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Particular.Approvals" Version="0.2.0" />
     <PackageReference Include="PublicApiGenerator" Version="9.3.0" />
   </ItemGroup>

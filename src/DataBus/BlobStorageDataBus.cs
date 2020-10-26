@@ -3,35 +3,34 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using Logging;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using Microsoft.WindowsAzure.Storage.RetryPolicies;
+    using Azure;
+    using Azure.Storage;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
-        public BlobStorageDataBus(CloudBlobContainer container, DataBusSettings settings, IAsyncTimer timer)
+        public BlobStorageDataBus(BlobContainerClient container, DataBusSettings settings, IAsyncTimer timer)
         {
             this.container = container;
             this.settings = settings;
             this.timer = timer;
-
-            retryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(settings.BackOffInterval), settings.MaxRetries);
         }
 
         public async Task<Stream> Get(string key)
         {
-            var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
-            await blob.FetchAttributesAsync().ConfigureAwait(false);
+            var blobClient = container.GetBlobClient(Path.Combine(settings.BasePath, key));
+            var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
+            var stream = new MemoryStream((int) properties.Value.ContentLength);
 
-            var stream = new MemoryStream((int) blob.Properties.Length);
+            var transferOptions = new StorageTransferOptions
+            {
+                MaximumConcurrency = settings.NumberOfIOThreads,
+            };
 
-            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
-            container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;
-
-            await blob.DownloadToStreamAsync(stream).ConfigureAwait(false);
+            await blobClient.DownloadToAsync(stream, null, transferOptions).ConfigureAwait(false);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
@@ -39,12 +38,20 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived)
         {
             var key = Guid.NewGuid().ToString();
-            var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
-            SetValidUntil(blob, timeToBeReceived);
-            blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
-            container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;
-            blob.StreamWriteSizeInBytes = settings.BlockSize;
-            await blob.UploadFromStreamAsync(stream).ConfigureAwait(false);
+            var blobClient = container.GetBlobClient(Path.Combine(settings.BasePath, key));
+
+            SetValidUntil(blobClient, timeToBeReceived);
+
+            //blobClient.StreamWriteSizeInBytes = settings.BlockSize;
+            var blobUploadOptions = new BlobUploadOptions
+            {
+                TransferOptions = new StorageTransferOptions
+                {
+                    MaximumConcurrency = settings.NumberOfIOThreads
+                }
+            };
+            await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
+
             return key;
         }
 
@@ -71,92 +78,100 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         async Task DeleteExpiredBlobs()
         {
+            string continuationToken = null;
+
             try
             {
-                var blobs = await container.ListBlobsAsync().ConfigureAwait(false);
-
-                foreach (var blockBlob in blobs.Select(blob => blob as CloudBlockBlob))
+                // Call the listing operation and enumerate the result segment.
+                // When the continuation token is empty, the last segment has been returned
+                // and execution can exit the loop.
+                do
                 {
-                    if (blockBlob == null)
+                    var resultSegment = container.GetBlobs().AsPages(continuationToken);
+                    foreach (Page<BlobItem> blobPage in resultSegment)
                     {
-                        continue;
+                        foreach (BlobItem blobItem in blobPage.Values)
+                        {
+                            var blobClient = container.GetBlobClient(blobItem.Name);
+                            var validUntil = await GetValidUntil(blobClient, settings.TTL).ConfigureAwait(false);
+                            if (validUntil < DateTimeOffset.UtcNow)
+                            {
+                                await blobClient.DeleteIfExistsAsync().ConfigureAwait(false);
+                            }
+                        }
+
+                        // Get the continuation token and loop until it is empty.
+                        continuationToken = blobPage.ContinuationToken;
                     }
 
-                    try
-                    {
-                        await blockBlob.FetchAttributesAsync().ConfigureAwait(false);
-                        var validUntil = await GetValidUntil(blockBlob, settings.TTL).ConfigureAwait(false);
-                        if (validUntil < DateTime.UtcNow)
-                        {
-                            await blockBlob.DeleteIfExistsAsync().ConfigureAwait(false);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Another endpoint instance could have deleted the blob just a moment ago after blobs were listed by the current instance
-                        logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception while deleting blob {blockBlob.Name}.", ex);
-                    }
                 }
+                while (continuationToken != string.Empty);
+
             }
-            catch (StorageException ex) // needs to stay as it runs on a background thread
+            catch (RequestFailedException ex)
             {
                 logger.WarnFormat($"{nameof(BlobStorageDataBus)} has encountered an exception.", ex);
             }
         }
 
-
-        internal static void SetValidUntil(ICloudBlob blob, TimeSpan timeToBeReceived)
+        internal static async void SetValidUntil(BlobClient blobClient, TimeSpan timeToBeReceived)
         {
             if (timeToBeReceived != TimeSpan.MaxValue)
             {
-                var validUntil = DateTime.UtcNow + timeToBeReceived;
-                blob.Metadata["ValidUntilUtc"] = DateTimeExtensions.ToWireFormattedString(validUntil);
+                var validUntil = DateTimeOffset.UtcNow + timeToBeReceived;
+                var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
+                properties.Value.Metadata["ValidUntilUtc"] = DateTimeOffsetHelper.ToWireFormattedString(validUntil);
+                await blobClient.SetMetadataAsync(properties.Value.Metadata).ConfigureAwait(false);
             }
             // else no ValidUntil will be considered it to be non-expiring or subject to maximum ttl
         }
 
-
-        internal static async Task<DateTime> GetValidUntil(ICloudBlob blockBlob, long defaultTtl = long.MaxValue)
+        internal static async Task<DateTimeOffset> GetValidUntil(BlobClient blobClient, long defaultTtl = long.MaxValue)
         {
-            if (blockBlob.Metadata.TryGetValue("ValidUntilUtc", out var validUntilUtcString))
+            var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
+            var metadata = properties.Value.Metadata;
+            if (metadata.TryGetValue("ValidUntilUtc", out var validUntilUtcString))
             {
-                return DateTimeExtensions.ToUtcDateTime(validUntilUtcString);
+                return DateTimeOffsetHelper.ToDateTimeOffset(validUntilUtcString);
             }
 
-            if (!blockBlob.Metadata.TryGetValue("ValidUntil", out var validUntilString))
+            if (!metadata.TryGetValue("ValidUntil", out var validUntilString))
             {
                 // no ValidUntil and no ValidUntilUtc will be considered non-expiring or whatever default ttl is set
-                return ToDefault(defaultTtl, blockBlob);
+                var defaultedTtl = await ToDefault(defaultTtl, blobClient).ConfigureAwait(false);
+                return defaultedTtl;
             }
             var style = DateTimeStyles.AssumeUniversal;
-            if (!blockBlob.Metadata.ContainsKey("ValidUntilKind"))
+            if (!metadata.ContainsKey("ValidUntilKind"))
             {
                 style = DateTimeStyles.AdjustToUniversal;
             }
 
             //since this is the old version that could be written in any culture we cannot be certain it will parse so need to handle failure
-            if (!DateTime.TryParse(validUntilString, null, style, out var validUntil))
+            if (!DateTimeOffset.TryParse(validUntilString, null, style, out var validUntil))
             {
-                var message = $"Could not parse the 'ValidUntil' value `{validUntilString}` for blob {blockBlob.Uri}. Resetting 'ValidUntil' to not expire. You may consider manually removing this entry if non-expiry is incorrect.";
-                logger.Error(message);
-                //If we cant parse the datetime then assume data corruption and store for max time
-                SetValidUntil(blockBlob, TimeSpan.MaxValue);
-                //upload the changed metadata
-                await blockBlob.SetMetadataAsync().ConfigureAwait(false);
+                 var message = $"Could not parse the 'ValidUntil' value `{validUntilString}` for blob {blobClient.Uri}. Resetting 'ValidUntil' to not expire. You may consider manually removing this entry if non-expiry is incorrect.";
+                 logger.Error(message);
+                 // If we cant parse the datetime then assume data corruption and store for max time
+                 SetValidUntil(blobClient, TimeSpan.MaxValue);
+                 // upload the changed metadata
+                 await blobClient.SetMetadataAsync(metadata).ConfigureAwait(false);
 
-                return ToDefault(defaultTtl, blockBlob);
+                 var defaultedTtl = await ToDefault(defaultTtl, blobClient).ConfigureAwait(false);
+                 return defaultedTtl;
             }
 
             return validUntil.ToUniversalTime();
         }
 
-        static DateTime ToDefault(long defaultTtl, ICloudBlob blockBlob)
+        static async Task<DateTimeOffset> ToDefault(long defaultTtl, BlobClient blobClient)
         {
-            if (defaultTtl != long.MaxValue && blockBlob.Properties.LastModified.HasValue)
+            var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
+            if (defaultTtl != long.MaxValue && properties.Value.LastModified != DateTimeOffset.MinValue)
             {
                 try
                 {
-                    return blockBlob.Properties.LastModified.Value.Add(TimeSpan.FromSeconds(defaultTtl)).UtcDateTime;
+                    return properties.Value.LastModified.Add(TimeSpan.FromSeconds(defaultTtl)).UtcDateTime;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -164,13 +179,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 }
             }
 
-            return DateTime.MaxValue;
+            return DateTimeOffset.MaxValue;
         }
 
-        CloudBlobContainer container;
+        BlobContainerClient container;
         DataBusSettings settings;
         IAsyncTimer timer;
-        ExponentialRetry retryPolicy;
         static ILog logger = LogManager.GetLogger(typeof(IDataBus));
     }
 }
