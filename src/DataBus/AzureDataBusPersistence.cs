@@ -25,7 +25,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
 
             var dataBus = new BlobStorageDataBus(blobContainerClient, dataBusSettings, new AsyncTimer());
-            context.Services.AddSingleton<IDataBus>(b => dataBus);
+            context.Services.AddSingleton<IDataBus, BlobStorageDataBus>(b => dataBus);
+            context.Services.AddSingleton(b => blobContainerClient);
         }
 
         private BlobContainerClient CreateBlobContainerClient(DataBusSettings dataBusSettings)
