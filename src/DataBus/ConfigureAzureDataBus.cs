@@ -152,7 +152,7 @@ namespace NServiceBus
             BlobContainerClient blobContainerClient)
         {
             Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
-            
+
             config.GetSettings().Set(SettingsKeys.BlobContainerClient, blobContainerClient);
             return config;
         }
@@ -173,7 +173,5 @@ namespace NServiceBus
 
             return settings;
         }
-
-        internal const int MaxBlockSize = 4 * 1024 * 1024; //4 mb
     }
 }

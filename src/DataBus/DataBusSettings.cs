@@ -1,7 +1,5 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    using System;
-
     class DataBusSettings
     {
         public DataBusSettings()
