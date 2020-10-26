@@ -1,4 +1,6 @@
-﻿namespace NServiceBus
+﻿using Azure.Storage.Blobs;
+
+namespace NServiceBus
 {
     using System;
     using System.Text.RegularExpressions;
@@ -10,7 +12,7 @@
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
     /// </summary>
-    public static class ConfigureAzureDataBus
+    public static partial class ConfigureAzureDataBus
     {
         /// <summary>
         /// Sets the number of retries used by the blob storage client. Default is 5.
@@ -37,25 +39,6 @@
             }
 
             GetSettings(config).BackOffInterval = backOffInterval;
-            return config;
-        }
-
-        /// <summary>
-        /// Sets the block size used by the blob storage client. Default is 4mb which also is the maximum for blob storage.
-        /// </summary>
-        public static DataBusExtensions<AzureDataBus> BlockSize(this DataBusExtensions<AzureDataBus> config, int blockSize)
-        {
-            if (blockSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(blockSize), blockSize, "Must not be negative.");
-            }
-
-            if (blockSize > MaxBlockSize)
-            {
-                throw new ArgumentOutOfRangeException(nameof(blockSize), blockSize, "Must be less than 4mb");
-            }
-
-            GetSettings(config).BlockSize = blockSize;
             return config;
         }
 
@@ -162,31 +145,15 @@
         }
 
         /// <summary>
-        /// Sets token credential to authenticate with Storage Blob service
-        /// <remarks>Token credentials can be created using <see cref="AzureServiceTokenProvider"/> with token renewal configured.</remarks>
+        /// Set the BlobContainerClient to use to control authentication against the service.
+        /// Allows token-based, account shared key and connection string based authentication.
         /// </summary>
-        /// <param name="config">The configuration to modify.</param>
-        /// <param name="storageAccountName">The storage account name.</param>
-        /// <param name="renewalTimeBeforeTokenExpires">The renewal time before token expiry.</param>
-        /// <param name="endpointSuffix">Endpoint suffix associated with storage blob service per type of data center. Default is "core.windows.net" for public Azure data centers.</param>
-        public static DataBusExtensions<AzureDataBus> AuthenticateWithManagedIdentity(this DataBusExtensions<AzureDataBus> config, string storageAccountName, TimeSpan renewalTimeBeforeTokenExpires, string endpointSuffix = "core.windows.net")
+        public static DataBusExtensions<AzureDataBus> UseBlobContainerClient(this DataBusExtensions<AzureDataBus> config,
+            BlobContainerClient blobContainerClient)
         {
-            if (renewalTimeBeforeTokenExpires <= TimeSpan.Zero)
-            {
-                throw new ArgumentException($"Should not be less or equal to {nameof(TimeSpan.Zero)}", nameof(renewalTimeBeforeTokenExpires));
-            }
+            Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
 
-            if (string.IsNullOrWhiteSpace(storageAccountName))
-            {
-                throw new ArgumentException("Should not be null or empty", nameof(storageAccountName));
-            }
-
-            var dataBusSettings = GetSettings(config);
-
-            dataBusSettings.RenewalTimeBeforeTokenExpires = renewalTimeBeforeTokenExpires;
-            dataBusSettings.StorageAccountName = storageAccountName;
-            dataBusSettings.EndpointSuffix = endpointSuffix;
-
+            config.GetSettings().Set(SettingsKeys.BlobContainerClient, blobContainerClient);
             return config;
         }
 
@@ -206,7 +173,5 @@
 
             return settings;
         }
-
-        internal const int MaxBlockSize = 4 * 1024 * 1024; //4 mb
     }
 }
