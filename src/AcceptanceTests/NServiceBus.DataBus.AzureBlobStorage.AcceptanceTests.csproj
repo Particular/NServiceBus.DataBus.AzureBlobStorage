@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
-    <PackageReference Include="NServiceBus" Version="8.0.0-alpha.631" />
     <PackageReference Include="NServiceBus.AcceptanceTesting" Version="8.0.0-alpha.631" />
     <PackageReference Include="Particular.CodeRules" Version="0.7.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
