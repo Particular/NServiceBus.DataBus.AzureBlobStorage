@@ -1,20 +1,22 @@
-﻿using System;
-using NServiceBus;
-using NUnit.Framework;
-
-public class When_validating_settings
+﻿namespace NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests
 {
-    [Test]
-    public void Should_throw_when_no_configured_blobcontainerclient_nor_connectionstring()
+    using System;
+    using NUnit.Framework;
+    
+    public class When_validating_settings
     {
-        var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
-        endpointConfiguration.SendFailedMessagesTo("error");
-        endpointConfiguration.UseTransport<AcceptanceTestingTransport>();
-        endpointConfiguration.UsePersistence<AcceptanceTestingPersistence>();
-        endpointConfiguration.EnableInstallers();
+        [Test]
+        public void Should_throw_when_no_configured_blobcontainerclient_nor_connectionstring()
+        {
+            var endpointConfiguration = new EndpointConfiguration("AzureBlobStorageDataBus.Test");
+            endpointConfiguration.SendFailedMessagesTo("error");
+            endpointConfiguration.UseTransport<AcceptanceTestingTransport>();
+            endpointConfiguration.UsePersistence<AcceptanceTestingPersistence>();
+            endpointConfiguration.EnableInstallers();
 
-        endpointConfiguration.UseDataBus<AzureDataBus>();
+            endpointConfiguration.UseDataBus<AzureDataBus>();
        
-        Assert.ThrowsAsync<Exception>(() => Endpoint.Start(endpointConfiguration));
+            Assert.ThrowsAsync<Exception>(() => Endpoint.Start(endpointConfiguration));
+        }
     }
 }
