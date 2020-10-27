@@ -5,7 +5,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
     using Features;
-
+    using System.Linq;
+    using Config;
+    
     internal class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
@@ -17,16 +19,21 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            var blobContainerClientConfiguredByUser = context.Settings.TryGet(SettingsKeys.BlobContainerClient, out BlobContainerClient blobContainerClient);
-            ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
-            if (!blobContainerClientConfiguredByUser)
+            // If no provider has been registered in the container, look for on in the settings
+            if (context.Services.All(x => x.ServiceType != typeof(IProvideBlobContainerClient)))
             {
-                blobContainerClient = CreateBlobContainerClient(dataBusSettings);
+                var blobContainerClientConfiguredByUser = context.Settings.TryGet(out IProvideBlobContainerClient blobContainerClientProvider);
+                ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
+                if (!blobContainerClientConfiguredByUser)
+                {
+                    var blobContainerClient = CreateBlobContainerClient(dataBusSettings);
+                    blobContainerClientProvider = new BlobContainerClientProvidedByConfiguration{Client = blobContainerClient};
+                }
+                context.Services.AddSingleton(b => blobContainerClientProvider);
             }
 
-            var dataBus = new BlobStorageDataBus(blobContainerClient, dataBusSettings, new AsyncTimer());
-            context.Services.AddSingleton<IDataBus, BlobStorageDataBus>(b => dataBus);
-            context.Services.AddSingleton(b => blobContainerClient);
+            context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobContainerClient>(),
+                dataBusSettings, new AsyncTimer()));
         }
 
         private BlobContainerClient CreateBlobContainerClient(DataBusSettings dataBusSettings)
