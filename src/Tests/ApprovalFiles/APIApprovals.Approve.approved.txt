@@ -26,3 +26,10 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseBlobContainerClient(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Azure.Storage.Blobs.BlobContainerClient blobContainerClient) { }
     }
 }
+namespace NServiceBus.DataBus.AzureBlobStorage.Config
+{
+    public interface IProvideBlobContainerClient
+    {
+        Azure.Storage.Blobs.BlobContainerClient Client { get; }
+    }
+}
