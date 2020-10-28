@@ -7,7 +7,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Features;
     using System.Linq;
     using Config;
-    
+
     internal class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
@@ -20,19 +20,13 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
             // If a provider has been registered in the container, it will added later in the configuration process and replace any client set here
-            var blobContainerClientConfiguredInSettings = context.Settings.TryGet(out IProvideBlobContainerClient blobContainerClientProvider);
-            if (blobContainerClientConfiguredInSettings)
-            {
-                context.Services.AddSingleton(b => blobContainerClientProvider);
-            }
-            else if (dataBusSettings.UserProvidedConnectionString)
+            if (!context.Settings.TryGet(out IProvideBlobContainerClient blobContainerClientProvider) && dataBusSettings.UserProvidedConnectionString)
             {
                 var blobContainerClient = CreateBlobContainerClient(dataBusSettings);
-                blobContainerClientProvider = new BlobContainerClientProvidedByConfiguration
-                    {Client = blobContainerClient};
-                context.Services.AddSingleton(b => blobContainerClientProvider);
+                blobContainerClientProvider = new BlobContainerClientProvidedByConfiguration { Client = blobContainerClient };
             }
-            
+
+            context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobContainerClientProvider());
             context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobContainerClient>(),
                 dataBusSettings, new AsyncTimer()));
         }
