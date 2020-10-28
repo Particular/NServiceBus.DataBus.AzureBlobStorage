@@ -1,14 +1,13 @@
-﻿using Azure.Storage.Blobs;
-
-namespace NServiceBus
+﻿namespace NServiceBus
 {
     using System;
     using System.Text.RegularExpressions;
     using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
-    using Microsoft.Azure.Services.AppAuthentication;
-
+    using Azure.Storage.Blobs;
+    using DataBus.AzureBlobStorage.Config;
+    
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
     /// </summary>
@@ -153,7 +152,7 @@ namespace NServiceBus
         {
             Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
 
-            config.GetSettings().Set(SettingsKeys.BlobContainerClient, blobContainerClient);
+            config.GetSettings().Set<IProvideBlobContainerClient>(new BlobContainerClientProvidedByConfiguration { Client =  blobContainerClient});
             return config;
         }
 
