@@ -19,19 +19,20 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
-            // If no provider has been registered in the container, look for on in the settings
-            if (context.Services.All(x => x.ServiceType != typeof(IProvideBlobContainerClient)))
+            // If a provider has been registered in the container, it will added later in the configuration process and replace any client set here
+            var blobContainerClientConfiguredInSettings = context.Settings.TryGet(out IProvideBlobContainerClient blobContainerClientProvider);
+            if (blobContainerClientConfiguredInSettings)
             {
-                var blobContainerClientConfiguredByUser = context.Settings.TryGet(out IProvideBlobContainerClient blobContainerClientProvider);
-                ThrowIfMissingConfigurationForBlobContainer(blobContainerClientConfiguredByUser, dataBusSettings);
-                if (!blobContainerClientConfiguredByUser)
-                {
-                    var blobContainerClient = CreateBlobContainerClient(dataBusSettings);
-                    blobContainerClientProvider = new BlobContainerClientProvidedByConfiguration{Client = blobContainerClient};
-                }
                 context.Services.AddSingleton(b => blobContainerClientProvider);
             }
-
+            else if (dataBusSettings.UserProvidedConnectionString)
+            {
+                var blobContainerClient = CreateBlobContainerClient(dataBusSettings);
+                blobContainerClientProvider = new BlobContainerClientProvidedByConfiguration
+                    {Client = blobContainerClient};
+                context.Services.AddSingleton(b => blobContainerClientProvider);
+            }
+            
             context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobContainerClient>(),
                 dataBusSettings, new AsyncTimer()));
         }
@@ -48,20 +49,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 }
             };
             return new BlobContainerClient(dataBusSettings.ConnectionString, dataBusSettings.Container, clientOptions);
-        }
-
-        private void ThrowIfMissingConfigurationForBlobContainer(bool isBlobClientConfiguredByUser,
-            DataBusSettings dataBusSettings)
-        {
-            if (isBlobClientConfiguredByUser)
-            {
-                return;
-            }
-
-            if (!dataBusSettings.UserProvidedConnectionString)
-            {
-                throw new Exception("Azure databus was not configured to use a BlobContainerClient. Use '.UseBlobContainerClient()' to provide a BlobContainerClient to be used. Alternatively, configure the data bus using a connection string and a container name.");
-            }
         }
     }
 }
