@@ -1,5 +1,6 @@
 ﻿namespace NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests
 {
+    using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NUnit.Framework;
@@ -9,24 +10,29 @@
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using Config;
 
-    public class When_custom_provider_registered : NServiceBusAcceptanceTest
+    public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
         [Test]
-        public async Task Should_be_used()
+        public async Task Should_work()
         {
+            var payloadToSend = new byte[1024 * 1024];
+            new Random().NextBytes(payloadToSend);
+
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new DataBusMessage()
+                .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
                 {
-                    Payload = new DataBusProperty<byte[]>(new byte[1024 * 1024])
+                    Payload = new DataBusProperty<byte[]>(payloadToSend)
                 })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
             Assert.True(context.ProviderWasCalled);
+            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
         }
 
         public class Context : ScenarioContext
         {
+            public byte[] PayloadReceived { get; set; }
             public bool MessageReceived { get; set; }
             public bool ProviderWasCalled { get; set; }
         }
@@ -37,21 +43,22 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
+                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobContainerClient, CustomProvider>());
+
                     config.UseDataBus<AzureDataBus>();
-                    config.RegisterComponents(c =>
-                        c.AddSingleton<IProvideBlobContainerClient>(provider => new CustomProvider(provider.GetRequiredService<Context>())));
                 });
             }
 
-            public class DataBusMessageHandler : IHandleMessages<DataBusMessage>
+            public class DataBusMessageHandler : IHandleMessages<MessageWithLargePayload>
             {
                 public DataBusMessageHandler(Context testContext)
                 {
                     this.testContext = testContext;
                 }
 
-                public Task Handle(DataBusMessage message, IMessageHandlerContext context)
+                public Task Handle(MessageWithLargePayload messageWithLargePayload, IMessageHandlerContext context)
                 {
+                    testContext.PayloadReceived = messageWithLargePayload.Payload.Value;
                     testContext.MessageReceived = true;
                     return Task.CompletedTask;
                 }
@@ -79,7 +86,7 @@
             }
         }
 
-        public class DataBusMessage : ICommand
+        public class MessageWithLargePayload : ICommand
         {
             public DataBusProperty<byte[]> Payload { get; set; }
         }
