@@ -144,8 +144,7 @@
         }
 
         /// <summary>
-        /// Set the BlobServiceClient to use to control authentication against the service.
-        /// Allows token-based, account shared key and connection string based authentication.
+        /// Set the custom <see cref="BlobServiceClient"/> to be used by the persistence, enabling the necessary customizations to the client.
         /// </summary>
         public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,
             BlobServiceClient blobServiceClient)

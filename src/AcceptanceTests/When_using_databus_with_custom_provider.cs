@@ -43,7 +43,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
+                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, TestableBlobServiceClientProvider>());
 
                     config.UseDataBus<AzureDataBus>();
                 });
@@ -66,9 +66,9 @@
                 readonly Context testContext;
             }
 
-            public class CustomProvider : IProvideBlobServiceClient
+            public class TestableBlobServiceClientProvider  : IProvideBlobServiceClient
             {
-                public CustomProvider(Context testContext)
+                public TestableBlobServiceClientProvider (Context testContext)
                 {
                     this.testContext = testContext;
                 }
