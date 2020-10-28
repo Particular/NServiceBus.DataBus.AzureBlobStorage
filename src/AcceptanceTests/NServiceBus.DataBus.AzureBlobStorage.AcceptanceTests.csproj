@@ -25,6 +25,7 @@
   <ItemGroup>
     <Compile Remove="\**\ConfigureEndpointInMemoryPersistence.cs" />
     <Compile Remove="\**\ConfigureEndpointLearningPersistence.cs" />
+    <Compile Remove="\**\ConfigureEndpointLearningTransport.cs" />
     <Compile Remove="\**\ConventionEnforcementTests.cs" />
     <Compile Remove="\**\DeterministicGuid.cs" />
     <Compile Remove="\**\Audit\*.*" />
