@@ -43,7 +43,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobContainerClient, CustomProvider>());
+                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
 
                     config.UseDataBus<AzureDataBus>();
                 });
@@ -66,19 +66,19 @@
                 readonly Context testContext;
             }
 
-            public class CustomProvider : IProvideBlobContainerClient
+            public class CustomProvider : IProvideBlobServiceClient
             {
                 public CustomProvider(Context testContext)
                 {
                     this.testContext = testContext;
                 }
 
-                public BlobContainerClient Client
+                public BlobServiceClient Client
                 {
                     get
                     {
                         testContext.ProviderWasCalled = true;
-                        return SetupFixture.BlobContainerClient;
+                        return SetupFixture.BlobServiceClient;
                     }
                 }
 
