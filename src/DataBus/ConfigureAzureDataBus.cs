@@ -144,15 +144,14 @@
         }
 
         /// <summary>
-        /// Set the BlobContainerClient to use to control authentication against the service.
-        /// Allows token-based, account shared key and connection string based authentication.
+        /// Set the custom <see cref="BlobServiceClient"/> to be used by the persistence, enabling the necessary customizations to the client.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> UseBlobContainerClient(this DataBusExtensions<AzureDataBus> config,
-            BlobContainerClient blobContainerClient)
+        public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,
+            BlobServiceClient blobServiceClient)
         {
-            Guard.AgainstNull(nameof(blobContainerClient), blobContainerClient);
+            Guard.AgainstNull(nameof(blobServiceClient), blobServiceClient);
 
-            config.GetSettings().Set<IProvideBlobContainerClient>(new BlobContainerClientProvidedByConfiguration { Client =  blobContainerClient});
+            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client =  blobServiceClient});
             return config;
         }
 

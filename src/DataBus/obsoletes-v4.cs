@@ -7,7 +7,7 @@ namespace NServiceBus
     public static partial class ConfigureAzureDataBus
     {
         [ObsoleteEx(
-            Message = "Managed Identity authentication is supported by configuring Azure databus with a BlobContainerClient using the '.UseBlobContainerClient()' configuration API.",
+            Message = "Managed Identity authentication is supported by configuring Azure databus with a BlobContainerClient using the '.UseBlobServiceClient()' configuration API.",
             ReplacementTypeOrMember = nameof(ConfigureAzureDataBus) + "BlobContainerClient",
             RemoveInVersion = "5.0.0",
             TreatAsErrorFromVersion = "4.0.0")]

@@ -17,7 +17,7 @@
 
         public IConfigureEndpointTestExecution CreatePersistenceConfiguration()
         {
-            return new ConfigureEndpointAcceptanceTestingPersistence();
+            return new ConfigureDatabusEndpoint();
         }
     }
 }
