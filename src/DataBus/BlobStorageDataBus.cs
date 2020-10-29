@@ -44,9 +44,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var key = Guid.NewGuid().ToString();
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
 
-            SetValidUntil(blobClient, timeToBeReceived);
-
-            //blobClient.StreamWriteSizeInBytes = settings.BlockSize;
             var blobUploadOptions = new BlobUploadOptions
             {
                 TransferOptions = new StorageTransferOptions
@@ -55,6 +52,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 }
             };
             await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
+            SetValidUntil(blobClient, timeToBeReceived);
 
             return key;
         }
