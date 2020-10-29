@@ -1,5 +1,6 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
+    using System.Collections.Generic;
     using System;
     using System.Globalization;
     using System.IO;
@@ -44,16 +45,26 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var key = Guid.NewGuid().ToString();
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
 
+            Dictionary<string, string> metadata = null;
+            if (timeToBeReceived != TimeSpan.MaxValue)
+            {
+                var validUntil = DateTimeOffset.UtcNow + timeToBeReceived;
+
+                metadata = new Dictionary<string, string>
+                {
+                    { "ValidUntilUtc", DateTimeOffsetHelper.ToWireFormattedString(validUntil) }
+                };
+            }
             var blobUploadOptions = new BlobUploadOptions
             {
                 TransferOptions = new StorageTransferOptions
                 {
                     MaximumConcurrency = settings.NumberOfIOThreads
-                }
+                },
+                Metadata = metadata
             };
             await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
-            SetValidUntil(blobClient, timeToBeReceived);
-
+            
             return key;
         }
 
