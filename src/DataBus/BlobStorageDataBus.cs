@@ -64,7 +64,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 Metadata = metadata
             };
             await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
-            
+
             return key;
         }
 
