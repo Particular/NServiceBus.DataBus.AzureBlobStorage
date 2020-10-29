@@ -44,8 +44,6 @@
                 EndpointSetup<DefaultServer>(config =>
                 {
                     config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
-
-                    config.UseDataBus<AzureDataBus>();
                 });
             }
 

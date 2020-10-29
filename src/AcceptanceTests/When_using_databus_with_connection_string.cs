@@ -40,9 +40,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus>()
-                        .Container(SetupFixture.ContainerName)
-                        .ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseDataBus<AzureDataBus>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
                 });
             }
 
