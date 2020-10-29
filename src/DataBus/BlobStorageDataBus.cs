@@ -9,6 +9,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
+    using Microsoft.IO;
     using Config;
 
     class BlobStorageDataBus : IDataBus, IDisposable
@@ -17,7 +18,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             this.settings = settings;
             this.timer = timer;
-            
+
             blobContainerClient = blobServiceClientProvider.Client.GetBlobContainerClient(settings.Container);
         }
 
@@ -25,7 +26,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         {
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
             var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
-            var stream = new MemoryStream((int) properties.Value.ContentLength);
+            // core takes care of disposing
+            var stream = memoryStreamManager.GetStream(key, (int) properties.Value.ContentLength);
 
             var transferOptions = new StorageTransferOptions
             {
@@ -188,5 +190,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         DataBusSettings settings;
         IAsyncTimer timer;
         static ILog logger = LogManager.GetLogger(typeof(IDataBus));
+        static readonly RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
     }
 }
