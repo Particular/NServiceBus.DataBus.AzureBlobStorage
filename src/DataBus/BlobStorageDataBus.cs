@@ -13,16 +13,17 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
-        public BlobStorageDataBus(IProvideBlobContainerClient blobContainerClientProvider, DataBusSettings settings, IAsyncTimer timer)
+        public BlobStorageDataBus(IProvideBlobServiceClient blobServiceClientProvider, DataBusSettings settings, IAsyncTimer timer)
         {
-            this.blobContainerClientProvider = blobContainerClientProvider;
             this.settings = settings;
             this.timer = timer;
+            
+            blobContainerClient = blobServiceClientProvider.Client.GetBlobContainerClient(settings.Container);
         }
 
         public async Task<Stream> Get(string key)
         {
-            var blobClient = blobContainerClientProvider.Client.GetBlobClient(Path.Combine(settings.BasePath, key));
+            var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
             var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
             var stream = new MemoryStream((int) properties.Value.ContentLength);
 
@@ -39,7 +40,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived)
         {
             var key = Guid.NewGuid().ToString();
-            var blobClient = blobContainerClientProvider.Client.GetBlobClient(Path.Combine(settings.BasePath, key));
+            var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
 
             SetValidUntil(blobClient, timeToBeReceived);
 
@@ -58,7 +59,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         public async Task Start()
         {
-            await blobContainerClientProvider.Client.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await blobContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             if (settings.ShouldPerformCleanup())
             {
@@ -68,7 +69,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 });
             }
 
-            logger.Info("Blob storage data bus started. Location: " + Path.Combine(blobContainerClientProvider.Client.Uri.ToString(), settings.BasePath));
+            logger.Info("Blob storage data bus started. Location: " + Path.Combine(blobContainerClient.Uri.ToString(), settings.BasePath));
         }
 
         public void Dispose()
@@ -88,12 +89,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 // and execution can exit the loop.
                 do
                 {
-                    var resultSegment = blobContainerClientProvider.Client.GetBlobs().AsPages(continuationToken);
+                    var resultSegment = blobContainerClient.GetBlobs().AsPages(continuationToken);
                     foreach (Page<BlobItem> blobPage in resultSegment)
                     {
                         foreach (BlobItem blobItem in blobPage.Values)
                         {
-                            var blobClient = blobContainerClientProvider.Client.GetBlobClient(blobItem.Name);
+                            var blobClient = blobContainerClient.GetBlobClient(blobItem.Name);
                             var validUntil = await GetValidUntil(blobClient, settings.TTL).ConfigureAwait(false);
                             if (validUntil < DateTimeOffset.UtcNow)
                             {
@@ -183,7 +184,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             return DateTimeOffset.MaxValue;
         }
 
-        IProvideBlobContainerClient blobContainerClientProvider;
+        BlobContainerClient blobContainerClient;
         DataBusSettings settings;
         IAsyncTimer timer;
         static ILog logger = LogManager.GetLogger(typeof(IDataBus));

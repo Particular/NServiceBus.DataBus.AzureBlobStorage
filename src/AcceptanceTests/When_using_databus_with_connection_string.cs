@@ -40,8 +40,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus>()
-                        .ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseDataBus<AzureDataBus>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
                 });
             }
 

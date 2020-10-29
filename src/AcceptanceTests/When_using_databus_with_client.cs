@@ -40,8 +40,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus>()
-                        .UseBlobContainerClient(SetupFixture.BlobContainerClient);
+                    config.UseDataBus<AzureDataBus>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
