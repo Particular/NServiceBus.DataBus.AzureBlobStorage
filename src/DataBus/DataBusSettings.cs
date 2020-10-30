@@ -12,7 +12,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             TTL = long.MaxValue; // seconds
             CleanupInterval = 0; // milliseconds, off by default
             ConnectionString = "UseDevelopmentStorage=true";
-            UserProvidedConnectionString = false;
+            UserHasProvidedConnectionString = false;
         }
 
         public bool ShouldPerformCleanup()
@@ -28,6 +28,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         public long TTL;
         public int CleanupInterval;
         public string ConnectionString;
-        public bool UserProvidedConnectionString;
+        public bool UserHasProvidedConnectionString;
     }
 }

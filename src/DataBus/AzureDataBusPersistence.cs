@@ -20,7 +20,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             // If a service client has been registered in the container, it will added later in the configuration process and replace any client set here
             var blobContainerClientProviderSetThroughSettings = context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider);
-            if (!blobContainerClientProviderSetThroughSettings && dataBusSettings.UserProvidedConnectionString)
+            if (!blobContainerClientProviderSetThroughSettings && dataBusSettings.UserHasProvidedConnectionString)
             {
                 var blobContainerClient = CreateBlobServiceClient(dataBusSettings);
                 blobContainerClientProvider = new BlobServiceClientProvidedByConfiguration { Client = blobContainerClient };
@@ -34,8 +34,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 typeof(AzureDataBus).FullName,
                 new
                 {
-                    dataBusSettings.UserProvidedConnectionString,
-                    UserProvidedBlobServiceClient = blobContainerClientProviderSetThroughSettings,
+                    dataBusSettings.UserHasProvidedConnectionString,
+                    UserHasProvidedBlobServiceClient = blobContainerClientProviderSetThroughSettings,
                     ContainerName = dataBusSettings.Container,
                     CleanupEnabled = dataBusSettings.ShouldPerformCleanup(),
                     dataBusSettings.CleanupInterval,
