@@ -68,7 +68,7 @@
             var dataBusSettings = GetSettings(config);
 
             dataBusSettings.ConnectionString = connectionString;
-            dataBusSettings.UserProvidedConnectionString = true;
+            dataBusSettings.ConnectionStringProvided = true;
 
             return config;
         }
