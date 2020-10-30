@@ -31,11 +31,13 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 dataBusSettings, new AsyncTimer()));
             
             context.Settings.AddStartupDiagnosticsSection(
-                "NServiceBus.Databus.AzureBlobStorage",
+                typeof(AzureDataBus).FullName,
                 new
                 {
                     dataBusSettings.UserProvidedConnectionString,
                     UserProvidedBlobServiceClient = blobContainerClientProviderSetThroughSettings,
+                    ContainerName = dataBusSettings.Container,
+                    CleanupEnabled = dataBusSettings.ShouldPerformCleanup(),
                     dataBusSettings.CleanupInterval,
                     dataBusSettings.MaxRetries,
                     dataBusSettings.BackOffInterval,
