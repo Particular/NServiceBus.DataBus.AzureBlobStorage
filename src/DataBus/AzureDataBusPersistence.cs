@@ -27,7 +27,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
             context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
-                dataBusSettings, new AsyncTimer()));
+                dataBusSettings));
 
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureDataBus).FullName,

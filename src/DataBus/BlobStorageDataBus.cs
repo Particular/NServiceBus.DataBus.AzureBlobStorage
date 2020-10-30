@@ -13,7 +13,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
-        public BlobStorageDataBus(IProvideBlobServiceClient blobServiceClientProvider, DataBusSettings settings, IAsyncTimer timer)
+        public BlobStorageDataBus(IProvideBlobServiceClient blobServiceClientProvider, DataBusSettings settings)
         {
             this.settings = settings;
 
