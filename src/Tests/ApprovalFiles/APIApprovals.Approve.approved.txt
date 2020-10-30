@@ -17,9 +17,15 @@ namespace NServiceBus
             "rlying SDK. The member currently throws a NotImplementedException. Will be remov" +
             "ed in version 5.0.0.", true)]
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BlockSize(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int blockSize) { }
+        [System.ObsoleteAttribute("The built-in clean-up mechanism for blobs has been removed, please refer to the u" +
+            "pgrade guide for alternative options. The member currently throws a NotImplement" +
+            "edException. Will be removed in version 5.0.0.", true)]
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> CleanupInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int cleanupInterval) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> ConnectionString(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string connectionString) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> Container(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string containerName) { }
+        [System.ObsoleteAttribute("The default TTL was used for the cleanup mechanism, which has been removed. The m" +
+            "ember currently throws a NotImplementedException. Will be removed in version 5.0" +
+            ".0.", true)]
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> DefaultTTL(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, long defaultTTLInSeconds) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> MaxRetries(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int maxRetries) { }
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> NumberOfIOThreads(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int numberOfIOThreads) { }

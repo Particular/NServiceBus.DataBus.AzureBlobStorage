@@ -114,36 +114,6 @@
         }
 
         /// <summary>
-        /// Sets the default TTL to use for messages with no specific TTL. By default no TTL is set and messages are kept forever.
-        /// Note that messages in flight or in the error queue can no longer be processed when DataBus entry has been removed.
-        /// </summary>
-        public static DataBusExtensions<AzureDataBus> DefaultTTL(this DataBusExtensions<AzureDataBus> config, long defaultTTLInSeconds)
-        {
-            if (defaultTTLInSeconds < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(defaultTTLInSeconds), defaultTTLInSeconds, "Should not be negative.");
-            }
-
-            GetSettings(config).TTL = defaultTTLInSeconds;
-            return config;
-        }
-
-        /// <summary>
-        /// Sets the default time interval in milliseconds to perform periodic clean up of blobs for expired messages with specific TTL. Disabled by default.
-        /// Note that value of zero (0) disables the periodic cleanup.
-        /// </summary>
-        public static DataBusExtensions<AzureDataBus> CleanupInterval(this DataBusExtensions<AzureDataBus> config, int cleanupInterval)
-        {
-            if (cleanupInterval < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(cleanupInterval), cleanupInterval, "Should not be negative.");
-            }
-
-            GetSettings(config).CleanupInterval = cleanupInterval;
-            return config;
-        }
-
-        /// <summary>
         /// Set the custom <see cref="BlobServiceClient"/> to be used by the persistence, enabling the necessary customizations to the client.
         /// </summary>
         public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,

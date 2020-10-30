@@ -27,7 +27,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
             context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
-                dataBusSettings, new AsyncTimer()));
+                dataBusSettings));
 
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureDataBus).FullName,
@@ -35,11 +35,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 {
                     ConnectionMechanism = dataBusSettings.ConnectionStringProvided ? "ConnectionString" : "BlobServiceClient",
                     ContainerName = dataBusSettings.Container,
-                    CleanupEnabled = dataBusSettings.ShouldPerformCleanup(),
-                    dataBusSettings.CleanupInterval,
                     dataBusSettings.MaxRetries,
                     dataBusSettings.BackOffInterval,
-                    dataBusSettings.TTL,
                     dataBusSettings.NumberOfIOThreads,
                 });
         }
