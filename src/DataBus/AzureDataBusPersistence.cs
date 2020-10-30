@@ -3,7 +3,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using System;
     using Azure.Core;
     using Azure.Storage.Blobs;
-    using Microsoft.Extensions.DependencyInjection;
     using Features;
     using Config;
 
@@ -25,9 +24,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 blobContainerClientProvider = new BlobServiceClientProvidedByConfiguration { Client = blobContainerClient };
             }
 
-            context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
-            context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
-                dataBusSettings));
+            var blobServiceClientProvider = blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider();
+            context.Container.RegisterSingleton(blobServiceClientProvider);
+            context.Container.ConfigureComponent<IDataBus>(serviceProvider => new BlobStorageDataBus(blobServiceClientProvider, dataBusSettings), DependencyLifecycle.SingleInstance);
 
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureDataBus).FullName,

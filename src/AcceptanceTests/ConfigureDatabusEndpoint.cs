@@ -7,7 +7,7 @@ public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
 {
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
-        configuration.UsePersistence<AcceptanceTestingPersistence>();
+        configuration.UsePersistence<LearningPersistence>();
         configuration.UseDataBus<AzureDataBus>().Container(SetupFixture.ContainerName);
             
         return Task.FromResult(0);

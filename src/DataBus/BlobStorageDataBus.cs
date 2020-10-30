@@ -45,11 +45,11 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             Dictionary<string, string> metadata = null;
             if (timeToBeReceived != TimeSpan.MaxValue)
             {
-                var validUntil = DateTimeOffset.UtcNow + timeToBeReceived;
+                var validUntil = DateTime.UtcNow + timeToBeReceived;
 
                 metadata = new Dictionary<string, string>
                 {
-                    { "ValidUntilUtc", DateTimeOffsetHelper.ToWireFormattedString(validUntil) }
+                    { "ValidUntilUtc", DateTimeExtensions.ToWireFormattedString(validUntil) }
                 };
             }
             var blobUploadOptions = new BlobUploadOptions

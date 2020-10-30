@@ -5,7 +5,6 @@
     using AcceptanceTesting;
     using NUnit.Framework;
     using Azure.Storage.Blobs;
-    using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using Config;
@@ -43,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
+                    config.RegisterComponents(services => services.ConfigureComponent(typeof(CustomProvider), DependencyLifecycle.SingleInstance));
                 });
             }
 
