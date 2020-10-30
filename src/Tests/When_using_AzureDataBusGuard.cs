@@ -63,18 +63,6 @@
             Assert.Throws<ArgumentException>(() => config.BasePath(basePath));
         }
 
-        [Test]
-        public void Should_not_allow_negative_default_time_to_live()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.DefaultTTL(-1L));
-        }
-
-        [Test]
-        public void Should_not_allow_negative_cleanup_interval()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.CleanupInterval(-1));
-        }
-
         DataBusExtensions<AzureDataBus> config = new DataBusExtensions<AzureDataBus>(new SettingsHolder());
     }
 }
