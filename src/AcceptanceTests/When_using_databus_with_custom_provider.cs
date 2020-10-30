@@ -42,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.RegisterComponents(services => services.ConfigureComponent(typeof(CustomProvider), DependencyLifecycle.SingleInstance));
+                    config.RegisterComponents(services => services.ConfigureComponent<CustomProvider>(DependencyLifecycle.SingleInstance));
                 });
             }
 

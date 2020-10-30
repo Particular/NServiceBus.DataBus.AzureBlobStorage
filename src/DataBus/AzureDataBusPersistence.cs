@@ -16,18 +16,21 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         protected override void Setup(FeatureConfigurationContext context)
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
-
-            // If a service client has been registered in the container, it will added later in the configuration process and replace any client set here
-            if (!context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider) && dataBusSettings.ConnectionStringProvided)
+            
+            if (!context.Container.HasComponent<IProvideBlobServiceClient>())
             {
-                var blobContainerClient = CreateBlobServiceClient(dataBusSettings);
-                blobContainerClientProvider = new BlobServiceClientProvidedByConfiguration { Client = blobContainerClient };
+                if (!context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider) && dataBusSettings.ConnectionStringProvided)
+                {
+                    var blobContainerClient = CreateBlobServiceClient(dataBusSettings);
+                    blobContainerClientProvider = new BlobServiceClientProvidedByConfiguration { Client = blobContainerClient };
+                }
+
+                var blobServiceClientProvider = blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider();
+                context.Container.ConfigureComponent(() => blobServiceClientProvider, DependencyLifecycle.SingleInstance);
             }
-
-            var blobServiceClientProvider = blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider();
-            context.Container.RegisterSingleton(blobServiceClientProvider);
-            context.Container.ConfigureComponent<IDataBus>(serviceProvider => new BlobStorageDataBus(blobServiceClientProvider, dataBusSettings), DependencyLifecycle.SingleInstance);
-
+            
+            context.Container.ConfigureComponent<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.Build<IProvideBlobServiceClient>(), dataBusSettings),DependencyLifecycle.SingleInstance );
+            
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureDataBus).FullName,
                 new
