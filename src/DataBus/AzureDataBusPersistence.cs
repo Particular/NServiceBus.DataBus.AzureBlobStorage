@@ -35,11 +35,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 {
                     ConnectionMechanism = dataBusSettings.ConnectionStringProvided ? "ConnectionString" : "BlobServiceClient",
                     ContainerName = dataBusSettings.Container,
-                    CleanupEnabled = dataBusSettings.ShouldPerformCleanup(),
-                    dataBusSettings.CleanupInterval,
                     dataBusSettings.MaxRetries,
                     dataBusSettings.BackOffInterval,
-                    dataBusSettings.TTL,
                     dataBusSettings.NumberOfIOThreads,
                 });
         }
