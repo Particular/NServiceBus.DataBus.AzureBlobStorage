@@ -19,7 +19,8 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
 
             // If a service client has been registered in the container, it will added later in the configuration process and replace any client set here
-            if (!context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider) && dataBusSettings.UserProvidedConnectionString)
+            var blobContainerClientProviderSetThroughSettings = context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider);
+            if (!blobContainerClientProviderSetThroughSettings && dataBusSettings.UserProvidedConnectionString)
             {
                 var blobContainerClient = CreateBlobServiceClient(dataBusSettings);
                 blobContainerClientProvider = new BlobServiceClientProvidedByConfiguration { Client = blobContainerClient };
@@ -28,6 +29,19 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
             context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
                 dataBusSettings, new AsyncTimer()));
+            
+            context.Settings.AddStartupDiagnosticsSection(
+                "NServiceBus.Databus.AzureBlobStorage",
+                new
+                {
+                    dataBusSettings.UserProvidedConnectionString,
+                    UserProvidedBlobServiceClient = blobContainerClientProviderSetThroughSettings,
+                    dataBusSettings.CleanupInterval,
+                    dataBusSettings.MaxRetries,
+                    dataBusSettings.BackOffInterval,
+                    dataBusSettings.TTL,
+                    dataBusSettings.NumberOfIOThreads,
+                });
         }
 
         private BlobServiceClient CreateBlobServiceClient(DataBusSettings dataBusSettings)
