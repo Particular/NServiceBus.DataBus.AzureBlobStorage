@@ -7,11 +7,11 @@
     using DataBus.AzureBlobStorage;
     using Azure.Storage.Blobs;
     using DataBus.AzureBlobStorage.Config;
-    
+
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
     /// </summary>
-    public static partial class ConfigureAzureDataBus
+    public static class ConfigureAzureDataBus
     {
         /// <summary>
         /// Sets the number of retries used by the blob storage client. Default is 5.
