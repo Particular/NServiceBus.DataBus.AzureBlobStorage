@@ -18,7 +18,7 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseBlobServiceClient(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Azure.Storage.Blobs.BlobServiceClient blobServiceClient) { }
     }
 }
-namespace NServiceBus.DataBus.AzureBlobStorage.Config
+namespace NServiceBus.DataBus.AzureBlobStorage
 {
     public interface IProvideBlobServiceClient
     {
