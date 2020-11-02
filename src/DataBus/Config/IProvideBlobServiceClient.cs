@@ -1,10 +1,10 @@
-﻿namespace NServiceBus.DataBus.AzureBlobStorage.Config
+﻿namespace NServiceBus.DataBus.AzureBlobStorage
 {
     using Azure.Storage.Blobs;
 
     /// <summary>
     /// Provides a <see cref="BlobServiceClient"/> via dependency injection. A custom implementation can be registered on the container and will be picked up by the persistence.
-    /// <remarks>     
+    /// <remarks>
     /// The client provided will not be disposed by the persistence. It is the responsibility of the provider to take care of proper resource disposal if necessary.
     /// </remarks>
     /// </summary>
