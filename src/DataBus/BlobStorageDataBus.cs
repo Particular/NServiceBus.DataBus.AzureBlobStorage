@@ -9,7 +9,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
     using Microsoft.IO;
-    using Config;
 
     class BlobStorageDataBus : IDataBus, IDisposable
     {
