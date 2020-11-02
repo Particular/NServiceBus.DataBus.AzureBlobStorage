@@ -7,7 +7,6 @@
     using Azure.Storage.Blobs;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using Config;
 
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
