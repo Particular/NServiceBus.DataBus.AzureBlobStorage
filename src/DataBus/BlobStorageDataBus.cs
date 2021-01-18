@@ -24,7 +24,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
             var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
             // core takes care of disposing
-            var stream = memoryStreamManager.GetStream(key, (int) properties.Value.ContentLength);
+            var stream = memoryStreamManager.GetStream(key, (int)properties.Value.ContentLength);
 
             var transferOptions = new StorageTransferOptions
             {
