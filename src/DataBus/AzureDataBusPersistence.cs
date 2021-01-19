@@ -7,7 +7,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Features;
     using Config;
 
-    internal class AzureDataBusPersistence : Feature
+    class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
         {
@@ -41,7 +41,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 });
         }
 
-        private BlobServiceClient CreateBlobServiceClient(DataBusSettings dataBusSettings)
+        BlobServiceClient CreateBlobServiceClient(DataBusSettings dataBusSettings)
         {
             var clientOptions = new BlobClientOptions
             {

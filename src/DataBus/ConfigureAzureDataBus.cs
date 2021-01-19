@@ -121,7 +121,7 @@
         {
             Guard.AgainstNull(nameof(blobServiceClient), blobServiceClient);
 
-            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client =  blobServiceClient});
+            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
             return config;
         }
 
