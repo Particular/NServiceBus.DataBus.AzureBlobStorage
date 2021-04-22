@@ -1,13 +1,14 @@
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    using System.Collections.Generic;
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
-    using Logging;
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
+    using Logging;
     using Microsoft.IO;
 
     class BlobStorageDataBus : IDataBus, IDisposable
@@ -19,10 +20,10 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             blobContainerClient = blobServiceClientProvider.Client.GetBlobContainerClient(settings.Container);
         }
 
-        public async Task<Stream> Get(string key)
+        public async Task<Stream> Get(string key, CancellationToken cancellationToken = default)
         {
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
-            var properties = await blobClient.GetPropertiesAsync().ConfigureAwait(false);
+            var properties = await blobClient.GetPropertiesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             // core takes care of disposing
             var stream = memoryStreamManager.GetStream(key, (int)properties.Value.ContentLength);
 
@@ -31,12 +32,12 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 MaximumConcurrency = settings.NumberOfIOThreads,
             };
 
-            await blobClient.DownloadToAsync(stream, null, transferOptions).ConfigureAwait(false);
+            await blobClient.DownloadToAsync(stream, null, transferOptions, cancellationToken).ConfigureAwait(false);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 
-        public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived)
+        public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived, CancellationToken cancellationToken = default)
         {
             var key = Guid.NewGuid().ToString();
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
@@ -59,14 +60,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 },
                 Metadata = metadata
             };
-            await blobClient.UploadAsync(stream, blobUploadOptions).ConfigureAwait(false);
+            await blobClient.UploadAsync(stream, blobUploadOptions, cancellationToken).ConfigureAwait(false);
 
             return key;
         }
 
-        public async Task Start()
+        public async Task Start(CancellationToken cancellationToken = default)
         {
-            await blobContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await blobContainerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
             logger.Info("Blob storage data bus started. Location: " + Path.Combine(blobContainerClient.Uri.ToString(), settings.BasePath));
         }
