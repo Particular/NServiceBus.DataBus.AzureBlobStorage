@@ -3,8 +3,10 @@ on:
   push:
     branches:
       - master
-      - release-*
+      - release-[2-9].*
   pull_request:
+      branches-ignore:
+        - release-[0-1].*
   pull_request_target:
   workflow_dispatch:
 env:
