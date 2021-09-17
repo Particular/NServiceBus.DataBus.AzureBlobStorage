@@ -28,7 +28,7 @@ jobs:
             name: Linux
       fail-fast: false
     steps:
-     - name: Check for secrets
+      - name: Check for secrets
         env:
           SECRETS_AVAILABLE: ${{ secrets.SECRETS_AVAILABLE }}
         shell: pwsh
