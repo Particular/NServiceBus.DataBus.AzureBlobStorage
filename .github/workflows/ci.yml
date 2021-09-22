@@ -73,13 +73,11 @@ jobs:
           $hostInfo = curl -H Metadata:true "169.254.169.254/metadata/instance?api-version=2017-08-01" | ConvertFrom-Json
           $region = $hostInfo.compute.location
           
-          $rgName = "GitHubActions-RG"
-          echo "::set-output name=rgName::$rgName"
           $rand = Get-Random
           $accountname = "pswabs$($rand)"
           echo "::set-output name=accountname::$accountname"
-          $storageAccount = az storage account create --location $region --name $accountname --resource-group $rgName --sku Standard_LRS | ConvertFrom-Json
-          $keys = az storage account keys list --account-name $accountname --resource-group $rgName | ConvertFrom-Json
+          $storageAccount = az storage account create --location $region --name $accountname --resource-group "GitHubActions-RG" --sku Standard_LRS | ConvertFrom-Json
+          $keys = az storage account keys list --account-name $accountname --resource-group "GitHubActions-RG" | ConvertFrom-Json
           $key = $keys[0].value
           echo "::add-mask::$key"
 
@@ -96,4 +94,4 @@ jobs:
         run: |
           # Provide a PowerShell script that will shutdown/clean up any dependent infrastructure that has been set up.
           # Any output parameters specified in the setup stage can be accessed by using {{steps.setup-infrastructure.outputs.key}}
-          az storage account delete --resource-group ${{ steps.setup-infrastructure.outputs.rgName }} --name ${{ steps.setup-infrastructure.outputs.accountname }} --yes
+          az storage account delete --resource-group "GitHubActions-RG" --name ${{ steps.setup-infrastructure.outputs.accountname }} --yes
