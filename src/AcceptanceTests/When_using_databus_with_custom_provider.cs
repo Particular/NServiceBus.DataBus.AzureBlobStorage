@@ -62,9 +62,9 @@
                 readonly Context testContext;
             }
 
-            public class CustomProvider  : IProvideBlobServiceClient
+            public class CustomProvider : IProvideBlobServiceClient
             {
-                public CustomProvider (Context testContext)
+                public CustomProvider(Context testContext)
                 {
                     this.testContext = testContext;
                 }

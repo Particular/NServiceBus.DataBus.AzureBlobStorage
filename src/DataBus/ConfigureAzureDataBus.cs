@@ -7,7 +7,7 @@
     using DataBus.AzureBlobStorage;
     using Azure.Storage.Blobs;
     using DataBus.AzureBlobStorage.Config;
-    
+
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
     /// </summary>
@@ -121,7 +121,7 @@
         {
             Guard.AgainstNull(nameof(blobServiceClient), blobServiceClient);
 
-            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client =  blobServiceClient});
+            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
             return config;
         }
 

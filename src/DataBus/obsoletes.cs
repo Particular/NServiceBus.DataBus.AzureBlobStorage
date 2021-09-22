@@ -27,10 +27,10 @@ namespace NServiceBus
             throw new NotImplementedException();
         }
 
-       [ObsoleteEx(
-            Message = "The default TTL was used for the cleanup mechanism, which has been removed.",
-            RemoveInVersion = "5.0.0",
-            TreatAsErrorFromVersion = "4.0.0")]
+        [ObsoleteEx(
+             Message = "The default TTL was used for the cleanup mechanism, which has been removed.",
+             RemoveInVersion = "5.0.0",
+             TreatAsErrorFromVersion = "4.0.0")]
         public static DataBusExtensions<AzureDataBus> DefaultTTL(this DataBusExtensions<AzureDataBus> config, long defaultTTLInSeconds)
         {
             throw new NotImplementedException();
