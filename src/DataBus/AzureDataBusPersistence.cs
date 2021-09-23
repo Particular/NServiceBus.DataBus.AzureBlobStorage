@@ -71,7 +71,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var result = await azureServiceTokenProvider.GetAuthenticationResultAsync(resourceUri, cancellationToken: token).ConfigureAwait(false);
 
             // Renew the token before it expires.
-            var next = (result.ExpiresOn - DateTimeOffset.UtcNow) - settings.RenewalTimeBeforeTokenExpires;
+            var next = result.ExpiresOn - DateTimeOffset.UtcNow - settings.RenewalTimeBeforeTokenExpires;
             if (next.Ticks < 0)
             {
                 next = default;
