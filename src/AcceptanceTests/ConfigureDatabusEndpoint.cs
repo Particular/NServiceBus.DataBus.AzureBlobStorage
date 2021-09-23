@@ -9,7 +9,7 @@ public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
     {
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseDataBus<AzureDataBus>().Container(SetupFixture.ContainerName);
-            
+
         return Task.FromResult(0);
     }
 
