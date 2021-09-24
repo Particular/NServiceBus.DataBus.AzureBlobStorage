@@ -6,7 +6,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Features;
     using Config;
 
-    internal class AzureDataBusPersistence : Feature
+    class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
         {
@@ -16,7 +16,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
         protected override void Setup(FeatureConfigurationContext context)
         {
             var dataBusSettings = context.Settings.GetOrDefault<DataBusSettings>() ?? new DataBusSettings();
-            
+
             if (!context.Container.HasComponent<IProvideBlobServiceClient>())
             {
                 if (!context.Settings.TryGet(out IProvideBlobServiceClient blobContainerClientProvider) && dataBusSettings.ConnectionStringProvided)
@@ -28,9 +28,9 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 var blobServiceClientProvider = blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider();
                 context.Container.ConfigureComponent(() => blobServiceClientProvider, DependencyLifecycle.SingleInstance);
             }
-            
-            context.Container.ConfigureComponent<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.Build<IProvideBlobServiceClient>(), dataBusSettings),DependencyLifecycle.SingleInstance );
-            
+
+            context.Container.ConfigureComponent<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.Build<IProvideBlobServiceClient>(), dataBusSettings), DependencyLifecycle.SingleInstance);
+
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureDataBus).FullName,
                 new
@@ -43,7 +43,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
                 });
         }
 
-        private BlobServiceClient CreateBlobServiceClient(DataBusSettings dataBusSettings)
+        BlobServiceClient CreateBlobServiceClient(DataBusSettings dataBusSettings)
         {
             var clientOptions = new BlobClientOptions
             {
