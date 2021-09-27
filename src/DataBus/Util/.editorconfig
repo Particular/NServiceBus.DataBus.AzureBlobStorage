@@ -1,0 +1,4 @@
+[*.cs]
+
+# Justification: release branch
+dotnet_diagnostic.IDE0060.severity = none

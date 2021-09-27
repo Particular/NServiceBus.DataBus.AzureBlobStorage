@@ -26,7 +26,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             var blob = container.GetBlockBlobReference(Path.Combine(settings.BasePath, key));
             await blob.FetchAttributesAsync().ConfigureAwait(false);
 
-            var stream = new MemoryStream((int) blob.Properties.Length);
+            var stream = new MemoryStream((int)blob.Properties.Length);
 
             blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = settings.NumberOfIOThreads;
             container.ServiceClient.DefaultRequestOptions.RetryPolicy = retryPolicy;

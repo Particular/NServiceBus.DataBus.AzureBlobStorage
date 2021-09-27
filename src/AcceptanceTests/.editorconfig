@@ -1,0 +1,4 @@
+[*.cs]
+
+# Justification: release branch
+dotnet_diagnostic.CA2007.severity = none

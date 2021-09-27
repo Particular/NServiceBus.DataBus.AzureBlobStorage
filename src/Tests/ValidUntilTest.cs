@@ -129,15 +129,17 @@ abstract class ValidUntilTest
             .Within(TimeSpan.FromSeconds(10)));
     }
 
-    protected ICloudBlob StubACloudBlob(DateTimeOffset? lastModified = default(DateTimeOffset?))
+    protected static ICloudBlob StubACloudBlob(DateTimeOffset? lastModified = default)
     {
         var cloudBlobProperties = new BlobProperties();
         var property = typeof(BlobProperties).GetProperty("LastModified");
         property.SetValue(cloudBlobProperties, lastModified, BindingFlags.NonPublic, null, null, null);
 
 
-        var cloudBlob = new FakeCloudBlob();
-        cloudBlob.Properties = cloudBlobProperties;
+        var cloudBlob = new FakeCloudBlob
+        {
+            Properties = cloudBlobProperties
+        };
         return cloudBlob;
     }
 
@@ -1095,7 +1097,7 @@ abstract class ValidUntilTest
         public int StreamWriteSizeInBytes { get; set; }
         public int StreamMinimumReadSizeInBytes { get; set; }
         public BlobProperties Properties { get; set; }
-        public IDictionary<string, string> Metadata {get; } = new Dictionary<string, string>();
+        public IDictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
         public DateTimeOffset? SnapshotTime { get; }
         public bool IsSnapshot { get; }
         public Uri SnapshotQualifiedUri { get; }
