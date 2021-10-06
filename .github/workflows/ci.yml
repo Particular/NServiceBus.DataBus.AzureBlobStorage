@@ -8,6 +8,8 @@ on:
       branches-ignore:
         - release-[0-1].*
   pull_request_target:
+      branches-ignore:
+        - release-[0-1].*  
   workflow_dispatch:
 env:
   DOTNET_NOLOGO: true
@@ -56,7 +58,7 @@ jobs:
         run: dotnet build src --configuration Release
       - name: Upload packages
         if: matrix.name == 'Windows'
-        uses: actions/upload-artifact@v2.2.2
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: NuGet packages
           path: nugets/
