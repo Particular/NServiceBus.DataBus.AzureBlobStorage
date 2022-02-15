@@ -91,7 +91,7 @@ jobs:
           $connectionString = "DefaultEndpointsProtocol=https;AccountName=$accountname;AccountKey=$key"
           echo "NServiceBus_DataBus_AzureBlobStorage_ConnectionString=$connectionString" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       - name: Run tests
-        uses: Particular/run-tests-action@v1.1.0
+        uses: Particular/run-tests-action@v1.2.0
       - name: Teardown infrastructure
         if: ${{ always() }}
         shell: pwsh
