@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="[12.6.0, 13.0.0)" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
-    <PackageReference Include="NServiceBus" Version="[8.0.0-beta.2, 9.0.0)" />
+    <PackageReference Include="NServiceBus" Version="[8.0.0-beta.3, 9.0.0)" />
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="[1.4.0, 2.0.0)" />
     <PackageReference Include="Fody" Version="6.6.2" PrivateAssets="All" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="All" />

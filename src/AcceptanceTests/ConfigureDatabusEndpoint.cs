@@ -8,7 +8,7 @@ public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
         configuration.UsePersistence<AcceptanceTestingPersistence>();
-        configuration.UseDataBus<AzureDataBus>().Container(SetupFixture.ContainerName);
+        configuration.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().Container(SetupFixture.ContainerName);
 
         return Task.FromResult(0);
     }
