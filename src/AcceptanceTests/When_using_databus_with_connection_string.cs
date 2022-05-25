@@ -1,11 +1,11 @@
 ﻿namespace NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests
 {
     using System;
+    using System.Threading.Tasks;
     using AcceptanceTesting;
+    using NServiceBus;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using System.Threading.Tasks;
-    using NServiceBus;
     using NUnit.Framework;
 
     public class When_using_databus_with_connection_string : NServiceBusAcceptanceTest
@@ -40,7 +40,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
                 });
             }
 
