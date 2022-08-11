@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
+    <!-- DO NOT REMOVE Microsoft.Azure.Services.AppAuthentication, it is added so that dependabot knows about version changes-->
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
     <PackageReference Include="NServiceBus" Version="8.0.0-beta.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
