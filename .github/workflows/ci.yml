@@ -55,4 +55,4 @@ jobs:
           connection-string-name: NServiceBus_DataBus_AzureBlobStorage_ConnectionString
           tag: DataBus.AzureBlobStorage
       - name: Run tests
-        uses: Particular/run-tests-action@v1.5.1
+        uses: Particular/run-tests-action@v1.6.0
