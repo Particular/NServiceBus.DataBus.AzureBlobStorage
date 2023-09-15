@@ -4,8 +4,7 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NServiceBus;
-    using NServiceBus.AcceptanceTests;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_databus_with_connection_string : NServiceBusAcceptanceTest

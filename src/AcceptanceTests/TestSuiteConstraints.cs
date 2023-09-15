@@ -1,8 +1,9 @@
 ﻿namespace NServiceBus.AcceptanceTests
 {
+    using System.Runtime.CompilerServices;
     using AcceptanceTesting.Support;
 
-    public partial class TestSuiteConstraints
+    public partial class TestSuiteConstraints : ITestSuiteConstraints
     {
         public bool SupportsDtc => false;
         public bool SupportsCrossQueueTransactions => true;
@@ -21,5 +22,8 @@
         {
             return new ConfigureDatabusEndpoint();
         }
+
+        [ModuleInitializer]
+        public static void Initialize() => ITestSuiteConstraints.Current = new TestSuiteConstraints();
     }
 }

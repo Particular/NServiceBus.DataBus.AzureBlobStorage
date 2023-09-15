@@ -6,8 +6,7 @@
     using NUnit.Framework;
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
-    using NServiceBus.AcceptanceTests;
-    using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
 
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
