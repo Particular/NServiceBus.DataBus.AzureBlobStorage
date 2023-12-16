@@ -4,8 +4,6 @@ NServiceBus.DataBus.AzureBlobStorage enables the use of the [Azure Storage Blob]
 
 It is part of the [Particular Service Platform](https://particular.net/service-platform), which includes [NServiceBus](https://particular.net/nservicebus) and tools to build, monitor, and debug distributed systems.
 
-## Documentation
-
 See the [Azure Blob Storage Data Bus documentation](https://docs.particular.net/nservicebus/messaging/databus/azure-blob-storage) for more details on how to use it.
 
 ## Running tests locally
