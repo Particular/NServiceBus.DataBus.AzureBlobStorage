@@ -26,11 +26,16 @@
             Assert.Throws<ArgumentOutOfRangeException>(() => config.NumberOfIOThreads(0));
         }
 
-        [TestCase("")]
-        [TestCase(null)]
-        public void Should_not_allow_invalid_connection_string(string connectionString)
+        [Test]
+        public void Should_not_allow_empty_connection_string()
         {
-            Assert.Throws<ArgumentException>(() => config.ConnectionString(connectionString));
+            Assert.Throws<ArgumentException>(() => config.ConnectionString(string.Empty));
+        }
+
+        [Test]
+        public void Should_not_allow_null_connection_string()
+        {
+            Assert.Throws<ArgumentNullException>(() => config.ConnectionString(null));
         }
 
         [TestCase("con")]
