@@ -2,10 +2,10 @@
 {
     using System;
     using System.Text.RegularExpressions;
+    using Azure.Storage.Blobs;
     using Configuration.AdvancedExtensibility;
     using DataBus;
     using DataBus.AzureBlobStorage;
-    using Azure.Storage.Blobs;
     using DataBus.AzureBlobStorage.Config;
 
     /// <summary>
@@ -18,24 +18,18 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> MaxRetries(this DataBusExtensions<AzureDataBus> config, int maxRetries)
         {
-            if (maxRetries < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maxRetries), maxRetries, "Must be non negative.");
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(maxRetries);
 
             GetSettings(config).MaxRetries = maxRetries;
             return config;
         }
 
         /// <summary>
-        /// Sets backoff intervall used by the blob storage client. Default is 30 seconds.
+        /// Sets backoff interval used by the blob storage client. Default is 30 seconds.
         /// </summary>
         public static DataBusExtensions<AzureDataBus> BackOffInterval(this DataBusExtensions<AzureDataBus> config, int backOffInterval)
         {
-            if (backOffInterval < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(backOffInterval), backOffInterval, "Must not be negative.");
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(backOffInterval);
 
             GetSettings(config).BackOffInterval = backOffInterval;
             return config;
@@ -46,10 +40,7 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> NumberOfIOThreads(this DataBusExtensions<AzureDataBus> config, int numberOfIOThreads)
         {
-            if (numberOfIOThreads <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(numberOfIOThreads), numberOfIOThreads, "Should not be less than one.");
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfIOThreads);
 
             GetSettings(config).NumberOfIOThreads = numberOfIOThreads;
             return config;
@@ -60,10 +51,7 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> ConnectionString(this DataBusExtensions<AzureDataBus> config, string connectionString)
         {
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                throw new ArgumentException("Should not be an empty string.", nameof(connectionString));
-            }
+            ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
             var dataBusSettings = GetSettings(config);
 
@@ -78,7 +66,6 @@
         /// </summary>
         public static DataBusExtensions<AzureDataBus> Container(this DataBusExtensions<AzureDataBus> config, string containerName)
         {
-
             if (!IsValidBlobContainerName(containerName))
             {
                 const string errorMessage =
@@ -90,7 +77,6 @@
 
                 throw new ArgumentException(errorMessage, nameof(containerName));
             }
-
 
             GetSettings(config).Container = containerName;
             return config;
@@ -119,7 +105,7 @@
         public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,
             BlobServiceClient blobServiceClient)
         {
-            Guard.AgainstNull(nameof(blobServiceClient), blobServiceClient);
+            ArgumentNullException.ThrowIfNull(blobServiceClient);
 
             config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
             return config;
