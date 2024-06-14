@@ -1,3 +1,0 @@
-component_type: Databus
-component_packages:
-  - name: NServiceBus.DataBus.AzureBlobStorage
