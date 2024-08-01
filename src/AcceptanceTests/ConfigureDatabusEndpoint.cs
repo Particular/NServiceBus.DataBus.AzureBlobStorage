@@ -1,7 +1,10 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
+using NServiceBus.ClaimCheck.DataBus;
 using NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests;
+
+using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;
 
 public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
 {

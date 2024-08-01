@@ -8,6 +8,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.ClaimCheck.DataBus;
 
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
