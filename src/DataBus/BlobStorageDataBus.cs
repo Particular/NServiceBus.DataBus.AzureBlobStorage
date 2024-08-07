@@ -8,6 +8,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
+    using ClaimCheck.DataBus;
     using Logging;
     using Microsoft.IO;
 

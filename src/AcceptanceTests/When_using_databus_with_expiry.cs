@@ -6,7 +6,9 @@
     using NServiceBus;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.ClaimCheck.DataBus;
     using NUnit.Framework;
+    using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;
 
     public class When_using_databus_with_expiry : NServiceBusAcceptanceTest
     {
@@ -18,10 +20,7 @@
 
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointReceivingMessageWithExpiry>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry
-                    {
-                        Payload = new DataBusProperty<byte[]>(payloadToSend)
-                    })))
+                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry { Payload = new ClaimCheck.DataBus.DataBusProperty<byte[]>(payloadToSend) })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -66,7 +65,7 @@
         [TimeToBeReceived("00:00:30")]
         public class MyMessageWithLargePayloadAndExpiry : ICommand
         {
-            public DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheck.DataBus.DataBusProperty<byte[]> Payload { get; set; }
         }
     }
 }

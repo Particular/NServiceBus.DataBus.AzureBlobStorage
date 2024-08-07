@@ -1,7 +1,7 @@
 namespace NServiceBus
 {
     using System;
-    using DataBus;
+    using NServiceBus.ClaimCheck.DataBus;
 
     /// <summary>
     /// DataBus implementation that uses azure blob storage.

@@ -4,7 +4,7 @@
     using System.Text.RegularExpressions;
     using Azure.Storage.Blobs;
     using Configuration.AdvancedExtensibility;
-    using DataBus;
+    using ClaimCheck.DataBus;
     using DataBus.AzureBlobStorage;
     using DataBus.AzureBlobStorage.Config;
 

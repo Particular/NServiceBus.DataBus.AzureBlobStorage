@@ -5,13 +5,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
     using Features;
+    using ClaimCheck.DataBus;
     using Config;
 
     class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
         {
-            DependsOn<DataBus>();
+            DependsOn<DataBusFeature>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
