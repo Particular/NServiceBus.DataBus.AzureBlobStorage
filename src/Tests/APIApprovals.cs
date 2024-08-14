@@ -1,5 +1,6 @@
 ﻿namespace NServiceBus.Azure.WindowsAzureServiceBus.Tests.API
 {
+    using NServiceBus.DataBus.AzureBlobStorage;
     using NUnit.Framework;
     using Particular.Approvals;
     using PublicApiGenerator;

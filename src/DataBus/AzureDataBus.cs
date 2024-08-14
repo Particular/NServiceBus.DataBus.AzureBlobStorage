@@ -1,4 +1,4 @@
-namespace NServiceBus
+namespace NServiceBus.DataBus.AzureBlobStorage
 {
     using System;
     using NServiceBus.ClaimCheck.DataBus;
@@ -11,7 +11,7 @@ namespace NServiceBus
         /// <summary>The feature to enable when this databus is selected.</summary>
         protected override Type ProvidedByFeature()
         {
-            return typeof(DataBus.AzureBlobStorage.AzureDataBusPersistence);
+            return typeof(AzureDataBusPersistence);
         }
     }
 }

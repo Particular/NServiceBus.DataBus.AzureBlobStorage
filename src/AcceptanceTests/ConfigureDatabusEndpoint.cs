@@ -2,6 +2,7 @@
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
 using NServiceBus.ClaimCheck.DataBus;
+using NServiceBus.DataBus.AzureBlobStorage;
 using NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests;
 
 using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;

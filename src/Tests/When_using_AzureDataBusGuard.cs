@@ -2,6 +2,7 @@
 {
     using System;
     using NServiceBus.ClaimCheck.DataBus;
+    using NServiceBus.DataBus.AzureBlobStorage;
     using NUnit.Framework;
     using Settings;
 
