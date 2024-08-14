@@ -2,24 +2,24 @@
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 namespace NServiceBus
 {
+    public static class ConfigureAzureDataBus
+    {
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> BackOffInterval(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, int backOffInterval) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> BasePath(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, string basePath) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> ConnectionString(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, string connectionString) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> Container(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, string containerName) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> MaxRetries(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, int maxRetries) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> NumberOfIOThreads(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, int numberOfIOThreads) { }
+        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> UseBlobServiceClient(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.DataBus.AzureBlobStorage.AzureDataBus> config, Azure.Storage.Blobs.BlobServiceClient blobServiceClient) { }
+    }
+}
+namespace NServiceBus.DataBus.AzureBlobStorage
+{
     public class AzureDataBus : NServiceBus.ClaimCheck.DataBus.DataBusDefinition
     {
         public AzureDataBus() { }
         protected override System.Type ProvidedByFeature() { }
     }
-    public static class ConfigureAzureDataBus
-    {
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BackOffInterval(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int backOffInterval) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BasePath(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string basePath) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> ConnectionString(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string connectionString) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> Container(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, string containerName) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> MaxRetries(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int maxRetries) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> NumberOfIOThreads(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int numberOfIOThreads) { }
-        public static NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseBlobServiceClient(this NServiceBus.ClaimCheck.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Azure.Storage.Blobs.BlobServiceClient blobServiceClient) { }
-    }
-}
-namespace NServiceBus.DataBus.AzureBlobStorage
-{
     public interface IProvideBlobServiceClient
     {
         Azure.Storage.Blobs.BlobServiceClient Client { get; }
