@@ -20,7 +20,7 @@
 
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointReceivingMessageWithExpiry>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry { Payload = new ClaimCheck.DataBus.DataBusProperty<byte[]>(payloadToSend) })))
+                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry { Payload = new ClaimCheckProperty<byte[]>(payloadToSend) })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -39,7 +39,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheck<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
@@ -65,7 +65,7 @@
         [TimeToBeReceived("00:00:30")]
         public class MyMessageWithLargePayloadAndExpiry : ICommand
         {
-            public ClaimCheck.DataBus.DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }

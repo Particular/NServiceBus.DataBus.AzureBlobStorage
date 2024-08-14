@@ -12,7 +12,7 @@ public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
         configuration.UsePersistence<AcceptanceTestingPersistence>();
-        configuration.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().Container(SetupFixture.ContainerName);
+        configuration.UseClaimCheckDataBus<AzureDataBus, SystemJsonDataBusSerializer>().Container(SetupFixture.ContainerName);
 
         return Task.FromResult(0);
     }

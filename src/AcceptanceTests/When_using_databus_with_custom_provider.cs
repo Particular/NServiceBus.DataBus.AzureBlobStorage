@@ -21,7 +21,7 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
                 {
-                    Payload = new DataBusProperty<byte[]>(payloadToSend)
+                    Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
                 })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -86,7 +86,7 @@
 
         public class MessageWithLargePayload : ICommand
         {
-            public DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }

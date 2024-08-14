@@ -22,7 +22,7 @@
                 .WithEndpoint<EndpointWithCustomClient>(b => b.When(session =>
                     session.SendLocal(new MyMessageWithLargePayload
                     {
-                        Payload = new ClaimCheck.DataBus.DataBusProperty<byte[]>(payloadToSend)
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
                     })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -42,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheckDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
@@ -66,7 +66,7 @@
 
         public class MyMessageWithLargePayload : ICommand
         {
-            public ClaimCheck.DataBus.DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }
