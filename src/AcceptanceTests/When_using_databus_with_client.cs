@@ -42,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheckDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheck<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
