@@ -8,7 +8,6 @@
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NServiceBus.ClaimCheck.DataBus;
     using NUnit.Framework;
-    using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;
 
     public class When_using_databus_with_expiry : NServiceBusAcceptanceTest
     {
@@ -39,7 +38,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheck<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
