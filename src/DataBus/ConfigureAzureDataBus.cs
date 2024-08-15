@@ -16,7 +16,7 @@
         /// <summary>
         /// Sets the number of retries used by the blob storage client. Default is 5.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> MaxRetries(this DataBusExtensions<AzureDataBus> config, int maxRetries)
+        public static ClaimCheckExtensions<AzureDataBus> MaxRetries(this ClaimCheckExtensions<AzureDataBus> config, int maxRetries)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(maxRetries);
 
@@ -27,7 +27,7 @@
         /// <summary>
         /// Sets backoff interval used by the blob storage client. Default is 30 seconds.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> BackOffInterval(this DataBusExtensions<AzureDataBus> config, int backOffInterval)
+        public static ClaimCheckExtensions<AzureDataBus> BackOffInterval(this ClaimCheckExtensions<AzureDataBus> config, int backOffInterval)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(backOffInterval);
 
@@ -38,7 +38,7 @@
         /// <summary>
         /// Sets the number threads used the blob storage client. Default is 5.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> NumberOfIOThreads(this DataBusExtensions<AzureDataBus> config, int numberOfIOThreads)
+        public static ClaimCheckExtensions<AzureDataBus> NumberOfIOThreads(this ClaimCheckExtensions<AzureDataBus> config, int numberOfIOThreads)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfIOThreads);
 
@@ -49,7 +49,7 @@
         /// <summary>
         /// The connection string to use. Default is `UseDevelopmentStorage=true`.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> ConnectionString(this DataBusExtensions<AzureDataBus> config, string connectionString)
+        public static ClaimCheckExtensions<AzureDataBus> ConnectionString(this ClaimCheckExtensions<AzureDataBus> config, string connectionString)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
@@ -64,7 +64,7 @@
         /// <summary>
         /// The blob container name to use. Default is ``.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> Container(this DataBusExtensions<AzureDataBus> config, string containerName)
+        public static ClaimCheckExtensions<AzureDataBus> Container(this ClaimCheckExtensions<AzureDataBus> config, string containerName)
         {
             if (!IsValidBlobContainerName(containerName))
             {
@@ -85,7 +85,7 @@
         /// <summary>
         /// The base path within the container. Default is ``.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> BasePath(this DataBusExtensions<AzureDataBus> config, string basePath)
+        public static ClaimCheckExtensions<AzureDataBus> BasePath(this ClaimCheckExtensions<AzureDataBus> config, string basePath)
         {
             var value = basePath ?? " ";
             var spacesOnly = value.Trim().Length == 0 && value.Length != 0;
@@ -102,7 +102,7 @@
         /// <summary>
         /// Set the custom <see cref="BlobServiceClient"/> to be used by the persistence, enabling the necessary customizations to the client.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,
+        public static ClaimCheckExtensions<AzureDataBus> UseBlobServiceClient(this ClaimCheckExtensions<AzureDataBus> config,
             BlobServiceClient blobServiceClient)
         {
             ArgumentNullException.ThrowIfNull(blobServiceClient);
@@ -117,7 +117,7 @@
                    Regex.IsMatch((string)containerName, @"^(([a-z\d]((-(?=[a-z\d]))|([a-z\d])){2,62})|(\$root))$");
         }
 
-        static DataBusSettings GetSettings(DataBusExtensions<AzureDataBus> config)
+        static DataBusSettings GetSettings(ClaimCheckExtensions<AzureDataBus> config)
         {
             if (!config.GetSettings().TryGet<DataBusSettings>(out var settings))
             {

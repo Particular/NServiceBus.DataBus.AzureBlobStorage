@@ -69,6 +69,6 @@
             Assert.Throws<ArgumentException>(() => config.BasePath(basePath));
         }
 
-        DataBusExtensions<AzureDataBus> config = new DataBusExtensions<AzureDataBus>(new SettingsHolder());
+        ClaimCheckExtensions<AzureDataBus> config = new ClaimCheckExtensions<AzureDataBus>(new SettingsHolder());
     }
 }
