@@ -5,14 +5,14 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
     using Features;
-    using ClaimCheck.DataBus;
+    using ClaimCheck;
     using Config;
 
     class AzureDataBusPersistence : Feature
     {
         public AzureDataBusPersistence()
         {
-            DependsOn<DataBusFeature>();
+            DependsOn<ClaimCheckFeature>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
@@ -27,7 +27,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
             }
 
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
-            context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
+            context.Services.AddSingleton<IClaimCheck>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
                 dataBusSettings));
 
             context.Settings.AddStartupDiagnosticsSection(
