@@ -6,9 +6,8 @@
     using NServiceBus;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck.DataBus;
+    using NServiceBus.ClaimCheck;
     using NUnit.Framework;
-    using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;
 
     public class When_using_databus_with_connection_string : NServiceBusAcceptanceTest
     {
@@ -20,7 +19,7 @@
 
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithDatabusUsingConnection>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayload { Payload = new ClaimCheck.DataBus.DataBusProperty<byte[]>(payloadToSend) })))
+                    session.SendLocal(new MyMessageWithLargePayload { Payload = new ClaimCheckProperty<byte[]>(payloadToSend) })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -39,7 +38,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
                 });
             }
 
@@ -63,7 +62,7 @@
 
         public class MyMessageWithLargePayload : ICommand
         {
-            public ClaimCheck.DataBus.DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }

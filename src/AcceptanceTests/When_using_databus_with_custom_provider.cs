@@ -8,7 +8,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck.DataBus;
+    using NServiceBus.ClaimCheck;
 
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
@@ -21,7 +21,7 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
                 {
-                    Payload = new DataBusProperty<byte[]>(payloadToSend)
+                    Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
                 })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -86,7 +86,7 @@
 
         public class MessageWithLargePayload : ICommand
         {
-            public DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }
