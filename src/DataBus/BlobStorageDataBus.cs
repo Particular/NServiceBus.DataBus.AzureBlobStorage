@@ -8,11 +8,11 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
-    using ClaimCheck.DataBus;
+    using ClaimCheck;
     using Logging;
     using Microsoft.IO;
 
-    class BlobStorageDataBus : IDataBus, IDisposable
+    class BlobStorageDataBus : IClaimCheck, IDisposable
     {
         public BlobStorageDataBus(IProvideBlobServiceClient blobServiceClientProvider, DataBusSettings settings)
         {
@@ -80,7 +80,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         BlobContainerClient blobContainerClient;
         DataBusSettings settings;
-        static ILog logger = LogManager.GetLogger(typeof(IDataBus));
+        static ILog logger = LogManager.GetLogger(typeof(IClaimCheck));
         static readonly RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
     }
 }

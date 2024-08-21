@@ -1,17 +1,15 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
-using NServiceBus.ClaimCheck.DataBus;
+using NServiceBus.ClaimCheck;
 using NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests;
-
-using SystemJsonDataBusSerializer = NServiceBus.ClaimCheck.DataBus.SystemJsonDataBusSerializer;
 
 public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
 {
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
         configuration.UsePersistence<AcceptanceTestingPersistence>();
-        configuration.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().Container(SetupFixture.ContainerName);
+        configuration.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().Container(SetupFixture.ContainerName);
 
         return Task.FromResult(0);
     }
