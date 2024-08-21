@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.DataBus.AzureBlobStorage.Config
+﻿namespace NServiceBus.ClaimCheck.AzureBlobStorage.Config
 {
     using System;
     using Azure.Storage.Blobs;

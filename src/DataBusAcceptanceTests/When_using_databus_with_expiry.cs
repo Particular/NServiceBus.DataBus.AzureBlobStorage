@@ -10,6 +10,7 @@
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
+#pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_expiry : NServiceBusAcceptanceTest
     {
         [Test]
@@ -39,7 +40,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
@@ -68,4 +69,5 @@
             public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }
