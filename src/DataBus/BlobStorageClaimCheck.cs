@@ -12,7 +12,9 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
     using Logging;
     using Microsoft.IO;
 
-    class BlobStorageClaimCheck : IClaimCheck, IDisposable
+#pragma warning disable CS0618 // Type or member is obsolete
+    class BlobStorageClaimCheck : IClaimCheck, DataBus.IDataBus, IDisposable
+#pragma warning restore CS0618 // Type or member is obsolete
     {
         public BlobStorageClaimCheck(IProvideBlobServiceClient blobServiceClientProvider, ClaimCheckSettings settings)
         {
