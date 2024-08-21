@@ -10,7 +10,8 @@
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
-    public class When_using_databus_with_connection_string : NServiceBusAcceptanceTest
+#pragma warning disable CS0618 // Type or member is obsolete
+    public class When_using_databus_with_client : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_work()
@@ -19,8 +20,11 @@
             new Random().NextBytes(payloadToSend);
 
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithDatabusUsingConnection>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayload { Payload = new ClaimCheckProperty<byte[]>(payloadToSend) })))
+                .WithEndpoint<EndpointWithCustomClient>(b => b.When(session =>
+                    session.SendLocal(new MyMessageWithLargePayload
+                    {
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                    })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -33,13 +37,13 @@
             public bool MessageReceived { get; set; }
         }
 
-        public class EndpointWithDatabusUsingConnection : EndpointConfigurationBuilder
+        public class EndpointWithCustomClient : EndpointConfigurationBuilder
         {
-            public EndpointWithDatabusUsingConnection()
+            public EndpointWithCustomClient()
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
@@ -66,4 +70,5 @@
             public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }

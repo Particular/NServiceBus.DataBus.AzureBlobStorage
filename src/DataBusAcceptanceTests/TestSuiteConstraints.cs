@@ -19,7 +19,7 @@
 
         public IConfigureEndpointTestExecution CreatePersistenceConfiguration()
         {
-            return new ConfigureClaimCheckEndpoint();
+            return new ConfigureDatabusEndpoint();
         }
     }
 }
