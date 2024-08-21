@@ -27,11 +27,11 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
             }
 
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
-            context.Services.AddSingleton<IClaimCheck>(serviceProvider => new BlobStorageClaimCheck(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
-                claimCheckSettings));
+            context.Services.AddSingleton(serviceProvider => new BlobStorageClaimCheck(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(), claimCheckSettings));
+            context.Services.AddTransient<IClaimCheck>(serviceProvider => serviceProvider.GetService<BlobStorageClaimCheck>());
 
             context.Settings.AddStartupDiagnosticsSection(
-                typeof(AzureDataBus).FullName,
+                typeof(AzureClaimCheck).FullName,
                 new
                 {
                     ConnectionMechanism = claimCheckSettings.ConnectionStringProvided ? "ConnectionString" : "BlobServiceClient",
