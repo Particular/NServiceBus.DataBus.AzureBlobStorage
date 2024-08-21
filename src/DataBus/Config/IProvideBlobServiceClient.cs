@@ -8,12 +8,8 @@
     /// The client provided will not be disposed by the persistence. It is the responsibility of the provider to take care of proper resource disposal if necessary.
     /// </remarks>
     /// </summary>
-    public interface IProvideBlobServiceClient
+    public interface IProvideBlobServiceClient : DataBus.AzureBlobStorage.IProvideBlobServiceClient
     {
-        /// <summary>
-        /// The BlobServiceClient to use
-        /// </summary>
-        BlobServiceClient Client { get; }
     }
 }
 
@@ -28,7 +24,11 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     /// </remarks>
     /// </summary>
     [ObsoleteEx(Message = "NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient.", RemoveInVersion = "8", TreatAsErrorFromVersion = "7", ReplacementTypeOrMember = "NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient")]
-    public interface IProvideBlobServiceClient : ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient
+    public interface IProvideBlobServiceClient
     {
+        /// <summary>
+        /// The BlobServiceClient to use
+        /// </summary>
+        BlobServiceClient Client { get; }
     }
 }
