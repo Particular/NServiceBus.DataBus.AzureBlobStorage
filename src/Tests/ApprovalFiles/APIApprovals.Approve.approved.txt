@@ -2,11 +2,33 @@
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 namespace NServiceBus
 {
+    public class AzureClaimCheck : NServiceBus.ClaimCheck.ClaimCheckDefinition
+    {
+        public AzureClaimCheck() { }
+        protected override System.Type ProvidedByFeature() { }
+    }
+    [System.Obsolete("AzureDataBus has been replaced by AzureClaimCheck. Use `AzureClaimCheck` instead." +
+        " Will be treated as an error from version 7.0.0. Will be removed in version 8.0." +
+        "0.", false)]
     public class AzureDataBus : NServiceBus.DataBus.DataBusDefinition
     {
         public AzureDataBus() { }
         protected override System.Type ProvidedByFeature() { }
     }
+    public static class ConfigureAzureClaimCheck
+    {
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> BackOffInterval(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, int backOffInterval) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> BasePath(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, string basePath) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> ConnectionString(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, string connectionString) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> Container(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, string containerName) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> MaxRetries(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, int maxRetries) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> NumberOfIOThreads(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, int numberOfIOThreads) { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> UseBlobServiceClient(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.AzureClaimCheck> config, Azure.Storage.Blobs.BlobServiceClient blobServiceClient) { }
+    }
+    [System.Obsolete("AzureDataBus has been replaced by AzureClaimCheck. These extension methods are re" +
+        "placed by the ones on the AzureClaimCheck type. Use `AzureClaimCheck` instead. W" +
+        "ill be treated as an error from version 7.0.0. Will be removed in version 8.0.0." +
+        "", false)]
     public static class ConfigureAzureDataBus
     {
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> BackOffInterval(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, int backOffInterval) { }
@@ -18,10 +40,15 @@ namespace NServiceBus
         public static NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> UseBlobServiceClient(this NServiceBus.DataBus.DataBusExtensions<NServiceBus.AzureDataBus> config, Azure.Storage.Blobs.BlobServiceClient blobServiceClient) { }
     }
 }
-namespace NServiceBus.DataBus.AzureBlobStorage
+namespace NServiceBus.ClaimCheck.AzureBlobStorage
 {
     public interface IProvideBlobServiceClient
     {
         Azure.Storage.Blobs.BlobServiceClient Client { get; }
     }
+}
+namespace NServiceBus.DataBus.AzureBlobStorage
+{
+    [System.Obsolete(@"NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient. Use `NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient` instead. Will be treated as an error from version 7.0.0. Will be removed in version 8.0.0.", false)]
+    public interface IProvideBlobServiceClient : NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient { }
 }

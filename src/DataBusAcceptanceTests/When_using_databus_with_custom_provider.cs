@@ -8,7 +8,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NUnit.Framework.Legacy;
 
+#pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
         [Test]
@@ -25,7 +27,7 @@
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            Assert.True(context.ProviderWasCalled);
+            Assert.That(context.ProviderWasCalled);
             CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
         }
 
@@ -88,4 +90,5 @@
             public DataBusProperty<byte[]> Payload { get; set; }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }

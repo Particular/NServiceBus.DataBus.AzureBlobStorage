@@ -4,11 +4,13 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NServiceBus;
+    using NServiceBus.ClaimCheck;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
-    public class When_using_databus_with_expiry : NServiceBusAcceptanceTest
+    public class When_using_claimcheck_with_expiry : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_work()
@@ -20,7 +22,7 @@
                 .WithEndpoint<EndpointReceivingMessageWithExpiry>(b => b.When(session =>
                     session.SendLocal(new MyMessageWithLargePayloadAndExpiry
                     {
-                        Payload = new DataBusProperty<byte[]>(payloadToSend)
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
                     })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -40,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheck<AzureClaimCheck, SystemJsonClaimCheckSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 
@@ -66,7 +68,7 @@
         [TimeToBeReceived("00:00:30")]
         public class MyMessageWithLargePayloadAndExpiry : ICommand
         {
-            public DataBusProperty<byte[]> Payload { get; set; }
+            public ClaimCheckProperty<byte[]> Payload { get; set; }
         }
     }
 }
