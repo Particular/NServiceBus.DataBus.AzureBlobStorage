@@ -6,7 +6,6 @@
     using NServiceBus;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck;
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
@@ -23,7 +22,7 @@
                 .WithEndpoint<EndpointWithCustomClient>(b => b.When(session =>
                     session.SendLocal(new MyMessageWithLargePayload
                     {
-                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                        Payload = new DataBusProperty<byte[]>(payloadToSend)
                     })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -67,7 +66,7 @@
 
         public class MyMessageWithLargePayload : ICommand
         {
-            public ClaimCheckProperty<byte[]> Payload { get; set; }
+            public DataBusProperty<byte[]> Payload { get; set; }
         }
     }
 #pragma warning restore CS0618 // Type or member is obsolete

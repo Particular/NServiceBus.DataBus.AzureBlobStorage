@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
-using NServiceBus.ClaimCheck;
 using NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests;
 
 public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution

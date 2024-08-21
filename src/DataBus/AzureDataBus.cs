@@ -9,7 +9,7 @@ namespace NServiceBus
     /// </summary>
     [ObsoleteEx(Message = "AzureDataBus has been replaced by AzureClaimCheck.", RemoveInVersion = "8", TreatAsErrorFromVersion = "7", ReplacementTypeOrMember = "AzureClaimCheck")]
 #pragma warning disable CS0618 // Type or member is obsolete
-    public class AaaaaaaazureDataBus : DataBusDefinition
+    public class AzureDataBus : DataBusDefinition
     {
         /// <summary>The feature to enable when this databus is selected.</summary>
 #pragma warning disable CS0672 // Member overrides obsolete member

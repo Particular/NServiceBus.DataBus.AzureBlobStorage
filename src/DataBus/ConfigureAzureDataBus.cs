@@ -7,7 +7,6 @@
     using DataBus;
     using NServiceBus.ClaimCheck.AzureBlobStorage;
     using NServiceBus.ClaimCheck.AzureBlobStorage.Config;
-    using IProvideBlobServiceClient = ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient;
 
     /// <summary>
     /// Configuration options for the Azure BlobStorage DataBus.
@@ -110,7 +109,7 @@
         {
             ArgumentNullException.ThrowIfNull(blobServiceClient);
 
-            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
+            config.GetSettings().Set<DataBus.AzureBlobStorage.IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
             return config;
         }
 

@@ -9,10 +9,8 @@ public class ConfigureClaimCheckEndpoint : IConfigureEndpointTestExecution
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
         configuration.UsePersistence<AcceptanceTestingPersistence>();
-        var ext = configuration.UseClaimCheck<AzureClaimCheck, SystemJsonClaimCheckSerializer>();
-
-        ConfigureAzureClaimCheck.Container(ext, SetupFixture.ContainerName);
-        //ext.Container(SetupFixture.ContainerName);
+        configuration.UseClaimCheck<AzureClaimCheck, SystemJsonClaimCheckSerializer>()
+            .Container(SetupFixture.ContainerName);
 
         return Task.FromResult(0);
     }
