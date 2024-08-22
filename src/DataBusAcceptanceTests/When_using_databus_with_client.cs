@@ -27,7 +27,7 @@
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext
