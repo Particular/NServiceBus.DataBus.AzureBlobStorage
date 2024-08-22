@@ -4,21 +4,19 @@
     using System.Text.RegularExpressions;
     using Azure.Storage.Blobs;
     using Configuration.AdvancedExtensibility;
-    using DataBus;
+    using NServiceBus.ClaimCheck;
     using NServiceBus.ClaimCheck.AzureBlobStorage;
     using NServiceBus.ClaimCheck.AzureBlobStorage.Config;
 
     /// <summary>
-    /// Configuration options for the Azure BlobStorage DataBus.
+    /// Configuration options for the Azure BlobStorage implementation of the claim check pattern.
     /// </summary>
-#pragma warning disable CS0618 // Type or member is obsolete
-    [ObsoleteEx(Message = "AzureDataBus has been replaced by AzureClaimCheck. These extension methods are replaced by the ones on the AzureClaimCheck type.", RemoveInVersion = "8", TreatAsErrorFromVersion = "7", ReplacementTypeOrMember = "AzureClaimCheck")]
-    public static class ConfigureAzureDataBus
+    public static class ConfigureAzureClaimCheck
     {
         /// <summary>
         /// Sets the number of retries used by the blob storage client. Default is 5.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> MaxRetries(this DataBusExtensions<AzureDataBus> config, int maxRetries)
+        public static ClaimCheckExtensions<AzureClaimCheck> MaxRetries(this ClaimCheckExtensions<AzureClaimCheck> config, int maxRetries)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(maxRetries);
 
@@ -29,7 +27,7 @@
         /// <summary>
         /// Sets backoff interval used by the blob storage client. Default is 30 seconds.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> BackOffInterval(this DataBusExtensions<AzureDataBus> config, int backOffInterval)
+        public static ClaimCheckExtensions<AzureClaimCheck> BackOffInterval(this ClaimCheckExtensions<AzureClaimCheck> config, int backOffInterval)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(backOffInterval);
 
@@ -40,7 +38,7 @@
         /// <summary>
         /// Sets the number threads used the blob storage client. Default is 5.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> NumberOfIOThreads(this DataBusExtensions<AzureDataBus> config, int numberOfIOThreads)
+        public static ClaimCheckExtensions<AzureClaimCheck> NumberOfIOThreads(this ClaimCheckExtensions<AzureClaimCheck> config, int numberOfIOThreads)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numberOfIOThreads);
 
@@ -51,7 +49,7 @@
         /// <summary>
         /// The connection string to use. Default is `UseDevelopmentStorage=true`.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> ConnectionString(this DataBusExtensions<AzureDataBus> config, string connectionString)
+        public static ClaimCheckExtensions<AzureClaimCheck> ConnectionString(this ClaimCheckExtensions<AzureClaimCheck> config, string connectionString)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
@@ -66,7 +64,7 @@
         /// <summary>
         /// The blob container name to use. Default is ``.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> Container(this DataBusExtensions<AzureDataBus> config, string containerName)
+        public static ClaimCheckExtensions<AzureClaimCheck> Container(this ClaimCheckExtensions<AzureClaimCheck> config, string containerName)
         {
             if (!IsValidBlobContainerName(containerName))
             {
@@ -87,7 +85,7 @@
         /// <summary>
         /// The base path within the container. Default is ``.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> BasePath(this DataBusExtensions<AzureDataBus> config, string basePath)
+        public static ClaimCheckExtensions<AzureClaimCheck> BasePath(this ClaimCheckExtensions<AzureClaimCheck> config, string basePath)
         {
             var value = basePath ?? " ";
             var spacesOnly = value.Trim().Length == 0 && value.Length != 0;
@@ -104,12 +102,12 @@
         /// <summary>
         /// Set the custom <see cref="BlobServiceClient"/> to be used by the persistence, enabling the necessary customizations to the client.
         /// </summary>
-        public static DataBusExtensions<AzureDataBus> UseBlobServiceClient(this DataBusExtensions<AzureDataBus> config,
+        public static ClaimCheckExtensions<AzureClaimCheck> UseBlobServiceClient(this ClaimCheckExtensions<AzureClaimCheck> config,
             BlobServiceClient blobServiceClient)
         {
             ArgumentNullException.ThrowIfNull(blobServiceClient);
 
-            config.GetSettings().Set<DataBus.AzureBlobStorage.IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
+            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
             return config;
         }
 
@@ -119,7 +117,7 @@
                    Regex.IsMatch((string)containerName, @"^(([a-z\d]((-(?=[a-z\d]))|([a-z\d])){2,62})|(\$root))$");
         }
 
-        static ClaimCheckSettings GetSettings(DataBusExtensions<AzureDataBus> config)
+        static ClaimCheckSettings GetSettings(ClaimCheckExtensions<AzureClaimCheck> config)
         {
             if (!config.GetSettings().TryGet<ClaimCheckSettings>(out var settings))
             {
@@ -130,5 +128,4 @@
             return settings;
         }
     }
-#pragma warning restore CS0618 // Type or member is obsolete
 }

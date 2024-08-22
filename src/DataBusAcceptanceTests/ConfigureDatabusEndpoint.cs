@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting.Support;
-using NServiceBus.ClaimCheck;
 using NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests;
 
 public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
@@ -9,7 +8,9 @@ public class ConfigureDatabusEndpoint : IConfigureEndpointTestExecution
     public Task Configure(string endpointName, EndpointConfiguration configuration, RunSettings settings, PublisherMetadata publisherMetadata)
     {
         configuration.UsePersistence<AcceptanceTestingPersistence>();
-        configuration.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().Container(SetupFixture.ContainerName);
+#pragma warning disable CS0618 // Type or member is obsolete
+        configuration.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().Container(SetupFixture.ContainerName);
+#pragma warning restore CS0618 // Type or member is obsolete
 
         return Task.FromResult(0);
     }

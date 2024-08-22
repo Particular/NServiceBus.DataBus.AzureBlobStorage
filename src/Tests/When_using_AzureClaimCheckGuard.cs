@@ -4,10 +4,9 @@
     using NServiceBus.ClaimCheck;
     using NUnit.Framework;
     using Settings;
-    using NServiceBus.DataBus;
 
     [TestFixture]
-    public class When_using_AzureDataBusGuard
+    public class When_using_AzureClaimCheckGuard
     {
         [Test]
         public void Should_not_allow_negative_maximum_retries()
@@ -69,8 +68,6 @@
             Assert.Throws<ArgumentException>(() => config.BasePath(basePath));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-        DataBusExtensions<AzureDataBus> config = new DataBusExtensions<AzureDataBus>(new SettingsHolder());
-#pragma warning restore CS0618 // Type or member is obsolete
+        ClaimCheckExtensions<AzureClaimCheck> config = new ClaimCheckExtensions<AzureClaimCheck>(new SettingsHolder());
     }
 }
