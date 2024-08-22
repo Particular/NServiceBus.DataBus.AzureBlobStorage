@@ -42,13 +42,13 @@ namespace NServiceBus
 }
 namespace NServiceBus.ClaimCheck.AzureBlobStorage
 {
-    public interface IProvideBlobServiceClient : NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient { }
-}
-namespace NServiceBus.DataBus.AzureBlobStorage
-{
-    [System.Obsolete(@"NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient. Use `NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient` instead. Will be treated as an error from version 7.0.0. Will be removed in version 8.0.0.", false)]
     public interface IProvideBlobServiceClient
     {
         Azure.Storage.Blobs.BlobServiceClient Client { get; }
     }
+}
+namespace NServiceBus.DataBus.AzureBlobStorage
+{
+    [System.Obsolete(@"NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient. Use `NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient` instead. Will be treated as an error from version 7.0.0. Will be removed in version 8.0.0.", false)]
+    public interface IProvideBlobServiceClient : NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient { }
 }
