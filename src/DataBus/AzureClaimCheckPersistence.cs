@@ -12,7 +12,7 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
     {
         public AzureClaimCheckPersistence()
         {
-            DependsOn<ClaimCheckFeature>();
+            DependsOn<ClaimCheck>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
