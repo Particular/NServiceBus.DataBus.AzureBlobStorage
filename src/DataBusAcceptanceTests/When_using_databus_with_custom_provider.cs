@@ -28,7 +28,7 @@
                 .Run();
 
             Assert.That(context.ProviderWasCalled);
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext
