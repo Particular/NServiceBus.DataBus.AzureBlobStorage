@@ -8,9 +8,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck;
     using NUnit.Framework.Legacy;
 
+#pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
     {
         [Test]
@@ -22,7 +22,7 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
                 {
-                    Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                    Payload = new DataBusProperty<byte[]>(payloadToSend)
                 })))
                 .Done(c => c.MessageReceived)
                 .Run();
@@ -87,7 +87,8 @@
 
         public class MessageWithLargePayload : ICommand
         {
-            public ClaimCheckProperty<byte[]> Payload { get; set; }
+            public DataBusProperty<byte[]> Payload { get; set; }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }

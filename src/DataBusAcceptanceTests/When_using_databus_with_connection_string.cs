@@ -6,10 +6,10 @@
     using NServiceBus;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck;
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
+#pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_connection_string : NServiceBusAcceptanceTest
     {
         [Test]
@@ -20,7 +20,7 @@
 
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithDatabusUsingConnection>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayload { Payload = new ClaimCheckProperty<byte[]>(payloadToSend) })))
+                    session.SendLocal(new MyMessageWithLargePayload { Payload = new DataBusProperty<byte[]>(payloadToSend) })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -39,7 +39,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
+                    config.UseDataBus<AzureDataBus, SystemJsonDataBusSerializer>().ConnectionString(SetupFixture.GetEnvConfiguredConnectionString());
                 });
             }
 
@@ -63,7 +63,8 @@
 
         public class MyMessageWithLargePayload : ICommand
         {
-            public ClaimCheckProperty<byte[]> Payload { get; set; }
+            public DataBusProperty<byte[]> Payload { get; set; }
         }
     }
+#pragma warning restore CS0618 // Type or member is obsolete
 }

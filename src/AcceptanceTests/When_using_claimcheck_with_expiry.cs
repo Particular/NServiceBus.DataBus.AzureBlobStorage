@@ -1,16 +1,16 @@
-﻿namespace NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests
+﻿namespace NServiceBus.ClaimCheck.AzureBlobStorage.AcceptanceTests
 {
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NServiceBus;
+    using NServiceBus.ClaimCheck;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NServiceBus.ClaimCheck;
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
-    public class When_using_databus_with_expiry : NServiceBusAcceptanceTest
+    public class When_using_claimcheck_with_expiry : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_work()
@@ -20,7 +20,10 @@
 
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointReceivingMessageWithExpiry>(b => b.When(session =>
-                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry { Payload = new ClaimCheckProperty<byte[]>(payloadToSend) })))
+                    session.SendLocal(new MyMessageWithLargePayloadAndExpiry
+                    {
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                    })))
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -39,7 +42,7 @@
             {
                 EndpointSetup<DefaultServer>(config =>
                 {
-                    config.UseClaimCheck<AzureDataBus, SystemJsonClaimCheckSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
+                    config.UseClaimCheck<AzureClaimCheck, SystemJsonClaimCheckSerializer>().UseBlobServiceClient(SetupFixture.BlobServiceClient);
                 });
             }
 

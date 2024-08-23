@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.ClaimCheck.AzureBlobStorage.AcceptanceTests
+﻿namespace NServiceBus.DataBus.AzureBlobStorage.AcceptanceTests
 {
     using Azure.Storage.Blobs;
     using System;

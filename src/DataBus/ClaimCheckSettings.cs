@@ -1,8 +1,8 @@
-namespace NServiceBus.DataBus.AzureBlobStorage
+namespace NServiceBus.ClaimCheck.AzureBlobStorage
 {
-    class DataBusSettings
+    class ClaimCheckSettings
     {
-        public DataBusSettings()
+        public ClaimCheckSettings()
         {
             Container = "databus";
             BasePath = "";

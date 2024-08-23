@@ -1,20 +1,18 @@
-﻿namespace NServiceBus.DataBus.AzureBlobStorage
+namespace NServiceBus.ClaimCheck.AzureBlobStorage
 {
+    using System;
     using Azure.Core;
     using Azure.Storage.Blobs;
-    using System;
     using Microsoft.Extensions.DependencyInjection;
-    using NServiceBus.ClaimCheck.AzureBlobStorage;
+    using Features;
+    using NServiceBus.ClaimCheck;
     using NServiceBus.ClaimCheck.AzureBlobStorage.Config;
-    using NServiceBus.Features;
 
-    class AzureDataBusPersistence : Feature
+    class AzureClaimCheckPersistence : Feature
     {
-        public AzureDataBusPersistence()
+        public AzureClaimCheckPersistence()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            DependsOn<DataBus>();
-#pragma warning restore CS0618 // Type or member is obsolete
+            DependsOn<ClaimCheck>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)
@@ -29,10 +27,7 @@
             }
 
             context.Services.AddSingleton(blobContainerClientProvider ?? new ThrowIfNoBlobServiceClientProvider());
-#pragma warning disable CS0618 // Type or member is obsolete
-            context.Services.AddSingleton<IDataBus>(serviceProvider => new BlobStorageDataBus(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(),
-                claimCheckSettings));
-#pragma warning restore CS0618 // Type or member is obsolete
+            context.Services.AddSingleton<IClaimCheck>(serviceProvider => new BlobStorageClaimCheck(serviceProvider.GetRequiredService<IProvideBlobServiceClient>(), claimCheckSettings));
 
             context.Settings.AddStartupDiagnosticsSection(
                 typeof(AzureClaimCheck).FullName,

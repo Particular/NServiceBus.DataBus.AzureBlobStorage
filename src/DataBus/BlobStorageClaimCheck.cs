@@ -1,4 +1,4 @@
-namespace NServiceBus.DataBus.AzureBlobStorage
+namespace NServiceBus.ClaimCheck.AzureBlobStorage
 {
     using System;
     using System.Collections.Generic;
@@ -8,17 +8,13 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
-    using ClaimCheck.AzureBlobStorage;
+    using ClaimCheck;
     using Logging;
-    using DataBus;
     using Microsoft.IO;
 
-    [ObsoleteEx]
-#pragma warning disable CS0618 // Type or member is obsolete
-    class BlobStorageDataBus : IDataBus, IDisposable
-#pragma warning restore CS0618 // Type or member is obsolete
+    class BlobStorageClaimCheck : IClaimCheck, IDisposable
     {
-        public BlobStorageDataBus(DataBus.AzureBlobStorage.IProvideBlobServiceClient blobServiceClientProvider, ClaimCheckSettings settings)
+        public BlobStorageClaimCheck(IProvideBlobServiceClient blobServiceClientProvider, ClaimCheckSettings settings)
         {
             this.settings = settings;
 
@@ -84,9 +80,7 @@ namespace NServiceBus.DataBus.AzureBlobStorage
 
         BlobContainerClient blobContainerClient;
         ClaimCheckSettings settings;
-#pragma warning disable CS0618 // Type or member is obsolete
-        static ILog logger = LogManager.GetLogger(typeof(IDataBus));
-#pragma warning restore CS0618 // Type or member is obsolete
+        static ILog logger = LogManager.GetLogger(typeof(IClaimCheck));
         static readonly RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
     }
 }
