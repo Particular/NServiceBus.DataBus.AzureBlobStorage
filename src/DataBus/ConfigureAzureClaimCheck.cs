@@ -4,9 +4,9 @@
     using System.Text.RegularExpressions;
     using Azure.Storage.Blobs;
     using Configuration.AdvancedExtensibility;
-    using NServiceBus.ClaimCheck;
-    using NServiceBus.ClaimCheck.AzureBlobStorage;
-    using NServiceBus.ClaimCheck.AzureBlobStorage.Config;
+    using ClaimCheck;
+    using ClaimCheck.AzureBlobStorage;
+    using ClaimCheck.AzureBlobStorage.Config;
 
     /// <summary>
     /// Configuration options for the Azure BlobStorage implementation of the claim check pattern.
