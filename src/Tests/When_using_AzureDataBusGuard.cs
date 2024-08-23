@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus.Azure.Tests.DataBus
 {
     using System;
-    using NServiceBus.ClaimCheck;
     using NUnit.Framework;
     using Settings;
     using NServiceBus.DataBus;
