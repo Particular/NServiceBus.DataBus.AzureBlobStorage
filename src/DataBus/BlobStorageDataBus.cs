@@ -1,4 +1,4 @@
-namespace NServiceBus.ClaimCheck.AzureBlobStorage
+namespace NServiceBus.DataBus.AzureBlobStorage
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,7 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
     using Azure.Storage;
     using Azure.Storage.Blobs;
     using Azure.Storage.Blobs.Models;
+    using ClaimCheck.AzureBlobStorage;
     using Logging;
     using DataBus;
     using Microsoft.IO;
