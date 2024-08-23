@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.Azure.Tests.DataBus
+﻿namespace NServiceBus.Azure.Tests.ClaimCheck
 {
     using System;
     using NServiceBus.ClaimCheck;
