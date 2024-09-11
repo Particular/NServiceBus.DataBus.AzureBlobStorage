@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.ClaimCheck;
 using NServiceBus.AcceptanceTesting.Support;
 using NServiceBus.ClaimCheck.AzureBlobStorage.AcceptanceTests;
 
