@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0672 // Member overrides
 
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
@@ -140,3 +141,4 @@ namespace NServiceBus
     }
 }
 #pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0672 // Member overrides
