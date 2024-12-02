@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
-    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" AutomaticVersionRange="false" />
+    <PackageReference Include="NServiceBus" Version="9.2.3" />
     <PackageReference Include="NServiceBus.ClaimCheck" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="All" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="All" />
     <PackageReference Include="Particular.Packaging" Version="4.2.0" PrivateAssets="All" />
   </ItemGroup>
