@@ -7,7 +7,6 @@
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
-    using NUnit.Framework.Legacy;
 
 #pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_client : NServiceBusAcceptanceTest
@@ -27,7 +26,7 @@
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext
