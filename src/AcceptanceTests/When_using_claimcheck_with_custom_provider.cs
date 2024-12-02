@@ -3,13 +3,11 @@
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using NUnit.Framework;
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
-    using NServiceBus.ClaimCheck;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NUnit.Framework.Legacy;
+    using NUnit.Framework;
 
     public class When_using_claimcheck_with_custom_provider : NServiceBusAcceptanceTest
     {
@@ -28,7 +26,7 @@
                 .Run();
 
             Assert.That(context.ProviderWasCalled);
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext

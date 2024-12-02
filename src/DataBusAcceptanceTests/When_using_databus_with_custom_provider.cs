@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using NUnit.Framework;
     using Azure.Storage.Blobs;
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
-    using NUnit.Framework.Legacy;
+    using NUnit.Framework;
 
 #pragma warning disable CS0618 // Type or member is obsolete
     public class When_using_databus_with_custom_provider : NServiceBusAcceptanceTest
@@ -28,7 +27,7 @@
                 .Run();
 
             Assert.That(context.ProviderWasCalled);
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext
