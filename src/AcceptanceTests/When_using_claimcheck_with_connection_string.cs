@@ -4,11 +4,9 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using NServiceBus;
-    using NServiceBus.ClaimCheck;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
     using NUnit.Framework;
-    using NUnit.Framework.Legacy;
 
     public class When_using_claimcheck_with_connection_string : NServiceBusAcceptanceTest
     {
@@ -27,7 +25,7 @@
                 .Done(c => c.MessageReceived)
                 .Run();
 
-            CollectionAssert.AreEqual(payloadToSend, context.PayloadReceived);
+            Assert.That(context.PayloadReceived, Is.EqualTo(payloadToSend).AsCollection);
         }
 
         public class Context : ScenarioContext
