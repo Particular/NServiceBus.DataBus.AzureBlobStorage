@@ -1,10 +1,10 @@
 # NServiceBus.DataBus.AzureBlobStorage
 
-NServiceBus.DataBus.AzureBlobStorage enables the use of the [Azure Storage Blob](https://azure.microsoft.com/en-us/documentation/services/storage/) service as the underlying implementation used by NServiceBus for the [Data Bus feature](http://docs.particular.net/nservicebus/messaging/databus) to store the payload.
+NServiceBus.DataBus.AzureBlobStorage enables the use of the [Azure Storage Blob](https://azure.microsoft.com/en-us/documentation/services/storage/) service as the underlying implementation used by NServiceBus for the [Data Bus feature](https://docs.particular.net/nservicebus/messaging/claimcheck/) to store the payload.
 
 It is part of the [Particular Service Platform](https://particular.net/service-platform), which includes [NServiceBus](https://particular.net/nservicebus) and tools to build, monitor, and debug distributed systems.
 
-See the [Azure Blob Storage Data Bus documentation](https://docs.particular.net/nservicebus/messaging/databus/azure-blob-storage) for more details on how to use it.
+See the [Azure Blob Storage Data Bus documentation](https://docs.particular.net/nservicebus/messaging/claimcheck/azure-blob-storage) for more details on how to use it.
 
 ## Running tests locally
 
