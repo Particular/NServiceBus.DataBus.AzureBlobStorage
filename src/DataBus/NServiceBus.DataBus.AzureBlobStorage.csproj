@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NServiceBus.snk</AssemblyOriginatorKeyFile>
     <Description>NServiceBus AzureBlobStorage DataBus</Description>
@@ -23,5 +23,5 @@
   <ItemGroup>
     <InternalsVisibleTo Include="NServiceBus.DataBus.AzureBlobStorage.Tests" Key="$(NServiceBusTestsKey)" />
   </ItemGroup>
-
+  
 </Project>
