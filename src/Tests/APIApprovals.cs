@@ -10,9 +10,9 @@
         [Test]
         public void Approve()
         {
-            var publicApi = typeof(AzureDataBus).Assembly.GeneratePublicApi(new ApiGeneratorOptions
+            var publicApi = typeof(AzureClaimCheck).Assembly.GeneratePublicApi(new ApiGeneratorOptions
             {
-                ExcludeAttributes = new[] { "System.Runtime.Versioning.TargetFrameworkAttribute", "System.Reflection.AssemblyMetadataAttribute" }
+                ExcludeAttributes = ["System.Runtime.Versioning.TargetFrameworkAttribute", "System.Reflection.AssemblyMetadataAttribute"]
             });
             Approver.Verify(publicApi);
         }
