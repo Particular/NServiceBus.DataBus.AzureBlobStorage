@@ -12,6 +12,7 @@ namespace NServiceBus
     public class AzureDataBus : NServiceBus.DataBus.DataBusDefinition
     {
         public AzureDataBus() { }
+        [System.Obsolete("AzureDataBus has been replaced by AzureClaimCheck.", true)]
         protected override System.Type ProvidedByFeature() { }
     }
     public static class ConfigureAzureClaimCheck
