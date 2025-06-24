@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\NServiceBus.snk</AssemblyOriginatorKeyFile>
     <Description>NServiceBus AzureBlobStorage DataBus</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.1" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" AutomaticVersionRange="false" />
-    <PackageReference Include="NServiceBus" Version="9.2.3" />
-    <PackageReference Include="NServiceBus.ClaimCheck" Version="1.0.1" />
+    <PackageReference Include="NServiceBus" Version="10.0.0-alpha.1" />
+    <PackageReference Include="NServiceBus.ClaimCheck" Version="2.0.0-alpha.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="All" />
-    <PackageReference Include="Obsolete.Fody" Version="5.3.0" PrivateAssets="All" />
-    <PackageReference Include="Particular.Packaging" Version="4.2.2" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.9.2" PrivateAssets="All" />
+    <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="All" />
+    <PackageReference Include="Particular.Packaging" Version="4.4.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
