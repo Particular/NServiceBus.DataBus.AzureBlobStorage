@@ -23,5 +23,5 @@
   <ItemGroup>
     <InternalsVisibleTo Include="NServiceBus.DataBus.AzureBlobStorage.Tests" Key="$(NServiceBusTestsKey)" />
   </ItemGroup>
-  
+
 </Project>
