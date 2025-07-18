@@ -2,10 +2,14 @@
 
 namespace NServiceBus.DataBus.AzureBlobStorage
 {
-    [ObsoleteEx(Message = "NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient.",
+    using System;
+    using Particular.Obsoletes;
+
+    [ObsoleteMetadata(Message = "NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient",
         RemoveInVersion = "8",
         TreatAsErrorFromVersion = "7",
         ReplacementTypeOrMember = "NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient")]
+    [Obsolete("NServiceBus.DataBus.AzureBlobStorage.IProvideBlobServiceClient has been replaced by NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient. Use 'NServiceBus.ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient' instead. Will be removed in version 8.0.0.", true)]
     public interface IProvideBlobServiceClient : ClaimCheck.AzureBlobStorage.IProvideBlobServiceClient
     {
     }
@@ -19,30 +23,28 @@ namespace NServiceBus
     using System;
     using Azure.Storage.Blobs;
     using DataBus;
+    using Particular.Obsoletes;
 
-    [ObsoleteEx(Message = "AzureDataBus has been replaced by AzureClaimCheck.",
+    [ObsoleteMetadata(Message = "AzureDataBus has been replaced by AzureClaimCheck",
         RemoveInVersion = "8",
         TreatAsErrorFromVersion = "7",
         ReplacementTypeOrMember = "AzureClaimCheck")]
-    [DoNotWarnAboutObsoleteUsage]
-    [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. Use `AzureClaimCheck` instead. Will be removed in version 8.0.0.", true)]
+    [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. Use 'AzureClaimCheck' instead. Will be removed in version 8.0.0.", true)]
     public class AzureDataBus : DataBusDefinition
     {
-        [ObsoleteEx(Message = "AzureDataBus has been replaced by AzureClaimCheck.",
+        [ObsoleteMetadata(Message = "AzureDataBus has been replaced by AzureClaimCheck",
             RemoveInVersion = "8",
             TreatAsErrorFromVersion = "7",
             ReplacementTypeOrMember = "AzureClaimCheck")]
-        [DoNotWarnAboutObsoleteUsage]
-        [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. Use `AzureClaimCheck` instead. Will be removed in version 8.0.0.", true)]
+        [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. Use 'AzureClaimCheck' instead. Will be removed in version 8.0.0.", true)]
         protected override Type ProvidedByFeature() => throw new NotImplementedException();
     }
 
-    [ObsoleteEx(Message = "AzureDataBus has been replaced by AzureClaimCheck. These extension methods are replaced by the ones on the AzureClaimCheck type.",
+    [ObsoleteMetadata(Message = "AzureDataBus has been replaced by AzureClaimCheck. These extension methods are replaced by the ones on the AzureClaimCheck type",
         RemoveInVersion = "8",
         TreatAsErrorFromVersion = "7",
         ReplacementTypeOrMember = "AzureClaimCheck")]
-    [DoNotWarnAboutObsoleteUsage]
-    [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. These extension methods are replaced by the ones on the AzureClaimCheck type. Use `AzureClaimCheck` instead. Will be removed in version 8.0.0.", true)]
+    [Obsolete("AzureDataBus has been replaced by AzureClaimCheck. These extension methods are replaced by the ones on the AzureClaimCheck type. Use 'AzureClaimCheck' instead. Will be removed in version 8.0.0.", true)]
     public static class ConfigureAzureDataBus
     {
         public static DataBusExtensions<AzureDataBus> MaxRetries(this DataBusExtensions<AzureDataBus> config, int maxRetries) => throw new NotImplementedException();
