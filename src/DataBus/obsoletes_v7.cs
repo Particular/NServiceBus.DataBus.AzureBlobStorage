@@ -15,9 +15,6 @@ namespace NServiceBus.DataBus.AzureBlobStorage
     }
 }
 
-// Regular Obsolete attributes are needed here because Fody ObsoleteEx attributes are not considered an actual obsolete at compile time.
-// The obsolete messages have been duplicated to ensure that the correct message is seen by consumers of the package.
-// The ObsoleteEx attributes have been kept to ensure the build error happens when it's time to remove this file.
 namespace NServiceBus
 {
     using System;
