@@ -107,7 +107,7 @@
         {
             ArgumentNullException.ThrowIfNull(blobServiceClient);
 
-            config.GetSettings().Set<IProvideBlobServiceClient>(new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient });
+            GetSettings(config).CustomBlobServiceProvider = new BlobServiceClientProvidedByConfiguration { Client = blobServiceClient };
             return config;
         }
 
@@ -117,15 +117,6 @@
                    Regex.IsMatch((string)containerName, @"^(([a-z\d]((-(?=[a-z\d]))|([a-z\d])){2,62})|(\$root))$");
         }
 
-        static ClaimCheckSettings GetSettings(ClaimCheckExtensions<AzureClaimCheck> config)
-        {
-            if (!config.GetSettings().TryGet<ClaimCheckSettings>(out var settings))
-            {
-                settings = new ClaimCheckSettings();
-                config.GetSettings().Set(settings);
-            }
-
-            return settings;
-        }
+        static ClaimCheckSettings GetSettings(ClaimCheckExtensions<AzureClaimCheck> config) => config.GetSettings().Get<AzureClaimCheck>().ClaimCheckSettings;
     }
 }
