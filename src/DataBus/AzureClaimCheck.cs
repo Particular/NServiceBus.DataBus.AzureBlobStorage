@@ -31,7 +31,7 @@ namespace NServiceBus
 
             protected override void Setup(FeatureConfigurationContext context)
             {
-                var claimCheckSettings = context.Settings.Get<ClaimCheckSettings>();
+                var claimCheckSettings = context.Settings.Get<AzureClaimCheck>().ClaimCheckSettings;
                 // If a service client has been registered in the container, it will be added later in the configuration process and replace any client set here
                 if (claimCheckSettings.CustomBlobServiceProvider is null && claimCheckSettings.ConnectionStringProvided)
                 {
