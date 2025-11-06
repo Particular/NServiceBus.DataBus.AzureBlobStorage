@@ -5,7 +5,7 @@ namespace NServiceBus
     public class AzureClaimCheck : NServiceBus.ClaimCheck.ClaimCheckDefinition
     {
         public AzureClaimCheck() { }
-        protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+        protected override void EnableFeature(NServiceBus.Settings.SettingsHolder settings) { }
     }
     [System.Obsolete("Use \'AzureClaimCheck\' instead. Will be removed in version 8.0.0.", true)]
     public class AzureDataBus : NServiceBus.DataBus.DataBusDefinition
