@@ -20,11 +20,11 @@ namespace NServiceBus
         /// <inheritdoc />
         protected override void EnableFeature(SettingsHolder settings) => settings.EnableFeature<AzureClaimCheckFeature>();
 
-        class AzureClaimCheckFeature : Feature
+        sealed class AzureClaimCheckFeature : Feature
         {
             internal AzureClaimCheckFeature()
             {
-                EnableByDefault<Features.ClaimCheck>();
+                Enable<Features.ClaimCheck>();
 
                 DependsOn<Features.ClaimCheck>();
             }
