@@ -22,9 +22,9 @@ namespace NServiceBus
 
         class AzureClaimCheckFeature : Feature
         {
-            internal AzureClaimCheckFeature()
+            public AzureClaimCheckFeature()
             {
-                EnableByDefault<Features.ClaimCheck>();
+                Enable<Features.ClaimCheck>();
 
                 DependsOn<Features.ClaimCheck>();
             }
