@@ -12,15 +12,9 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
     using Logging;
     using Microsoft.IO;
 
-    class BlobStorageClaimCheck : IClaimCheck, IDisposable
+    class BlobStorageClaimCheck(IProvideBlobServiceClient blobServiceClientProvider, ClaimCheckSettings settings)
+        : IClaimCheck, IDisposable
     {
-        public BlobStorageClaimCheck(IProvideBlobServiceClient blobServiceClientProvider, ClaimCheckSettings settings)
-        {
-            this.settings = settings;
-
-            blobContainerClient = blobServiceClientProvider.Client.GetBlobContainerClient(settings.Container);
-        }
-
         public async Task<Stream> Get(string key, CancellationToken cancellationToken = default)
         {
             var blobClient = blobContainerClient.GetBlobClient(Path.Combine(settings.BasePath, key));
@@ -78,8 +72,7 @@ namespace NServiceBus.ClaimCheck.AzureBlobStorage
             logger.Info("Blob storage data bus stopped");
         }
 
-        BlobContainerClient blobContainerClient;
-        ClaimCheckSettings settings;
+        BlobContainerClient blobContainerClient = blobServiceClientProvider.Client.GetBlobContainerClient(settings.Container);
         static ILog logger = LogManager.GetLogger(typeof(IClaimCheck));
         static readonly RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
     }

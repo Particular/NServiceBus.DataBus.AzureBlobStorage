@@ -11,31 +11,31 @@
         [Test]
         public void Should_not_allow_negative_maximum_retries()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.MaxRetries(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Config.MaxRetries(-1));
         }
 
         [Test]
         public void Should_not_allow_negative_backoff_interval()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.BackOffInterval(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Config.BackOffInterval(-1));
         }
 
         [Test]
         public void Should_not_allow_invalid_number_of_threads()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => config.NumberOfIOThreads(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Config.NumberOfIOThreads(0));
         }
 
         [Test]
         public void Should_not_allow_empty_connection_string()
         {
-            Assert.Throws<ArgumentException>(() => config.ConnectionString(string.Empty));
+            Assert.Throws<ArgumentException>(() => Config.ConnectionString(string.Empty));
         }
 
         [Test]
         public void Should_not_allow_null_connection_string()
         {
-            Assert.Throws<ArgumentNullException>(() => config.ConnectionString(null));
+            Assert.Throws<ArgumentNullException>(() => Config.ConnectionString(null));
         }
 
         [TestCase("con")]
@@ -45,7 +45,7 @@
         [TestCase("$root")]
         public void Should_allow_valid_container_name(string containerName)
         {
-            config.Container(containerName);
+            Config.Container(containerName);
         }
 
         [TestCase("")]
@@ -58,16 +58,26 @@
         [TestCase(null)]
         public void Should_not_allow_invalid_container_name(string containerName)
         {
-            Assert.Throws<ArgumentException>(() => config.Container(containerName));
+            Assert.Throws<ArgumentException>(() => Config.Container(containerName));
         }
 
         [TestCase(null)]
         [TestCase(" ")]
         public void Should_not_allow_null_or_whitespace_base_path(string basePath)
         {
-            Assert.Throws<ArgumentException>(() => config.BasePath(basePath));
+            Assert.Throws<ArgumentException>(() => Config.BasePath(basePath));
         }
 
-        ClaimCheckExtensions<AzureClaimCheck> config = new ClaimCheckExtensions<AzureClaimCheck>(new SettingsHolder());
+        ClaimCheckExtensions<AzureClaimCheck> Config
+        {
+            get
+            {
+                var settings = new SettingsHolder();
+                settings.Set(new AzureClaimCheck());
+                var extension = new ClaimCheckExtensions<AzureClaimCheck>(settings);
+
+                return extension;
+            }
+        }
     }
 }
