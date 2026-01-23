@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.1" AutomaticVersionRange="false" />
-    <PackageReference Include="NServiceBus" Version="8.2.4" />
+    <PackageReference Include="NServiceBus" Version="8.2.6" />
   </ItemGroup>
 
   <ItemGroup>
