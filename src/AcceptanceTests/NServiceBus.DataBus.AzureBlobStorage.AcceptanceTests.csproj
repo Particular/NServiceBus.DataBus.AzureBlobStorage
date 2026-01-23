@@ -16,12 +16,12 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
 
-  <!-- The referenced source package does not currently include support for .NET 9 sources. 
-     This change addresses that limitation to ensure compatibility with .NET 9. 
-     Once the package provides support for .NET 9, this change can be re-evaluated. -->
+  <!-- The referenced source package does not currently include support for .NET 10 sources. 
+     This change addresses that limitation to ensure compatibility with .NET 10. 
+     Once the package provides support for .NET 10, this change can be re-evaluated. -->
   <PropertyGroup>
     <ResolvedTargetFramework>$(TargetFramework)</ResolvedTargetFramework>
-    <ResolvedTargetFramework Condition="'$(TargetFramework)' == 'net9.0'">net8.0</ResolvedTargetFramework>
+    <ResolvedTargetFramework Condition="'$(TargetFramework)' == 'net10.0'">net8.0</ResolvedTargetFramework>
   </PropertyGroup>
   
   <ItemGroup Condition="'$(PkgNServiceBus_AcceptanceTests_Sources)' != ''">
