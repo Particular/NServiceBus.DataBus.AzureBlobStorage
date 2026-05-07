@@ -20,7 +20,7 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithCustomProvider>(b =>
                 {
-                    b.Services(services => services.AddSingleton<IProvideBlobServiceClient, EndpointWithCustomProvider.CustomProvider>());
+                    b.Services(services => services.AddSingleton<IProvideBlobServiceClient, EndpointWithCustomProvider.CustomProvider>(), afterStart: true);
                     b.When(session => session.SendLocal(new MessageWithLargePayload
                     {
                         Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
