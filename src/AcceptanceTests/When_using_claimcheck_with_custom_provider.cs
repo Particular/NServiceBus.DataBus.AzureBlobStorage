@@ -18,10 +18,14 @@
             new Random().NextBytes(payloadToSend);
 
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
+                .WithEndpoint<EndpointWithCustomProvider>(b =>
                 {
-                    Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
-                })))
+                    b.Services(services => services.AddSingleton<IProvideBlobServiceClient, EndpointWithCustomProvider.CustomProvider>());
+                    b.When(session => session.SendLocal(new MessageWithLargePayload
+                    {
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                    }));
+                })
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -38,13 +42,7 @@
 
         public class EndpointWithCustomProvider : EndpointConfigurationBuilder
         {
-            public EndpointWithCustomProvider()
-            {
-                EndpointSetup<DefaultServer>(config =>
-                {
-                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
-                });
-            }
+            public EndpointWithCustomProvider() => EndpointSetup<DefaultServer>();
 
             public class DataBusMessageHandler : IHandleMessages<MessageWithLargePayload>
             {
