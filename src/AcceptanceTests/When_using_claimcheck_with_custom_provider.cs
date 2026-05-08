@@ -46,9 +46,7 @@
 
             public class CustomProviderFeature : Feature
             {
-                static readonly string AzureClaimCheckFeatureName = $"{typeof(AzureClaimCheck).FullName}+AzureClaimCheckFeature";
-
-                public CustomProviderFeature() => DependsOn(AzureClaimCheckFeatureName);
+                public CustomProviderFeature() => DependsOn<ClaimCheck>();
 
                 protected override void Setup(FeatureConfigurationContext context)
                 {
