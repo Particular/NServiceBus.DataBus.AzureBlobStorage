@@ -7,6 +7,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.Features;
     using NUnit.Framework;
 
     public class When_using_claimcheck_with_custom_provider : NServiceBusAcceptanceTest
@@ -18,10 +19,13 @@
             new Random().NextBytes(payloadToSend);
 
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<EndpointWithCustomProvider>(b => b.When(session => session.SendLocal(new MessageWithLargePayload
+                .WithEndpoint<EndpointWithCustomProvider>(b =>
                 {
-                    Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
-                })))
+                    b.When(session => session.SendLocal(new MessageWithLargePayload
+                    {
+                        Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
+                    }));
+                })
                 .Done(c => c.MessageReceived)
                 .Run();
 
@@ -38,12 +42,16 @@
 
         public class EndpointWithCustomProvider : EndpointConfigurationBuilder
         {
-            public EndpointWithCustomProvider()
+            public EndpointWithCustomProvider() => EndpointSetup<DefaultServer>(config => config.EnableFeature<CustomProviderFeature>());
+
+            public class CustomProviderFeature : Feature
             {
-                EndpointSetup<DefaultServer>(config =>
+                public CustomProviderFeature() => DependsOn<ClaimCheck>();
+
+                protected override void Setup(FeatureConfigurationContext context)
                 {
-                    config.RegisterComponents(services => services.AddSingleton<IProvideBlobServiceClient, CustomProvider>());
-                });
+                    context.Services.AddSingleton<IProvideBlobServiceClient, CustomProvider>();
+                }
             }
 
             public class DataBusMessageHandler : IHandleMessages<MessageWithLargePayload>
