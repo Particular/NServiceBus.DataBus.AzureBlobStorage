@@ -7,6 +7,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using NServiceBus.AcceptanceTests;
     using NServiceBus.AcceptanceTests.EndpointTemplates;
+    using NServiceBus.Features;
     using NUnit.Framework;
 
     public class When_using_claimcheck_with_custom_provider : NServiceBusAcceptanceTest
@@ -20,7 +21,6 @@
             var context = await Scenario.Define<Context>()
                 .WithEndpoint<EndpointWithCustomProvider>(b =>
                 {
-                    b.Services(services => services.AddSingleton<IProvideBlobServiceClient, EndpointWithCustomProvider.CustomProvider>(), afterStart: true);
                     b.When(session => session.SendLocal(new MessageWithLargePayload
                     {
                         Payload = new ClaimCheckProperty<byte[]>(payloadToSend)
@@ -42,7 +42,19 @@
 
         public class EndpointWithCustomProvider : EndpointConfigurationBuilder
         {
-            public EndpointWithCustomProvider() => EndpointSetup<DefaultServer>();
+            public EndpointWithCustomProvider() => EndpointSetup<DefaultServer>(config => config.EnableFeature<CustomProviderFeature>());
+
+            public class CustomProviderFeature : Feature
+            {
+                static readonly string AzureClaimCheckFeatureName = $"{typeof(AzureClaimCheck).FullName}+AzureClaimCheckFeature";
+
+                public CustomProviderFeature() => DependsOn(AzureClaimCheckFeatureName);
+
+                protected override void Setup(FeatureConfigurationContext context)
+                {
+                    context.Services.AddSingleton<IProvideBlobServiceClient, CustomProvider>();
+                }
+            }
 
             public class DataBusMessageHandler : IHandleMessages<MessageWithLargePayload>
             {
